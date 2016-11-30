@@ -4,7 +4,7 @@
 
 Feed layout will using mansory layout using CSS column. To make sure all cards fill the column please make sure the card follow the example below
 
-`
+```html
 <div class="feed-container">
     <div class="card-container">
 		  <div class="card">
@@ -18,7 +18,7 @@ Feed layout will using mansory layout using CSS column. To make sure all cards f
 		   </div>
 	</div>
 </div>
-`
+```
 
 ### Start the development server
 
