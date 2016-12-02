@@ -1,0 +1,42 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="shared-styles.html">
+<dom-module id="shuvayatra-slider-item">
+    <template>
+        <style include="shared-styles">
+        :host {
+            display: block;
+            padding: 10px;
+        }
+        
+        iron-image {
+            width: 150px;
+            height: 150px;
+        }
+        </style>
+        <div>
+            <iron-image src="[[getImage(data)]]" preload sizing="cover"></iron-image>
+            <h5>[[data.title]]</h5>
+        </div>
+    </template>
+    <script>
+    Polymer({
+        is: 'shuvayatra-slider-item',
+
+        properties: {
+            data: {
+                type: Object,
+            },
+        },
+
+        getImage: function(data){
+            if(this.data.type === 'text'){
+                return this.data.featured_image;
+            }else{
+                return this.data.data.thumbnail;
+            }
+        }
+
+    });
+    </script>
+</dom-module>

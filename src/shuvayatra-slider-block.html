@@ -1,0 +1,45 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="shuvayatra-slider-item.html">
+<dom-module id="shuvayatra-slider-block">
+    <template>
+        <style include="shared-styles">
+        :host {
+            display: block;
+            padding: 10px;
+        }
+        
+        paper-card {
+            width: 100%;
+        }
+        </style>
+        <paper-card class="card" elevation="1" animated-shadow="false">
+            <div class="card-content">
+                <h4>[[data.title]]</h4>
+                <article>[[data.description]]</article>
+                <template is="dom-repeat" items="[[data.content]]">
+                    <shuvayatra-slider-item data={{item}}></shuvayatra-slider-item>
+                </template>
+                <template is="dom-if" if="{{data.view_more}}">
+                    <a href="#">
+                        <p>[[data.view_more_title]]</p>
+                    </a>
+                </template>
+            </div>
+        </paper-card>
+    </template>
+    <script>
+    Polymer({
+        is: 'shuvayatra-slider-block',
+
+        properties: {
+            data: {
+                type:Object,
+            },
+        },
+
+    });
+    </script>
+</dom-module>

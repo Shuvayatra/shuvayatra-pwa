@@ -1,0 +1,51 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="shuvayatra-html-placeholder">
+    <template>
+        <style is="custom-style">
+            :host {
+                display: block;
+                max-width: 700px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            #html_placeholder {
+                border-top: 1px solid #d2f6fb;
+                margin-top: 20px;
+                font-size: 16px;
+                color: rgba(44, 62, 80, 0.69);
+                line-height: 30px;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+                -webkit-hyphens: auto;
+                -ms-hyphens: auto;
+                -moz-hyphens: auto;
+                hyphens: auto;
+            }
+
+            @media only screen  and (max-width: 480px) {
+                #html_placeholder ul {
+                    padding-left: 20px;
+                }
+            }
+        </style>
+        <div id="html_placeholder"></div>
+    </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-html-placeholder',
+
+            properties: {
+                html: {
+                    type: String,
+                    observer: '_htmlChanged'
+                },
+            },
+
+            _htmlChanged: function (value) {
+                this.$.html_placeholder.innerHTML = value;
+            }
+        });
+    </script>
+</dom-module>

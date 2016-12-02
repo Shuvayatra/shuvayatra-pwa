@@ -7,55 +7,58 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="shuvayatra-radio-widget.html">
+<link rel="import" href="shuvayatra-notice.html">
+<link rel="import" href="shuvayatra-list-block.html">
+<link rel="import" href="shuvayatra-slider-block.html">
+<link rel="import" href="behaviors/global-behavior.html">
 
 <dom-module id="shuvayatra-home">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
-
-        padding: 10px;
-      }
-      paper-card{
-        width: 100%;
-      }
-    </style>
-
-    <iron-ajax
-    auto
-    url="http://nrna.yipl.com.np/api/screen/home"
-    handle-as="json"
-    last-response="{{homefeeds}}"
-    debounce-duration="300"></iron-ajax>
-    <div class="feed-container">
-      <template is="dom-repeat" items="[[homefeeds]]">
-        <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
-          <div class="card-container">
-            <paper-card class="card" elevation="1" animated-shadow="false">
-              <div class="card-content">
-              <iron-image src="[[item.notice.image_url]]" sizing="cover"></iron-image>
-              <h4>[[item.notice.title]]</h4>
-              <article>[[item.notice.description]]</article>
-              </div>
-            </paper-card>
-          </div>
-        </template>
-      </template>
-    </div>
-  </template>
-  <script>
+    <template>
+        <style include="shared-styles">
+        :host {
+            display: block;
+            padding: 10px;
+        }
+        
+        paper-card {
+            width: 100%;
+        }
+        </style>
+        <iron-ajax auto url="{{ baseUrl }}api/screen/home" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300"></iron-ajax>
+        <div class="feed-container">
+            <template is="dom-repeat" items="[[homefeeds]]">
+                <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
+                    <shuvayatra-notice notice="{{item.notice}}">
+                    </shuvayatra-notice>
+                </template>
+                <template is="dom-if" if="{{checkLayout(item.layout,'radio_widget')}}">
+                    <shuvayatra-radio-widget title="{{item.title}}" description="{{item.description}}">
+                    </shuvayatra-radio-widget>
+                </template>
+                <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
+                    <shuvayatra-list-block data="{{ item }}">
+                    </shuvayatra-list-block>
+                </template>
+                <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
+                    <shuvayatra-slider-block data="{{ item }}">
+                    </shuvayatra-slider-block>
+                </template>
+            </template>
+        </div>
+    </template>
+    <script>
     Polymer({
-      is: 'shuvayatra-home',
-      checkLayout:function(value,layout){
-        console.log('masuk');
-        return (value===layout);
-      }
+        is: 'shuvayatra-home',
+        behaviors: [GlobalBehavior],
+
+        checkLayout: function(value, layout) {
+            return (value === layout);
+        },
     });
-  </script>
+    </script>
 </dom-module>

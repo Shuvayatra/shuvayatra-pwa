@@ -24,7 +24,8 @@
     "fetch": "^2.0.1",
     "iron-ajax": "PolymerElements/iron-ajax#^1.4.3",
     "paper-card": "PolymerElements/paper-card#^1.1.4",
-    "iron-image": "PolymerElements/iron-image#^1.2.5"
+    "iron-image": "PolymerElements/iron-image#^1.2.5",
+    "paper-fab": "PolymerElements/paper-fab#^1.2.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

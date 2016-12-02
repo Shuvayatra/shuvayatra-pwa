@@ -1,0 +1,43 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+
+<link rel="import" href="shared-styles.html">
+<dom-module id="shuvayatra-notice">
+    <template>
+        <style include="shared-styles">
+        :host {
+            display: block;
+            padding: 10px;
+        }
+        
+        paper-card {
+            width: 100%;
+        }
+
+        iron-image {
+            width: 64px;
+            height: 64px;
+        }
+        </style>
+        <paper-card class="card" elevation="1" animated-shadow="false">
+            <div class="card-content">
+                <iron-image src="[[notice.image_url]]" sizing="cover"></iron-image>
+                <h4>[[notice.title]]</h4>
+                <article>[[notice.description]]</article>
+            </div>
+        </paper-card>
+    </template>
+    <script>
+    Polymer({
+        is: 'shuvayatra-notice',
+
+        properties: {
+            notice: {
+                type: Object
+            },
+        },
+
+    });
+    </script>
+</dom-module>
