@@ -6,23 +6,26 @@
 <dom-module id="shuvayatra-slider-block">
     <template>
         <style include="shared-styles">
-        :host {
-            display: block;
-            padding: 10px;
-        }
-        
-        paper-card {
-            width: 100%;
-        }
+            :host {
+                display: block;
+            }
+
+            paper-card {
+                width: 100%;
+            }
         </style>
         <div class="card-container">
             <paper-card class="card" elevation="1" animated-shadow="false">
-                <div class="card-content">
+                <div class="slider-block card-content">
                     <h4>[[data.title]]</h4>
                     <article>[[data.description]]</article>
-                    <template is="dom-repeat" items="[[data.content]]">
-                        <shuvayatra-slider-item data={{item}}></shuvayatra-slider-item>
-                    </template>
+                    <div class="slider-wrap">
+                        <div class="slider-element">
+                            <template is="dom-repeat" items="[[data.content]]">
+                                <shuvayatra-slider-item data={{item}}></shuvayatra-slider-item>
+                            </template>
+                        </div>
+                    </div>
                     <template is="dom-if" if="{{data.view_more}}">
                         <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter) }}">
                             <p>[[data.view_more_title]]</p>
@@ -33,16 +36,16 @@
         </div>
     </template>
     <script>
-    Polymer({
-        is: 'shuvayatra-slider-block',
-        behaviors: [GlobalBehavior],
 
-        properties: {
-            data: {
-                type: Object,
+        Polymer({
+            is: 'shuvayatra-slider-block',
+            behaviors: [GlobalBehavior],
+            properties: {
+                data: {
+                    type: Object,
+                },
             },
-        },
 
-    });
+        });
     </script>
 </dom-module>

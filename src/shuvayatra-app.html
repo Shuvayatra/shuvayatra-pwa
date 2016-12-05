@@ -29,106 +29,125 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="shuvayatra-app">
     <template>
         <style>
-        :host {
-            --app-primary-color: #00BBD5;
-            --app-secondary-color: black;
-            display: block;
-        }
-        
-        app-header {
-            background-color: var(--app-primary-color);
-        }
-        /*
-      app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
-      }
-      */
-        
-        .drawer-list {
-            margin: 0 20px;
-        }
-        
-        .drawer-list a {
-            display: block;
-            padding: 0 16px;
-            text-decoration: none;
-            color: var(--app-secondary-color);
-            line-height: 40px;
-        }
-        
-        .drawer-list a.iron-selected {
-            color: black;
-            font-weight: bold;
-        }
-        
-        paper-tabs {
-            max-width: 640px;
-            margin: 0 auto;
-            --paper-tabs-selection-bar-color: black;
-        }
-        
-        paper-tab {
-            --paper-tab-ink: #aaa;
-            text-transform: uppercase;
-        }
-        
-        [hidden] {
-            display: none !important;
-        }
-        
-        paper-tab a,
-        paper-item a {
-            text-decoration: none;
-            text-align: center;
-            vertical-align: middle;
-        }
-        
-        paper-tab a {
-            color: #FFF;
-        }
-        
-        paper-item a {
-            color: var(--app-primary-color);
-        }
-        
-        #logo {
-            width: 48px;
-            height: 48px;
-            margin-right: 1em;
-        }
-        
-        #drawer app-toolbar {
-            background-color: var(--app-primary-color);
-            color: #FFF;
-        }
-        
-        #menu-button {
-            margin-left: -1em;
-        }
-        
-        #search-button {
-            margin-right: -1em;
-        }
+            :host {
+                --app-primary-color: #00BBD5;
+                --app-secondary-color: black;
+                display: block;
+            }
+
+            app-header {
+                padding: 0 10px;
+                background-color: var(--app-primary-color);
+            }
+
+            app-toolbar {
+                padding: 0;
+            }
+
+            app-drawer app-toolbar {
+                padding: 20px;
+                font-size: 18px;
+            }
+
+            app-header paper-icon-button {
+                color: #616161;
+            }
+
+            .drawer-list {
+                margin: 0 20px;
+            }
+
+            .drawer-list a {
+                display: block;
+                padding: 0 16px;
+                text-decoration: none;
+                color: var(--app-secondary-color);
+                line-height: 40px;
+            }
+
+            .drawer-list a.iron-selected {
+                color: black;
+                font-weight: bold;
+            }
+
+            paper-tabs {
+                max-width: 640px;
+                margin: 0 auto;
+                --paper-tabs-selection-bar-color: black;
+            }
+
+            paper-tab {
+                --paper-tab-ink: #aaa;
+                text-transform: uppercase;
+            }
+
+            [hidden] {
+                display: none !important;
+            }
+
+            paper-tab a,
+            paper-item a {
+                text-decoration: none;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            paper-tab a {
+                color: #FFF;
+            }
+
+            paper-menu {
+                padding: 0;
+            }
+
+            paper-item {
+                text-transform: capitalize;
+            }
+
+            paper-item iron-icon {
+                margin-right: 20px;
+                color: #888888;
+            }
+
+            paper-item a {
+                color: #333;
+            }
+
+            #logo {
+                width: 48px;
+                height: 48px;
+                margin-right: 1em;
+            }
+
+            #drawer app-toolbar {
+                background-color: var(--app-primary-color);
+                color: #FFF;
+            }
+
+            #menu-button {
+                margin-left: -1em;
+            }
+
+            #search-button {
+                margin-right: -1em;
+            }
         </style>
         <style is="custom-style">
-        paper-input#search {
-            background-color: #FFF;
-            border: 1px solid #CCC;
-            --paper-input-container: {
-                padding: 0 1em;
-            }
-            --paper-input-container-underline: {
+            paper-input#search {
+                background-color: #FFF;
+                border-radius: 4px;
+                box-shadow: 0 0 5px 2px rgba(144, 144, 144, 0.45);
+                --paper-input-container: {
+                    padding: 0 1em;
+                } --paper-input-container-underline: {
                 display: none;
-            }
-            --paper-input-container-underline-focus: {
+            } --paper-input-container-underline-focus: {
                 display: none;
-            }
-            --paper-input-container-label: {
+            } --paper-input-container-label: {
                 line-height: 32px;
+            } display: block;
+                width: 100%;
             }
-            display:block;
-            width:100%;
-        }
         </style>
         <app-location route="{{route}}"></app-location>
         <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
@@ -144,14 +163,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <!-- Nav on mobile: side nav menu -->
                         <paper-menu selected="{{selected}}" attr-for-selected="name">
                             <template is="dom-repeat" items="[[items]]">
-                                <paper-item name="[[item.label]]"><a href="[[item.route]]">[[item.label]]</a></paper-item>
+                                <paper-item name="[[item.label]]">
+                                    <iron-icon icon="home"></iron-icon>
+                                    <a href="[[item.route]]">[[item.label]]</a></paper-item>
                             </template>
                         </paper-menu>
                     </app-drawer>
                     <app-header-layout>
                         <app-header condenses reveals>
                             <app-toolbar>
-                                <img id="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}" />
+                                <img id="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}"/>
                                 <paper-input id="search" label="Search" type="search" no-label-float="false">
                                     <paper-icon-button prefix id="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
                                     <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
@@ -181,94 +202,95 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <!-- end tab on wide layout -->
     </template>
     <script>
-    Polymer({
-        is: 'shuvayatra-app',
+        Polymer({
+            is: 'shuvayatra-app',
 
-        properties: {
-            page: {
-                type: String,
-                reflectToAttribute: true,
-                observer: '_pageChanged'
-            },
-            items: {
-                type: Array,
-                value: function() {
-                    return [{
-                        label: 'home',
-                        route: '/'
-                    }, {
-                        label: 'journey',
-                        route: '/journey'
-                    }, {
-                        label: 'destination',
-                        route: '/destination'
-                    }, {
-                        label: 'news',
-                        route: '/news'
-                    }, {
-                        label: 'radio',
-                        route: '/radio'
-                    }];
+            properties: {
+                page: {
+                    type: String,
+                    reflectToAttribute: true,
+                    observer: '_pageChanged'
+                },
+                items: {
+                    type: Array,
+                    value: function () {
+                        return [{
+                            label: 'home',
+                            route: '/'
+                        }, {
+                            label: 'journey',
+                            route: '/journey'
+                        }, {
+                            label: 'destination',
+                            route: '/destination'
+                        }, {
+                            label: 'news',
+                            route: '/news'
+                        }, {
+                            label: 'radio',
+                            route: '/radio'
+                        }];
+                    }
+                },
+                wideLayout: {
+                    type: Boolean,
+                    value: false,
+                    observer: 'onLayoutChange',
+                },
+                headerPages: {
+                    type: Array,
+                    value: function () {
+                        return ["channel", "feed"];
+                    }
                 }
             },
-            wideLayout: {
-                type: Boolean,
-                value: false,
-                observer: 'onLayoutChange',
+
+            observers: [
+                '_routePageChanged(routeData.page)',
+                '_subrouteIdChanged(subrouteData.id)'
+            ],
+
+            _routePageChanged: function (page) {
+                if (this.headerPages.indexOf(page) === -1) {
+                    this.myPage = "main";
+                }
+                this.page = page || 'home';
             },
-            headerPages:{
-                type: Array,
-                value: function(){
-                    return ["channel", "feed"];
+
+            _subrouteIdChanged: function (id) {
+                if (this.page === 'channel' && id) {
+                    this.id = id;
+                    this.myPage = "channel";
+                } else if (this.page === 'feed') {
+                    this.myPage = "feed";
+                } else {
+                    this.myPage = "main";
+                }
+            },
+
+
+            _pageChanged: function (page) {
+                this.loadPage(page);
+            },
+
+            loadPage: function (pageTitle) {
+                // Load page import on demand. Show 404 page if fails
+                var resolvedPageUrl = this.resolveUrl('shuvayatra-' + pageTitle + '.html');
+
+                this.importHref(resolvedPageUrl, null, this._showPage404, true);
+                this.$.drawer.opened = false;
+            },
+
+            _showPage404: function () {
+                this.page = 'notfound';
+            },
+
+            onLayoutChange: function (wide) {
+                var drawer = this.$.drawer;
+                if (wide && drawer.opened) {
+                    drawer.opened = false;
                 }
             }
-        },
-
-        observers: [
-            '_routePageChanged(routeData.page)',
-            '_subrouteIdChanged(subrouteData.id)'
-        ],
-
-        _routePageChanged: function(page) {
-            if(this.headerPages.indexOf(page) === -1){
-                this.myPage = "main";
-            }
-            this.page = page || 'home';
-        },
-
-        _subrouteIdChanged: function(id){
-            if(this.page === 'channel' && id){
-                this.id = id;
-                this.myPage = "channel";
-            } else if(this.page === 'feed'){
-                this.myPage = "feed";
-            } else{
-                this.myPage="main";
-            }
-        },
-
-        _pageChanged: function(page) {
-            this.loadPage(page);
-        },
-
-        loadPage: function(pageTitle){
-            // Load page import on demand. Show 404 page if fails
-            var resolvedPageUrl = this.resolveUrl('shuvayatra-' + pageTitle + '.html');
-            
-            this.importHref(resolvedPageUrl, null, this._showPage404, true);
-            this.$.drawer.opened = false;
-        },
-
-        _showPage404: function() {
-            this.page = 'notfound';
-        },
-
-        onLayoutChange: function(wide) {
-            var drawer = this.$.drawer;
-            if (wide && drawer.opened) {
-                drawer.opened = false;
-            }
-        }
-    });
+        });
     </script>
 </dom-module>

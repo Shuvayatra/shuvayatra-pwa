@@ -1,44 +1,55 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="shared-styles.html">
 <dom-module id="shuvayatra-notice">
     <template>
         <style include="shared-styles">
-        :host {
-            display: block;
-            padding: 10px;
-        }
-        
-        paper-card {
-            width: 100%;
-        }
-        
-        iron-image {
-            width: 64px;
-            height: 64px;
-        }
+            :host {
+                display: block;
+            }
+
+            paper-card {
+                width: 100%;
+            }
+
+            iron-image {
+                width: 40px;
+                height: 40px;
+                float: left;
+            }
+
+            iron-icon {
+                position: absolute;
+                right: 10px;
+                top: 15px;
+            }
+
         </style>
         <div class="card-container">
             <paper-card class="card" elevation="1" animated-shadow="false">
-                <div class="card-content">
+                <div class="notice card-content">
                     <iron-image src="[[notice.image_url]]" sizing="cover"></iron-image>
-                    <h4>[[notice.title]]</h4>
-                    <article>[[notice.description]]</article>
+                    <div class="text-info">
+                        <h4>[[notice.title]]</h4>
+                        <article>[[notice.description]]</article>
+                    </div>
+                    <iron-icon icon="close"></iron-icon>
                 </div>
             </paper-card>
         </div>
     </template>
     <script>
-    Polymer({
-        is: 'shuvayatra-notice',
+        Polymer({
+            is: 'shuvayatra-notice',
 
-        properties: {
-            notice: {
-                type: Object
+            properties: {
+                notice: {
+                    type: Object
+                },
             },
-        },
 
-    });
+        });
     </script>
 </dom-module>
