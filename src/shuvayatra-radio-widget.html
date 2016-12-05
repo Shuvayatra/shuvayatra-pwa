@@ -14,25 +14,27 @@
             width: 100%;
         }
         </style>
-        <paper-card class="card" elevation="1" animated-shadow="false">
-            <div class="card-content">
-                <h4>[[title]]</h4>
-                <article>[[description]]</article>
-                <paper-fab icon="add"></paper-fab>
-            </div>
-        </paper-card>
+        <div class="card-container">
+            <paper-card class="card" elevation="1" animated-shadow="false">
+                <div class="card-content">
+                    <h4>[[title]]</h4>
+                    <article>[[description]]</article>
+                    <paper-fab icon="add"></paper-fab>
+                </div>
+            </paper-card>
+        </div>
     </template>
     <script>
     Polymer({
         is: 'shuvayatra-radio-widget',
 
         properties: {
-        	title:{
-        		type: String
-        	},
-        	description:{
-        		type: String,
-        	},
+            title: {
+                type: String
+            },
+            description: {
+                type: String,
+            },
         },
 
     });

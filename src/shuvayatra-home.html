@@ -10,8 +10,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="shuvayatra-radio-widget.html">
+<link rel="import" href="shuvayatra-weather-widget.html">
 <link rel="import" href="shuvayatra-notice.html">
 <link rel="import" href="shuvayatra-list-block.html">
 <link rel="import" href="shuvayatra-slider-block.html">
@@ -29,12 +32,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             width: 100%;
         }
         </style>
+
+        <iron-localstorage
+            name="onboard"
+            value="{{onboard}}"
+            </iron-localstorage>
         <iron-ajax auto url="{{ baseUrl }}api/screen/home" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300"></iron-ajax>
         <div class="feed-container">
             <template is="dom-repeat" items="[[homefeeds]]">
                 <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
                     <shuvayatra-notice notice="{{item.notice}}">
                     </shuvayatra-notice>
+                </template>
+                <template is="dom-if" if="{{showCountryWidget(index)}}">
+                    <shuvayatra-weather-widget country="{{onboard.country}}">
+                    </shuvayatra-weather-widget>
                 </template>
                 <template is="dom-if" if="{{checkLayout(item.layout,'radio_widget')}}">
                     <shuvayatra-radio-widget title="{{item.title}}" description="{{item.description}}">
@@ -57,7 +69,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         behaviors: [GlobalBehavior],
 
         checkLayout: function(value, layout) {
+            if(value === 'notice'){
+                this.hasNotice = true;
+            }
             return (value === layout);
+        },
+
+        showCountryWidget: function(index) {
+            return ((index === 1 && this.hasNotice) || (index === 0 && !this.hasNotice));
         },
     });
     </script>
