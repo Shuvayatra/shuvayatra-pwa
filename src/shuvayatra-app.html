@@ -132,47 +132,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <app-location route="{{route}}"></app-location>
         <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
-        <!-- start tab on wide layout -->
-        <app-drawer-layout force-narrow fullbleed>
-            <app-drawer id="drawer">
-                <app-toolbar>Shuvayatra</app-toolbar>
-                <!-- Nav on mobile: side nav menu -->
-                <paper-menu selected="{{selected}}" attr-for-selected="name">
-                    <template is="dom-repeat" items="[[items]]">
-                        <paper-item name="[[item.label]]"><a href="[[item.route]]">[[item.label]]</a></paper-item>
-                    </template>
-                </paper-menu>
-            </app-drawer>
-            <app-header-layout>
-                <app-header condenses reveals>
-                    <app-toolbar>
-                        <img id="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}" />
-                        <paper-input id="search" label="Search" type="search" no-label-float="false">
-                            <paper-icon-button prefix id="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
-                            <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
-                        </paper-input>
-                    </app-toolbar>
-                    <app-toolbar class="tabs-bar" hidden$="{{!wideLayout}}">
-                        <!-- Nav on desktop: tabs -->
-                        <paper-tabs selected="{{selected}}" attr-for-selected="name" bottom-item>
+        <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
+        <iron-pages selected="[[myPage]]" attr-for-selected="name" fallback-selection="notfound" role="main">
+            <shuvayatra-channel-playlist name="podcasts" channel-id={{id}}></shuvayatra-channel-playlist>
+            <div name="main">
+                <!-- start tab on wide layout -->
+                <app-drawer-layout force-narrow fullbleed>
+                    <app-drawer id="drawer">
+                        <app-toolbar>Shuvayatra</app-toolbar>
+                        <!-- Nav on mobile: side nav menu -->
+                        <paper-menu selected="{{selected}}" attr-for-selected="name">
                             <template is="dom-repeat" items="[[items]]">
-                                <paper-tab name="[[item.label]]"><a href="[[item.route]]">[[item.label]]</a></paper-tab>
+                                <paper-item name="[[item.label]]"><a href="[[item.route]]">[[item.label]]</a></paper-item>
                             </template>
-                        </paper-tabs>
-                    </app-toolbar>
-                </app-header>
-                <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="notfound" role="main">
-                    <shuvayatra-home name="home"></shuvayatra-home>
-                    <shuvayatra-journey name="journey"></shuvayatra-journey>
-                    <shuvayatra-destination name="destination"></shuvayatra-destination>
-                    <shuvayatra-news name="news"></shuvayatra-news>
-                    <shuvayatra-radio name="radio"></shuvayatra-radio>
-                    <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
-                </iron-pages>
-            </app-header-layout>
-        </app-drawer-layout>
-        <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
-        <!-- end tab on wide layout -->
+                        </paper-menu>
+                    </app-drawer>
+                    <app-header-layout>
+                        <app-header condenses reveals>
+                            <app-toolbar>
+                                <img id="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}" />
+                                <paper-input id="search" label="Search" type="search" no-label-float="false">
+                                    <paper-icon-button prefix id="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
+                                    <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
+                                </paper-input>
+                            </app-toolbar>
+                            <app-toolbar class="tabs-bar" hidden$="{{!wideLayout}}">
+                                <!-- Nav on desktop: tabs -->
+                                <paper-tabs selected="{{selected}}" attr-for-selected="name" bottom-item>
+                                    <template is="dom-repeat" items="[[items]]">
+                                        <paper-tab name="[[item.label]]"><a href="[[item.route]]">[[item.label]]</a></paper-tab>
+                                    </template>
+                                </paper-tabs>
+                            </app-toolbar>
+                        </app-header>
+                        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="notfound" role="main">
+                            <shuvayatra-home name="home"></shuvayatra-home>
+                            <shuvayatra-journey name="journey"></shuvayatra-journey>
+                            <shuvayatra-destination name="destination"></shuvayatra-destination>
+                            <shuvayatra-news name="news"></shuvayatra-news>
+                            <shuvayatra-radio name="radio"></shuvayatra-radio>
+                            <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
+                        </iron-pages>
+                    </app-header-layout>
+                </app-drawer-layout>
+            </div>
+            <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
+            <!-- end tab on wide layout -->
     </template>
     <script>
     Polymer({
@@ -210,25 +215,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 value: false,
                 observer: 'onLayoutChange',
             },
+            headerPages:{
+                type: Array,
+                value: function(){
+                    return ["radio"];
+                }
+            }
         },
 
         observers: [
-            '_routePageChanged(routeData.page)'
+            '_routePageChanged(routeData.page)',
+            '_subrouteIdChanged(subrouteData.id)'
         ],
 
         _routePageChanged: function(page) {
+            if(this.headerPages.indexOf(page) === -1){
+                this.myPage = "main";
+            }
             this.page = page || 'home';
         },
 
+        _subrouteIdChanged: function(id){
+            if(this.page === 'radio' && id){
+                this.loadPage("channel-playlist");
+                this.id = id;
+                this.myPage = "podcasts";
+            }else{
+                this.myPage="main";
+            }
+        },
+
         _pageChanged: function(page) {
+            if(this.myPage === 'main'){
+                this.loadPage(page);
+            }
+        },
+
+        loadPage: function(pageTitle){
+            console.log(pageTitle);
             // Load page import on demand. Show 404 page if fails
-            var resolvedPageUrl = this.resolveUrl('shuvayatra-' + page + '.html');
+            var resolvedPageUrl = this.resolveUrl('shuvayatra-' + pageTitle + '.html');
+            
             this.importHref(resolvedPageUrl, null, this._showPage404, true);
+            this.$.drawer.opened = false;
         },
 
         _showPage404: function() {
             this.page = 'notfound';
         },
+
         onLayoutChange: function(wide) {
             var drawer = this.$.drawer;
             if (wide && drawer.opened) {
