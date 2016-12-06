@@ -134,7 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
         <iron-pages selected="[[myPage]]" attr-for-selected="name" fallback-selection="notfound" role="main">
-            <shuvayatra-channel-playlist name="podcasts" channel-id={{id}}></shuvayatra-channel-playlist>
+            <shuvayatra-channel name="channel" channel-id={{id}}></shuvayatra-channel>
             <div name="main">
                 <!-- start tab on wide layout -->
                 <app-drawer-layout force-narrow fullbleed>
@@ -218,7 +218,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             headerPages:{
                 type: Array,
                 value: function(){
-                    return ["radio"];
+                    return ["channel"];
                 }
             }
         },
@@ -236,23 +236,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _subrouteIdChanged: function(id){
-            if(this.page === 'radio' && id){
-                this.loadPage("channel-playlist");
+            if(this.page === 'channel' && id){
                 this.id = id;
-                this.myPage = "podcasts";
+                this.myPage = "channel";
             }else{
                 this.myPage="main";
             }
         },
 
         _pageChanged: function(page) {
-            if(this.myPage === 'main'){
-                this.loadPage(page);
-            }
+            this.loadPage(page);
         },
 
         loadPage: function(pageTitle){
-            console.log(pageTitle);
             // Load page import on demand. Show 404 page if fails
             var resolvedPageUrl = this.resolveUrl('shuvayatra-' + pageTitle + '.html');
             

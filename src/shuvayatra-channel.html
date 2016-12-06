@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="behaviors/global-behavior.html">
-<dom-module id="shuvayatra-channel-playlist">
+<dom-module id="shuvayatra-channel">
     <template>
         <style include="shared-styles">
         :host {
@@ -61,13 +61,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
     <script>
     Polymer({
-        is: 'shuvayatra-channel-playlist',
+        is: 'shuvayatra-channel',
         behaviors: [GlobalBehavior],
 
         properties: {
             channelId: {
                 type: Number,
             }
+        },
+
+        _goBack: function () {
+            window.history.back();
         },
     });
     </script>
