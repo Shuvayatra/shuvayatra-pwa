@@ -10,7 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="behaviors/global-behavior.html">
@@ -21,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display: block;
             padding: 10px;
         }
+        
         iron-image {
             width: 150px;
             height: 200px;
@@ -29,15 +29,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-ajax auto url="{{ baseUrl }}api/radio/categories" last-response="{{channels}}" handle-as="json" debounce-duration="300"></iron-ajax>
         
         <p id="title">All Channels</p>
-
         <div class="feed-container">
             <template id="list" is="dom-repeat" items="{{ channels }}">
-                <paper-card class="card" elevation="1" animated-shadow="false">
-                    <div class="card-content">
-                        <iron-image src="{{ item.image_url }}" sizing="cover"></iron-image>
-                        <p>{{ item.title }}</p>
-                    </div>
-                </paper-card>
+                <a class="link" href="{{ _generateUrl(item) }}">
+                    <paper-card class="card" elevation="1" animated-shadow="false">
+                        <div class="card-content">
+                            <iron-image src="{{ item.image_url }}" sizing="cover"></iron-image>
+                            <p>{{ item.title }}</p>
+                        </div>
+                    </paper-card>
+                </a>
             </template>
         </div>
     </template>
@@ -48,6 +49,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
 
+        },
+
+        _generateUrl: function(item) {
+            if (item != null) {
+                return "/radio/" + item.id;
+            }
         },
     });
     </script>
