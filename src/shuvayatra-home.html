@@ -36,7 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-localstorage
             name="onboard"
             value="{{onboard}}">
-            </iron-localstorage>
+        </iron-localstorage>
         <iron-ajax auto url="{{ baseUrl }}api/screen/home" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300"></iron-ajax>
         <div class="feed-container">
             <template is="dom-repeat" items="[[homefeeds]]">
