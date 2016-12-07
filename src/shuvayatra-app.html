@@ -131,10 +131,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         </style>
         <app-location route="{{route}}"></app-location>
-        <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+        <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
         <iron-pages selected="[[myPage]]" attr-for-selected="name" fallback-selection="notfound" role="main">
             <shuvayatra-channel name="channel" channel-id={{id}}></shuvayatra-channel>
+            <shuvayatra-feed name="feed" params="{{queryParams}}" title="{{queryParams.title}}"></shuvayatra-feed>
             <div name="main">
                 <!-- start tab on wide layout -->
                 <app-drawer-layout force-narrow fullbleed>
@@ -218,7 +219,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             headerPages:{
                 type: Array,
                 value: function(){
-                    return ["channel"];
+                    return ["channel", "feed"];
                 }
             }
         },
@@ -239,7 +240,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if(this.page === 'channel' && id){
                 this.id = id;
                 this.myPage = "channel";
-            }else{
+            } else if(this.page === 'feed'){
+                this.myPage = "feed";
+            } else{
                 this.myPage="main";
             }
         },

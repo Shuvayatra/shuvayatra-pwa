@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="behaviors/global-behavior.html">
 <link rel="import" href="shuvayatra-slider-item.html">
 <dom-module id="shuvayatra-slider-block">
     <template>
@@ -23,7 +24,7 @@
                         <shuvayatra-slider-item data={{item}}></shuvayatra-slider-item>
                     </template>
                     <template is="dom-if" if="{{data.view_more}}">
-                        <a href="#">
+                        <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter) }}">
                             <p>[[data.view_more_title]]</p>
                         </a>
                     </template>
@@ -34,6 +35,7 @@
     <script>
     Polymer({
         is: 'shuvayatra-slider-block',
+        behaviors: [GlobalBehavior],
 
         properties: {
             data: {

@@ -1,0 +1,141 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="behaviors/global-behavior.html">
+<link rel="import" href="shuvayatra-audio-card.html">
+<link rel="import" href="shuvayatra-video-card.html">
+<link rel="import" href="shuvayatra-text-card.html">
+<dom-module id="shuvayatra-feed">
+    <template>
+        <style include="shared-styles">
+        :host {
+            display: block;
+        }
+        
+        app-header {
+            @apply(--layout-fixed-top);
+            z-index: 2;
+            color: #fff;
+            background-color: var(--app-primary-color);
+            --app-header-shadow: {
+                box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.2);
+                height: 10px;
+                bottom: -10px;
+            }
+            ;
+        }
+        
+        .feed-container {
+            margin-top: 75px;
+        }
+        </style>
+        <iron-ajax id="ajax" url="{{ baseUrl }}api/posts" params="{{params}}" handle-as="json" debounce-duration="300" loading="{{loading}}" on-response="_didRespond"></iron-ajax>
+        <app-header condenses effects="waterfall" fixed>
+            <app-toolbar>
+                <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
+                <label>{{title}}</label>
+            </app-toolbar>
+        </app-header>
+        <div class="feed-container">
+            <iron-list id="list" items="[]" as="item">
+                <template>
+                <div>
+                    <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
+                        <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
+                    </template>
+                    <template is="dom-if" if="{{ _checkPostType(item.type, 'audio') }}">
+                        <shuvayatra-audio-card class="post-card" post="{{ item }}"></shuvayatra-audio-card>
+                    </template>
+                    <template is="dom-if" if="{{ _checkPostType(item.type, 'text') }}">
+                        <shuvayatra-text-card class="post-card" post="{{ item }}"></shuvayatra-text-card>
+                    </template>
+                </div>
+                </template>
+            </iron-list>
+            <div class="loadingIndicator">
+                <paper-spinner active="{{loading}}"></paper-spinner>
+            </div>
+            <iron-scroll-threshold id="scrollTheshold" lower-threshold="500" scroll-target="document" on-lower-threshold="_loadMoreData">
+            </iron-scroll-threshold>
+        </div>
+    </template>
+    <script>
+    Polymer({
+        is: 'shuvayatra-feed',
+        behaviors: [GlobalBehavior],
+
+        properties: {
+            title:{
+                type: String
+            },
+
+            params: {
+                type: Object,
+                notify: true
+            },
+
+            page: {
+                type: Number,
+                value: 0
+            }
+        },
+
+        ready: function() {
+            delete this.params.title;
+        },
+
+        _loadMoreData: function() {
+            if (!this.isLastPage) {
+                this.params.page = (this.page + 1);
+                this.$.ajax.generateRequest();
+            }
+        },
+
+        _didRespond: function(e) {
+            var response = e.detail.response;
+            this.page = response.current_page;
+            this.isLastPage = this.page === response.last_page;
+            var feeds = response.data;
+            var parent = this.$;
+
+            feeds.forEach(function(feed) {
+                parent.list.push('items', feed);
+            });
+
+            parent.scrollTheshold.clearTriggers();
+        },
+
+        _checkPostType: function(type, value) {
+            console.log('test');
+            return (type === value);
+        },
+
+        _generateUrl: function(item) {
+            return "#";
+            if (item != null) {
+                return "/post/" + item.id;
+            }
+        },
+
+        _goBack: function() {
+            window.history.back();
+        },
+    });
+    </script>
+</dom-module>

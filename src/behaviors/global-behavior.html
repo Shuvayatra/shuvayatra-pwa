@@ -26,7 +26,31 @@
             apiKey: {
             	type: String,
             	value: "eeee0c3eaa204f98acac4102c90676abc674f191"
+            },
+
+            appUrl: {
+                type: Object,
+                value: {
+                    deeplink:{
+                        feed: "shuvayatra://feed"
+                    },
+                    url:{
+                        feed: "/feed/"
+                    }
+                }
             }
+        },
+
+        _handleDeeplink: function(title, deeplink, params){
+            var url = "#";
+            if(deeplink === this.appUrl.deeplink.feed){
+                url = this.appUrl.url.feed;
+                if(params){
+                    url += "?title= "+ title + "&category_id=" + params.join(",");
+                }
+                console.log(url);
+            }
+            return url;
         }
     };
 </script>
