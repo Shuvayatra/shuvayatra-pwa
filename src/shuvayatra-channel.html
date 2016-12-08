@@ -11,6 +11,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
@@ -23,37 +26,113 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display: block;
             padding: 10px;
         }
+        
         app-header {
             @apply(--layout-fixed-top);
             z-index: 2;
-            color: #fff; background-color: var(--app-primary-color); --app-header-shadow: { box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.2); height: 10px; bottom: -10px; }; 
+            color: #fff;
+            background-color: var(--app-primary-color);
+            --app-header-shadow: {
+                box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.2);
+                height: 10px;
+                bottom: -10px;
+            }
+            ;
         }
-
-        .feed-container{
+        
+        .feed-container {
             margin-top: 52px;
         }
+        
+        iron-image{
+            width: 130px;
+            height: 115px;
+            float: left;
+        }
 
-        iron-image {
-            width: 150px;
-            height: 100px;
+        .mytitle__wrap{
+            width: calc(100% - 130px);
+            float: left;
+            position: relative;
+            padding: 5px 5px 5px 25px;
+        }
+
+        .mytitle__wrap label:nth-of-type(1){
+            font-size: 14px;
+            color: #000;
+            height: 60px;
+        }
+
+        .mytitle__wrap label{
+            font-size: 12px;
+            display: block;
+            color: #868686;
+            cursor: pointer;
+        }
+
+        paper-card{
+            width:100%;
+            margin-bottom: 10px;
+            display: flex;
+        }
+
+        paper-fab {
+            --iron-icon-fill-color: #00bbd3;
+            background: #fff;
+            position: absolute;
+            top: 50%;
+            left: -20px;
+            transform: translateY(-50%);
+        }
+
+        .post-card a{
+            display: block;
+        }
+
+        .link {
+            display: block;
+            text-decoration: none;
+        }
+
+        @media only screen and (min-width: 480px){
+            iron-image{
+                width: 300px;
+                height: 150px;
+            }
+
+            .mytitle__wrap{
+                width: calc(100% - 150px);
+            }
+
+            .mytitle__wrap label:nth-of-type(1) {
+                height: 90px;
+            }
+
         }
         </style>
         <iron-ajax auto url="{{ baseUrl }}api/podcasts/?category={{channelId}}" last-response="{{channel}}" handle-as="json" debounce-duration="300"></iron-ajax>
-
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
                 <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
                 <label>{{channel.title}}</label>
             </app-toolbar>
         </app-header>
-
         <div class="feed-container">
             <template id="list" is="dom-repeat" items="{{ channel.feeds.data }}">
-                <paper-card class="card" elevation="1" animated-shadow="false">
+                <!-- <paper-card class="card" elevation="1" animated-shadow="false">
                     <div class="card-content">
                         <iron-image src="{{ item.image }}" sizing="cover"></iron-image>
                         <p>{{ item.title }}</p>
                         <p>{{ item.description }}</p>
+                    </div>
+                </paper-card> -->
+                <paper-card class="mycard" elevation="1" animated="true">
+                    <paper-ripple></paper-ripple>
+                    <iron-image placeholder="../images/image-default.png" preload src="{{ item.image }}" fade="true" sizing="cover"></iron-image>
+                    <div class="mytitle__wrap">
+                        <paper-fab mini icon="av:volume-up" no-ink></paper-fab>
+                        <label>{{ item.title }}</label>
+                        <label>{{ item.description}}</label>
                     </div>
                 </paper-card>
             </template>
@@ -70,7 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         },
 
-        _goBack: function () {
+        _goBack: function() {
             window.history.back();
         },
     });
