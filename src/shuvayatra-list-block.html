@@ -6,20 +6,19 @@
 <dom-module id="shuvayatra-list-block">
     <template>
         <style include="shared-styles">
-        :host {
-            display: block;
-            padding: 10px;
-        }
-        
-        paper-card {
-            width: 100%;
-        }
+            :host {
+                display: block;
+                margin-bottom: 20px;
+            }
+
+            paper-card {
+                width: 100%;
+            }
         </style>
         <div class="card-container">
             <paper-card class="card" elevation="1" animated-shadow="false">
-                <div class="card-content">
+                <div class="health-wrap card-content">
                     <h4>[[data.title]]</h4>
-                    <article>[[data.description]]</article>
                     <template is="dom-repeat" items="[[data.content]]">
                         <shuvayatra-list-item data={{item}}></shuvayatra-list-item>
                     </template>
@@ -33,16 +32,15 @@
         </div>
     </template>
     <script>
-    Polymer({
-        is: 'shuvayatra-list-block',
-        behaviors: [GlobalBehavior],
-
-        properties: {
-            data: {
-                type: Object,
+        Polymer({
+            is: 'shuvayatra-list-block',
+            behaviors: [GlobalBehavior],
+            properties: {
+                data: {
+                    type: Object,
+                },
             },
-        },
 
-    });
+        });
     </script>
 </dom-module>

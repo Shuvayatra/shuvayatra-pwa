@@ -5,38 +5,46 @@
 <dom-module id="shuvayatra-radio-widget">
     <template>
         <style include="shared-styles">
-        :host {
-            display: block;
-            padding: 10px;
-        }
-        
-        paper-card {
-            width: 100%;
-        }
+            :host {
+                display: block;
+                margin-bottom: 20px;
+            }
+
+            paper-card {
+                width: 100%;
+            }
+
+            paper-fab {
+                float: right;
+                width: 45px;
+                height: 45px;
+            }
         </style>
         <div class="card-container">
             <paper-card class="card" elevation="1" animated-shadow="false">
-                <div class="card-content">
-                    <h4>[[title]]</h4>
-                    <article>[[description]]</article>
+                <div class="radio card-content">
+                    <div>
+                        <h4>[[title]]</h4>
+                        <article>[[description]]</article>
+                    </div>
                     <paper-fab icon="add"></paper-fab>
                 </div>
             </paper-card>
         </div>
     </template>
     <script>
-    Polymer({
-        is: 'shuvayatra-radio-widget',
+        Polymer({
+            is: 'shuvayatra-radio-widget',
 
-        properties: {
-            title: {
-                type: String
+            properties: {
+                title: {
+                    type: String
+                },
+                description: {
+                    type: String,
+                },
             },
-            description: {
-                type: String,
-            },
-        },
 
-    });
+        });
     </script>
 </dom-module>

@@ -5,23 +5,26 @@
         <style is="custom-style">
             :host {
                 display: block;
-                max-width: 700px;
-                margin-left: auto;
-                margin-right: auto;
             }
 
             #html_placeholder {
-                border-top: 1px solid #d2f6fb;
-                margin-top: 20px;
                 font-size: 16px;
                 color: rgba(44, 62, 80, 0.69);
-                line-height: 30px;
                 overflow-wrap: break-word;
                 word-wrap: break-word;
                 -webkit-hyphens: auto;
                 -ms-hyphens: auto;
                 -moz-hyphens: auto;
                 hyphens: auto;
+            }
+
+            #html_placeholder p {
+                margin: 0;
+                font-size: 14px;
+            }
+
+            #html_placeholder ul {
+                display: none;
             }
 
             @media only screen  and (max-width: 480px) {

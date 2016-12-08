@@ -12,65 +12,344 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!-- shared styles for all views -->
 <dom-module id="shared-styles">
-  <template>
-    <style>
-      .card {
-        margin: 8px;
-        padding: 16px;
+    <template>
+        <style>
+            .card {
+                color: #757575;
+                border-radius: 5px;
+                background-color: #fff;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            }
 
-        color: #757575;
-        border-radius: 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      }
+            .circle {
+                display: inline-block;
+                width: 64px;
+                height: 64px;
+                text-align: center;
+                color: #555;
+                border-radius: 50%;
+                background: #ddd;
+                font-size: 30px;
+                line-height: 64px;
+            }
 
-      .circle {
-        display: inline-block;
+            h1 {
+                margin: 16px 0;
+                color: #212121;
+                font-size: 22px;
+            }
 
-        width: 64px;
-        height: 64px;
+            /* NOTICE */
+            .notice.card-content {
+                background: #fffef0;
+                padding: 10px 15px !important;
+                overflow: hidden;
+                border-radius: 4px;
+            }
 
-        text-align: center;
+            .notice.card-content .text-info {
+                width: calc(100% - 80px);
+                margin-left: 10px;
+                margin-right: 30px;
+                float: left;
+            }
 
-        color: #555;
-        border-radius: 50%;
-        background: #ddd;
+            .notice.card-content h4 {
+                margin: 0;
+                color: #000;
+                line-height: 1.2;
+                font-weight: normal;
+            }
 
-        font-size: 30px;
-        line-height: 64px;
-      }
+            .notice.card-content article {
+                font-size: 14px;
+            }
 
-      h1 {
-        margin: 16px 0;
+            /* WEATHER-WIDGET */
+            ul {
+                padding: 0;
+                margin: 0;
+                list-style: none;
+            }
 
-        color: #212121;
+            .weather-widget .title {
+                font-size: 18px;
+                color: #333;
+                font-weight: 500;
+            }
 
-        font-size: 22px;
-      }
+            .weather-widget .currency {
+                font-size: 18px;
+            }
 
-      /* COLUMN CHANGES */
-      .feed-container {
-        box-sizing: border-box;
-        column-count: 1;
-        column-gap: 0;
-        position: relative;
-      }
-      @media (min-width: 768px) {
-        .feed-container {
-          column-count: 2;
-        }
-      }
-      @media (min-width: 1200px) {
-        .feed-container {
-          column-count: 3;
-        }
-      }
-      .card-container{
-        -webkit-column-break-inside: avoid; /* Chrome, Safari, Opera */
-        page-break-inside: avoid; /* Firefox */
-        break-inside: avoid; /* IE 10+ */
-        padding: 2px;
-      }
-    </style>
-  </template>
+            .weather-widget .date {
+                font-size: 24px;
+            }
+
+            .weather-widget .clearfix {
+                overflow: hidden;
+                margin-top: 30px;
+            }
+
+            .weather-widget .eng-date {
+                float: left;
+            }
+
+            .weather-widget .temp-wrap {
+                float: right;
+            }
+
+            .weather-widget .temp-wrap span {
+                display: inline-block;
+                vertical-align: top;
+                margin-top: 10px;
+            }
+
+            .weather-widget .eng-date p {
+                margin: 0;
+                line-height: 1.2;
+                font-size: 14px;
+            }
+
+            .weather-widget .title,
+            .weather-widget .date {
+                margin-bottom: 20px;
+            }
+
+            /* RADIO */
+            .feed-container {
+                box-sizing: border-box;
+                position: relative;
+            }
+
+            .feed-container .card {
+                border-radius: 0;
+                display: block;
+            }
+
+            .feed-container .link {
+                display: block;
+                width: 48.5%;
+                position: relative;
+                margin-bottom: 10px;
+            }
+
+            .feed-container .link:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.3);
+                z-index: 1;
+            }
+
+            .radio-block.card-content {
+                padding: 0 !important;
+            }
+
+            .radio-block.card-content p {
+                position: absolute;
+                bottom: 5px;
+                left: 0;
+                right: 0;
+                z-index: 2;
+                text-align: center;
+                margin: 0;
+                color: #fff;
+            }
+
+            /* RADIO-WIDGET */
+            .radio.card-content {
+                background: #d8d8d8;
+                overflow: hidden;
+            }
+
+            .radio.card-content h4 {
+                margin: 0;
+                color: #333;
+            }
+
+            .radio.card-content > div {
+                width: calc(100% - 55px);
+                padding-right: 10px;
+                float: left;
+            }
+
+            .radio.card-content article {
+                font-size: 14px;
+            }
+
+            /* HEALTH-LIST */
+            .health-wrap.card-content h4,
+            .slider-block.card-content h4 {
+                margin: 0 0 20px;
+                color: #333;
+            }
+
+            .health-wrap.card-content > a,
+            .slider-block.card-content > a {
+                display: block;
+                text-align: center;
+                text-decoration: none;
+                color: #239ac7;
+            }
+
+            .health-wrap.card-content > a:hover,
+            .slider-block.card-content > a:hover,
+            .health-wrap.card-content > a:focus,
+            .slider-block.card-content > a:focus {
+                color: #1f8db7;
+            }
+
+            .health-wrap.card-content > a p,
+            .slider-block.card-content > a p {
+                margin: 0;
+                border-top: 1px solid #979797;
+                margin-left: -16px;
+                margin-right: -16px;
+                padding-top: 15px;
+            }
+
+            .health-list-row .text-info {
+                float: left;
+                width: calc(100% - 60px);
+            }
+
+            .health-list-row .text-info > div {
+                overflow: hidden;
+                position: relative;
+                line-height: 22px;
+                max-height: 45px;
+                text-align: justify;
+                margin-right: 0;
+                padding-right: 25px;
+                font-size: 14px;
+            }
+
+            .health-list-row .text-info > div:before {
+                content: '...';
+                position: absolute;
+                right: 10px;
+                bottom: 0;
+            }
+
+            .health-list-row .text-info h4 {
+                margin: 0;
+                font-weight: normal;
+                color: #333;
+                line-height: normal;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .health-list-row .img-wrap {
+                width: 60px;
+                height: 60px;
+                float: left;
+                margin-top: 5px;
+            }
+
+            /* SLIDER-BLOCK */
+
+            .slider-wrap {
+                overflow: hidden;
+                margin: 10px 0;
+            }
+
+            .slider-element {
+                display: flex;
+                justify-content: space-between;
+                overflow-x: scroll;
+            }
+
+            .slider-block.card-content h4 {
+                margin-bottom: 0;
+                color: #333;
+                padding-left: 20px;
+            }
+
+            .slider-block.card-content article {
+                font-weight: 700;
+                padding-left: 20px;
+                font-size: 14px;
+                line-height: 16px;
+            }
+
+            .slider-block.card-content > a p {
+                margin: 0;
+            }
+
+            .slider-block.card-content {
+                padding: 16px 0 !important;
+            }
+
+            /* DESTINATION */
+            .destination.card-content {
+                padding: 0 !important;
+            }
+
+            .country-description {
+                padding: 20px 15px;
+                overflow: hidden;
+            }
+
+            .country-description iron-image {
+                width: 90px;
+                height: 55px;
+                float: left;
+            }
+
+            .country-list-grid {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                margin-top: 20px;
+            }
+
+            .country-list-grid .card {
+                width: 49%;
+                border-radius: 0;
+                background: #ccc;
+                color: #fff;
+                margin-bottom: 10px;
+            }
+
+            .country-text-info {
+                width: calc(100% - 110px);
+                float: left;
+                padding-left: 20px;
+            }
+
+            .country-text-info span {
+                display: block;
+            }
+
+            .destination-country-list.card-content {
+                padding: 0 !important;
+            }
+
+            .destination-country-list p {
+                margin: 0;
+                padding: 10px 15px;
+                background: #4a4a4a;
+            }
+
+            .card-container {
+                -webkit-column-break-inside: avoid; /* Chrome, Safari, Opera */
+                page-break-inside: avoid; /* Firefox */
+                break-inside: avoid; /* IE 10+ */
+                padding: 2px;
+            }
+
+            /* RESPONSIVE-MEDIA-QUERIES */
+            @media only screen and (min-width: 480px) {
+                .weather-widget .eng-date p {
+                    font-size: 18px;
+                }
+            }
+        </style>
+    </template>
 </dom-module>

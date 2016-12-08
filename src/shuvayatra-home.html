@@ -23,14 +23,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="shuvayatra-home">
     <template>
         <style include="shared-styles">
-        :host {
-            display: block;
-            padding: 10px;
-        }
-        
-        paper-card {
-            width: 100%;
-        }
+            :host {
+                display: block;
+                padding: 20px 10px;
+            }
+
+            paper-card {
+                width: 100%;
+            }
         </style>
 
         <iron-localstorage
@@ -64,20 +64,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
     </template>
     <script>
-    Polymer({
-        is: 'shuvayatra-home',
-        behaviors: [GlobalBehavior],
+        Polymer({
+            is: 'shuvayatra-home',
+            behaviors: [GlobalBehavior],
 
-        checkLayout: function(value, layout) {
-            if(value === 'notice'){
-                this.hasNotice = true;
-            }
-            return (value === layout);
-        },
+            checkLayout: function (value, layout) {
+                if (value === 'notice') {
+                    this.hasNotice = true;
+                }
+                return (value === layout);
+            },
 
-        showCountryWidget: function(index) {
-            return ((index === 1 && this.hasNotice) || (index === 0 && !this.hasNotice));
-        },
-    });
+            showCountryWidget: function (index) {
+                return ((index === 1 && this.hasNotice) || (index === 0 && !this.hasNotice));
+            },
+        });
     </script>
 </dom-module>

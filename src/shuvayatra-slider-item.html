@@ -4,15 +4,26 @@
 <dom-module id="shuvayatra-slider-item">
     <template>
         <style include="shared-styles">
-        :host {
-            display: block;
-            padding: 10px;
-        }
-        
-        iron-image {
-            width: 150px;
-            height: 150px;
-        }
+            :host {
+                display: block;
+                margin-right: 5px;
+            }
+
+            iron-image {
+                width: 140px;
+                height: 80px;
+            }
+
+            h5 {
+                font-weight: normal;
+                color: #333;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 130px;
+                margin: 0;
+                padding: 5px;
+            }
         </style>
         <div>
             <iron-image src="[[getImage(data)]]" preload sizing="cover"></iron-image>
@@ -20,23 +31,23 @@
         </div>
     </template>
     <script>
-    Polymer({
-        is: 'shuvayatra-slider-item',
+        Polymer({
+            is: 'shuvayatra-slider-item',
 
-        properties: {
-            data: {
-                type: Object,
+            properties: {
+                data: {
+                    type: Object
+                }
             },
-        },
 
-        getImage: function(data){
-            if(this.data.type === 'text'){
-                return this.data.featured_image;
-            }else{
-                return this.data.data.thumbnail;
+            getImage: function (data) {
+                if (this.data.type === 'text') {
+                    return this.data.featured_image;
+                } else {
+                    return this.data.data.thumbnail;
+                }
             }
-        }
 
-    });
+        });
     </script>
 </dom-module>
