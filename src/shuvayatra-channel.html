@@ -26,6 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         :host {
             display: block;
             padding: 10px;
+            position: relative;
         }
         
         app-header {
@@ -34,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             color: #fff;
             background-color: var(--app-primary-color);
             --app-header-shadow: {
-                box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.2);
+                box-shadow: inset 0 5px 6px -3px rgba(0, 0, 0, 0.2);
                 height: 10px;
                 bottom: -10px;
             }
@@ -42,7 +43,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         
         .feed-container {
-            margin-top: 52px;
+            margin-top: 70px;
+            padding-bottom: 100px;
         }
         
         iron-image{
@@ -55,17 +57,63 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             width: calc(100% - 130px);
             float: left;
             position: relative;
-            padding: 5px 5px 5px 25px;
+            padding: 5px 10px 5px 30px;
         }
 
         .mytitle__wrap label:nth-of-type(1){
             font-size: 14px;
             color: #000;
-            height: 60px;
+            margin-top: 5px;
+        }
+
+        .ellipsis {
+            overflow: hidden;
+            height: 50px;
+            line-height: 25px;
+            margin-top: 15px;
+        }
+
+        .ellipsis > div {
+            float: right;
+            width: 100%;
+            margin-left: -5px;
+        }
+
+        .ellipsis:before {
+            content: "";
+            float: left;
+            width: 5px;
+            height: 50px;
+        }
+
+        .ellipsis:after {
+            content: "\02026";
+            box-sizing: content-box;
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            float: right;
+            color: #8e8e8e;
+            position: relative;
+            top: -25px;
+            left: 100%;
+            width: 3em;
+            margin-left: -3em;
+            padding-right: 5px;
+            text-align: right;
+            background: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(white), color-stop(50%, white));
+            background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+            background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+            background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+        }
+
+        .mytitle__wrap .ellipsis p {
+            margin: 0;
+            color: #8e8e8e;
         }
 
         .mytitle__wrap label{
-            font-size: 12px;
+            font-size: 14px;
             display: block;
             color: #868686;
             cursor: pointer;
@@ -106,9 +154,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .mytitle__wrap label:nth-of-type(1) {
-                height: 90px;
+                margin: 15px 0;
             }
 
+            .mytitle__wrap label:nth-of-type(2) {
+                margin: 0;
+            }
+
+            .ellipsis {
+                margin-top: 30px;
+            }
+
+        }
+
+        @media only screen and (min-width: 768px) {
+            :host {
+                max-width: 750px;
+                margin: 0 auto;
+            }
         }
         </style>
         <iron-ajax auto url="{{ baseUrl }}api/podcasts/?category={{channelId}}" on-response="_didRespond" last-response="{{channel}}" handle-as="json" debounce-duration="300"></iron-ajax>
@@ -126,7 +189,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div class="mytitle__wrap">
                         <paper-fab mini icon="av:volume-up" no-ink></paper-fab>
                         <label>{{ item.title }}</label>
-                        <label>{{ item.description}}</label>
+                        <div class="ellipsis"><div><p>{{ item.description}}</p></div></div>
                     </div>
                 </paper-card>
             </template>

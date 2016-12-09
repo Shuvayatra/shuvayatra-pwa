@@ -42,6 +42,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 flex-wrap: wrap;
                 padding: 0 10px;
             }
+
+            @media only screen and (min-width: 768px) {
+                :host {
+                    max-width: 750px;
+                    margin: 0 auto;
+                }
+
+                iron-image {
+                    height: 270px;
+                }
+            }
         </style>
         <iron-ajax auto url="{{ baseUrl }}api/radio/categories" last-response="{{channels}}" handle-as="json" debounce-duration="300"></iron-ajax>
 

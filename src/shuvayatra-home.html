@@ -31,6 +31,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             paper-card {
                 width: 100%;
             }
+
+            @media only screen and (min-width: 768px) {
+                :host {
+                    max-width: 750px;
+                    margin: 0 auto;
+                }
+            }
         </style>
 
         <iron-localstorage

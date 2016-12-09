@@ -7,33 +7,42 @@
 <dom-module id="shuvayatra-mini-player">
     <template>
         <style include="shared-styles">
-        :host {
-            display: block;
-            padding: 10px;
-            --paper-slider-active-color: #fff;
-            --paper-slider-knob-color: #fff;
-            --paper-slider-knob-start-color: #fff;
-        }
-        
-        paper-icon-button {
-            width: 80px;
-            height: 80px;
-        }
-        
-        paper-icon-button[hidden] {
-            display: none;
-        }
-        
-        paper-slider {
-            width: 100%;
-        }
-        
-        .player-container {
-            background-color: #ddd;
-        }
+            :host {
+                display: block;
+                --paper-slider-active-color: #fff;
+                --paper-slider-knob-color: #fff;
+                --paper-slider-knob-start-color: #fff;
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                padding: 0;
+                color: #fff;
+                max-width: 750px;
+                margin: 0 auto;
+            }
+
+            paper-icon-button {
+                width: 80px;
+                height: 80px;
+            }
+
+            paper-icon-button[hidden] {
+                display: none;
+            }
+
+            paper-slider {
+                width: 100%;
+                --paper-slider-container-color: #fff;
+                --paper-slider-knob-start-border-color: #fff;
+            }
+
+            .player-container {
+                background-color: #7bd086;
+            }
         </style>
         <div class="player-container">
-            <div>
+            <div class="player-container-inner">
                 <div on-tap="_playPause">
                     <paper-icon-button icon="av:play-circle-outline" hidden$="{{ _hidePlayIcon(isPlaying, canBePlayed) }}"></paper-icon-button>
                     <paper-icon-button icon="av:pause-circle-outline" hidden$="{{ !isPlaying }}"></paper-icon-button>
@@ -50,167 +59,167 @@
         </div>
     </template>
     <script>
-    Polymer({
-        is: 'shuvayatra-mini-player',
+        Polymer({
+            is: 'shuvayatra-mini-player',
 
-        listeners: {
-            'audio.loadedmetadata': '_onCanPlay',
-            'audio.playing': '_onPlaying',
-            'audio.pause': '_onPause',
-            'audio.ended': '_onEnd',
-            'audio.error': '_onError',
-            'immediate-value-change': '_onSeekbarPositionChanged',
-            'change': '_onSeekbarPositionChanged'
-        },
-
-        observers: [
-            '_onProgressChanged(percentagePlayed)'
-        ],
-
-        properties: {
-            tracks: {
-                type: Array,
-                notify: true
+            listeners: {
+                'audio.loadedmetadata': '_onCanPlay',
+                'audio.playing': '_onPlaying',
+                'audio.pause': '_onPause',
+                'audio.ended': '_onEnd',
+                'audio.error': '_onError',
+                'immediate-value-change': '_onSeekbarPositionChanged',
+                'change': '_onSeekbarPositionChanged'
             },
 
-            playIndex: {
-                type: Number
-            }
-        },
+            observers: [
+                '_onProgressChanged(percentagePlayed)'
+            ],
 
-        ready: function(){
-            this.isPlaying = false;
-            this.canBePlayed = true;
-        },
+            properties: {
+                tracks: {
+                    type: Array,
+                    notify: true
+                },
 
-        _onCanPlay: function() {
-            this.canBePlayed = true;
+                playIndex: {
+                    type: Number
+                }
+            },
 
-            if (this.timeOffset > 0) {
-                this.percentagePlayed = this.timeOffset / this.$.audio.duration;
-            }
-        },
+            ready: function () {
+                this.isPlaying = false;
+                this.canBePlayed = true;
+            },
 
-        _onPlaying: function() {
-            this.ended = false;
-            this.isPlaying = true;
-            this._startProgressTimer();
-        },
+            _onCanPlay: function () {
+                this.canBePlayed = true;
 
-        _onPause: function() {
-            this.isPlaying = false;
-        },
+                if (this.timeOffset > 0) {
+                    this.percentagePlayed = this.timeOffset / this.$.audio.duration;
+                }
+            },
 
-        _onEnd: function() {
-            this.ended = true;
-            this.isPlaying = false;
+            _onPlaying: function () {
+                this.ended = false;
+                this.isPlaying = true;
+                this._startProgressTimer();
+            },
 
-            if (this.playIndex < this.tracks.length - 1) {
-                this.playIndex += 1;
-                this.seekbarValue = 0;
-            }
-        },
+            _onPause: function () {
+                this.isPlaying = false;
+            },
 
-        _onError: function() {
-            // this.title = 'Sorry, can\'t play track: ' + this.title;
-            this.error = true;
-        },
+            _onEnd: function () {
+                this.ended = true;
+                this.isPlaying = false;
 
-        _onSeekbarPositionChanged: function() {
-            var value = this.$.seekbar.immediateValue;
-            var player = this;
-            if (player.canBePlayed) {
-                player._updateAudioProgress(value);
-                if (!player.isPlaying) player.$.audio.play();
-            } else if (player.preload === 'none') {
-                player.$.audio.load();
-                player.$.audio.addEventListener('loadedmetadata', function() {
+                if (this.playIndex < this.tracks.length - 1) {
+                    this.playIndex += 1;
+                    this.seekbarValue = 0;
+                }
+            },
+
+            _onError: function () {
+                // this.title = 'Sorry, can\'t play track: ' + this.title;
+                this.error = true;
+            },
+
+            _onSeekbarPositionChanged: function () {
+                var value = this.$.seekbar.immediateValue;
+                var player = this;
+                if (player.canBePlayed) {
                     player._updateAudioProgress(value);
                     if (!player.isPlaying) player.$.audio.play();
-                }, false);
-            }
-        },
+                } else if (player.preload === 'none') {
+                    player.$.audio.load();
+                    player.$.audio.addEventListener('loadedmetadata', function () {
+                        player._updateAudioProgress(value);
+                        if (!player.isPlaying) player.$.audio.play();
+                    }, false);
+                }
+            },
 
-        _updateAudioProgress: function(progress) {
-            var audio = this.$.audio;
-            var totalDuration = audio.duration;
-            this.currentTime = audio.currentTime = (progress * totalDuration) / 100;
-        },
+            _updateAudioProgress: function (progress) {
+                var audio = this.$.audio;
+                var totalDuration = audio.duration;
+                this.currentTime = audio.currentTime = (progress * totalDuration) / 100;
+            },
 
-        _startProgressTimer: function() {
-            var player = this;
-            player.timer = {};
-            if (player.timer.sliderUpdateInterval) {
-                clearInterval(player.timer.sliderUpdateInterval);
-            }
-
-            player.timer.sliderUpdateInterval = setInterval(function() {
-                if (player.isPlaying) {
-                    player.currentTime = player.$.audio.currentTime;
-                    player.duration = player.$.audio.duration;
-                    player.percentagePlayed = (player.currentTime / player.$.audio.duration) * 100;
-                } else {
+            _startProgressTimer: function () {
+                var player = this;
+                player.timer = {};
+                if (player.timer.sliderUpdateInterval) {
                     clearInterval(player.timer.sliderUpdateInterval);
                 }
-            }, 100);
-        },
 
-        _convertSecToMin: function(seconds) {
-            if (!seconds || seconds === 0) return '00:00';
-            var minutes = Math.floor(seconds / 60);
-            var secondsToCalc = Math.floor(seconds % 60) + '';
-            return minutes + ':' + (secondsToCalc.length < 2 ? '0' + secondsToCalc : secondsToCalc);
-        },
+                player.timer.sliderUpdateInterval = setInterval(function () {
+                    if (player.isPlaying) {
+                        player.currentTime = player.$.audio.currentTime;
+                        player.duration = player.$.audio.duration;
+                        player.percentagePlayed = (player.currentTime / player.$.audio.duration) * 100;
+                    } else {
+                        clearInterval(player.timer.sliderUpdateInterval);
+                    }
+                }, 100);
+            },
 
-        _hidePlayIcon: function(isPlaying, canBePlayed) {
-            return isPlaying ? true : !(canBePlayed || this.preload === 'none');
-        },
+            _convertSecToMin: function (seconds) {
+                if (!seconds || seconds === 0) return '00:00';
+                var minutes = Math.floor(seconds / 60);
+                var secondsToCalc = Math.floor(seconds % 60) + '';
+                return minutes + ':' + (secondsToCalc.length < 2 ? '0' + secondsToCalc : secondsToCalc);
+            },
 
-        _playPause: function(e) {
-            e.preventDefault();
-            if (this.canBePlayed) {
-                return this.isPlaying ? this.$.audio.pause() : this.$.audio.play();
-            } else if (this.preload === 'none') {
-                this.$.audio.load();
+            _hidePlayIcon: function (isPlaying, canBePlayed) {
+                return isPlaying ? true : !(canBePlayed || this.preload === 'none');
+            },
+
+            _playPause: function (e) {
+                e.preventDefault();
+                if (this.canBePlayed) {
+                    return this.isPlaying ? this.$.audio.pause() : this.$.audio.play();
+                } else if (this.preload === 'none') {
+                    this.$.audio.load();
+                    this.$.audio.play();
+                }
+            },
+
+            _onProgressChanged: function (progress) {
+                if (!this.$.seekbar.pressed) {
+                    this.seekbarValue = progress;
+                }
+            },
+
+            _getProgress: function (currentTime) {
+                return this._convertSecToMin(this.currentTime) + " | " + this._convertSecToMin(this.duration);
+            },
+
+            _getTitle: function (index) {
+                if (this.tracks && index !== -1) {
+                    return this.tracks[index].title;
+                } else {
+                    return "---";
+                }
+            },
+
+            _getSource: function (index) {
+                if (this.tracks && index !== -1) {
+                    return this.tracks[index].source;
+                }
+            },
+
+            _stopPlayback: function () {
+                this.playIndex = -1;
+                this.$.audio.pause();
+                this.currentTime = this.$.audio.currentTime = 0;
+                this.$.seekbar.value = 0;
+            },
+
+            _startPlayback: function () {
                 this.$.audio.play();
             }
-        },
 
-        _onProgressChanged: function(progress) {
-            if (!this.$.seekbar.pressed) {
-                this.seekbarValue = progress;
-            }
-        },
-
-        _getProgress: function(currentTime) {
-            return this._convertSecToMin(this.currentTime) + " | " + this._convertSecToMin(this.duration);
-        },
-
-        _getTitle: function(index) {
-            if (this.tracks && index !== -1) {
-                return this.tracks[index].title;
-            } else {
-                return "---";
-            }
-        },
-
-        _getSource: function(index) {
-            if (this.tracks && index !== -1) {
-                return this.tracks[index].source;
-            }
-        },
-
-        _stopPlayback: function(){
-            this.playIndex = -1;
-            this.$.audio.pause();
-            this.currentTime = this.$.audio.currentTime = 0;
-            this.$.seekbar.value = 0;
-        },
-
-        _startPlayback: function(){
-            this.$.audio.play();
-        }
-
-    });
+        });
     </script>
 </dom-module>
