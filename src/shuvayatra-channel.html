@@ -19,6 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="behaviors/global-behavior.html">
+<link rel="import" href="shuvayatra-mini-player.html">
 <dom-module id="shuvayatra-channel">
     <template>
         <style include="shared-styles">
@@ -110,7 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         }
         </style>
-        <iron-ajax auto url="{{ baseUrl }}api/podcasts/?category={{channelId}}" last-response="{{channel}}" handle-as="json" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{ baseUrl }}api/podcasts/?category={{channelId}}" on-response="_didRespond" last-response="{{channel}}" handle-as="json" debounce-duration="300"></iron-ajax>
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
                 <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
@@ -119,14 +120,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
         <div class="feed-container">
             <template id="list" is="dom-repeat" items="{{ channel.feeds.data }}">
-                <!-- <paper-card class="card" elevation="1" animated-shadow="false">
-                    <div class="card-content">
-                        <iron-image src="{{ item.image }}" sizing="cover"></iron-image>
-                        <p>{{ item.title }}</p>
-                        <p>{{ item.description }}</p>
-                    </div>
-                </paper-card> -->
-                <paper-card class="mycard" elevation="1" animated="true">
+                <paper-card class="mycard" elevation="1" animated="true" on-click="_setPlayIndex">
                     <paper-ripple></paper-ripple>
                     <iron-image placeholder="../images/image-default.png" preload src="{{ item.image }}" fade="true" sizing="cover"></iron-image>
                     <div class="mytitle__wrap">
@@ -137,6 +131,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </paper-card>
             </template>
         </div>
+        <shuvayatra-mini-player id="player" tracks="{{ tracks }}" play-index="{{playIndex}}"></shuvayatra-mini-player>
     </template>
     <script>
     Polymer({
@@ -146,12 +141,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         properties: {
             channelId: {
                 type: Number,
+            },
+
+            tracks:{
+                notify: true
+            },
+
+            playIndex: {
+                type: Number,
+                value: -1,
+                notify: true
+            }
+        },
+
+        _didRespond: function(e){
+            if(e.detail.response.feeds){
+                this.tracks = e.detail.response.feeds.data;
+                this.playIndex = 0;
             }
         },
 
         _goBack: function() {
+            this.$.player._stopPlayback();
             window.history.back();
         },
+
+        _setPlayIndex: function(e){
+            var index = e.model.__data__.index;
+            this.playIndex = index;
+            this.$.player._startPlayback();
+        }
     });
     </script>
 </dom-module>
