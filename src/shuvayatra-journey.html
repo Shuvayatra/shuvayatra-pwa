@@ -27,6 +27,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             shuvayatra-slider-block {
                 margin-bottom: 20px;
             }
+
+            @media only screen and (min-width: 768px) {
+                :host {
+                    max-width: 750px;
+                    margin: 0 auto;
+                }
+            }
         </style>
         <iron-ajax auto url="{{ baseUrl }}api/screen/journey" handle-as="json" last-response="{{journeyFeeds}}" debounce-duration="300"></iron-ajax>
         <div class="feed-container">

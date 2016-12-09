@@ -24,6 +24,13 @@
                 margin: 0;
                 padding: 5px;
             }
+
+            @media only screen and (min-width: 600px) {
+                iron-image {
+                    width: 200px;
+                    height: 150px;
+                }
+            }
         </style>
         <div>
             <iron-image src="[[getImage(data)]]" preload sizing="cover"></iron-image>

@@ -41,6 +41,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .card {
                 width: 100%;
             }
+
+            @media only screen and (min-width: 700px) {
+                iron-image {
+                    height: 200px;
+                }
+
+                .destination-country-list p {
+                    text-align: center;
+                    font-size: 18px;
+                }
+            }
+
+            @media only screen and (min-width: 768px) {
+                :host {
+                    max-width: 750px;
+                    margin: 0 auto;
+                }
+            }
         </style>
         <iron-localstorage name="onboard" value="{{onboard}}">
         </iron-localstorage>
