@@ -257,21 +257,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _routePageChanged: function (page) {
                 if (this.headerPages.indexOf(page) === -1) {
                     this.myPage = "main";
+                }else{
+                    this.myPage = page;
                 }
                 this.page = page || 'home';
             },
 
             _subrouteIdChanged: function (id) {
-                if (this.page === 'channel' && id) {
-                    this.id = id;
-                    this.myPage = "channel";
-                } else if (this.page === 'feed') {
-                    this.myPage = "feed";
-                } else if (this.page === 'search') {
-                    this.myPage = "search";
-                } else {
-                    this.myPage = "main";
-                }
+                this.id = id;
             },
 
 
