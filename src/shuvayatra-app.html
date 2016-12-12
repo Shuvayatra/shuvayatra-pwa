@@ -156,6 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-pages selected="[[myPage]]" attr-for-selected="name" fallback-selection="notfound" role="main">
             <shuvayatra-channel name="channel" channel-id={{id}}></shuvayatra-channel>
             <shuvayatra-feed name="feed" params="{{queryParams}}" title="{{queryParams.title}}"></shuvayatra-feed>
+            <shuvayatra-search name="search"></shuvayatra-search>
             <div name="main">
                 <!-- start tab on wide layout -->
                 <app-drawer-layout force-narrow fullbleed>
@@ -174,10 +175,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <app-header condenses reveals>
                             <app-toolbar>
                                 <img id="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}"/>
-                                <paper-input id="search" label="Search" type="search" no-label-float="false">
+                                <a href="/search" style="width:100%;">
+                                <paper-input disabled  id="search" label="Search" type="search" no-label-float="false">
                                     <paper-icon-button prefix id="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
                                     <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
                                 </paper-input>
+                                </a>
                             </app-toolbar>
                             <app-toolbar class="tabs-bar" hidden$="{{!wideLayout}}">
                                 <!-- Nav on desktop: tabs -->
@@ -241,7 +244,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 headerPages: {
                     type: Array,
                     value: function () {
-                        return ["channel", "feed"];
+                        return ["channel", "feed", "search"];
                     }
                 }
             },
@@ -264,6 +267,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.myPage = "channel";
                 } else if (this.page === 'feed') {
                     this.myPage = "feed";
+                } else if (this.page === 'search') {
+                    this.myPage = "search";
                 } else {
                     this.myPage = "main";
                 }
