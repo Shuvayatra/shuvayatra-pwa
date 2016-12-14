@@ -25,6 +25,10 @@
                 padding: 5px;
             }
 
+            a{
+                text-decoration: none;
+            }
+
             @media only screen and (min-width: 600px) {
                 iron-image {
                     width: 200px;
@@ -33,13 +37,16 @@
             }
         </style>
         <div>
-            <iron-image src="[[getImage(data)]]" preload sizing="cover"></iron-image>
-            <h5>[[data.title]]</h5>
+            <a href="{{ _generateUrl(data) }}">
+                <iron-image src="[[getImage(data)]]" preload sizing="cover"></iron-image>
+                <h5>[[data.title]]</h5>
+            </a>
         </div>
     </template>
     <script>
         Polymer({
             is: 'shuvayatra-slider-item',
+            behaviors: [PostBehavior],
 
             properties: {
                 data: {

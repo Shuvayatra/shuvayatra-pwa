@@ -156,6 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-pages selected="[[myPage]]" attr-for-selected="name" fallback-selection="notfound" role="main">
             <shuvayatra-channel name="channel" channel-id={{id}}></shuvayatra-channel>
             <shuvayatra-feed name="feed" params="{{queryParams}}" title="{{queryParams.title}}"></shuvayatra-feed>
+            <shuvayatra-post name="post" post-id="{{id}}"></shuvayatra-post>
             <shuvayatra-search name="search"></shuvayatra-search>
             <div name="main">
                 <!-- start tab on wide layout -->
@@ -244,7 +245,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 headerPages: {
                     type: Array,
                     value: function () {
-                        return ["channel", "feed", "search"];
+                        return ["channel", "feed", "search","post"];
                     }
                 }
             },

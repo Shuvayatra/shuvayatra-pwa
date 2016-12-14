@@ -10,7 +10,7 @@
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
     "iron-icon": "PolymerElements/iron-icon#^1.0.0",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.0.0",
-    "iron-localstorage": "PolymerElements/iron-localstorage#^1.0.0",
+    "iron-localstorage": "polymerelements/iron-localstorage#^1.0.0",
     "iron-media-query": "PolymerElements/iron-media-query#^1.0.8",
     "iron-pages": "PolymerElements/iron-pages#^1.0.0",
     "iron-selector": "PolymerElements/iron-selector#^1.5.2",
@@ -35,7 +35,10 @@
     "paper-date-picker": "polymer-paper-date-picker#^1.2.0",
     "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
     "paper-radio-group": "PolymerElements/paper-radio-group#^1.2.1",
-    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.4.3"
+    "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^1.4.3",
+    "iron-form": "PolymerElements/iron-form#^1.1.1",
+    "google-youtube": "GoogleWebComponents/google-youtube#^1.2.1",
+    "iron-grid": "*"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

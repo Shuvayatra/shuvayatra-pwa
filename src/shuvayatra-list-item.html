@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="./behaviors/post-behavior.html">
 <link rel="import" href="shared-styles.html">
 <dom-module id="shuvayatra-list-item">
     <template>
@@ -10,12 +11,17 @@
                 margin-bottom: 20px;
             }
 
+            a{
+                color: #757575;
+            }
+
             iron-image {
                 width: 60px;
                 height: 60px;
             }
         </style>
         <div class="health-list-row">
+            <a href="{{ _generateUrl(data) }}">
             <div class="text-info">
                 <h4>[[data.title]]</h4>
                 <div>[[ stripHTML(data.description) ]]</div>
@@ -23,11 +29,13 @@
             <div class="img-wrap">
                 <iron-image src="[[getImage(data)]]" preload sizing="cover"></iron-image>
             </div>
+            </a>
         </div>
     </template>
     <script>
         Polymer({
             is: 'shuvayatra-list-item',
+            behaviors: [PostBehavior],
 
             properties: {
                 data: {
