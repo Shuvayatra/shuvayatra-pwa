@@ -17,242 +17,373 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="behaviors/global-behavior.html">
 <link rel="import" href="shuvayatra-snackbar.html">
+<link rel="stylesheet" href="../bower_components/flatpickr/dist/flatpickr.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="../bower_components/flatpickr/dist/flatpickr.min.js"></script>
 <dom-module id="shuvayatra-onboard">
     <template>
         <style>
-        :host {
-            --app-primary-color: #00BBD5;
-            --app-secondary-color: black;
-            display: block;
-        }
-        
-        app-header {
-            padding: 0 10px;
-            background-color: var(--app-primary-color);
-            --app-header-background-front-layer: {
-                background-image: url('../images/image-default.png');
+            :host {
+                --app-primary-color: #00BBD5;
+                --app-secondary-color: black;
+                display: block;
+                background: #fff;
+                height: calc(100% - 64px);
+                min-height: inherit;
             }
-            ;
-            --app-header-background-rear-layer: {
-                background-color: var(--app-primary-color);
+
+            app-header {
+                padding: 0 10px;
+                background: #1695f7; /* fallback for old browsers */
+                background: -webkit-linear-gradient(to left, #64c064, #1695f7); /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to left, #64c064, #1695f7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                --app-header-background-front-layer: {
+                    background-image: url('../images/image-default.png');
+                };
+                --app-header-background-rear-layer: {
+                    background-color: var(--app-primary-color);
+                };
             }
-            ;
-        }
-        
-        app-toolbar {
-            padding: 0;
-        }
-        
-        app-drawer app-toolbar {
-            padding: 20px;
-            font-size: 18px;
-        }
-        
-        app-header paper-icon-button {
-            color: #616161;
-        }
-        
-        paper-button {
-            background: green;
-            color: yellow;
-        }
+
+            app-toolbar {
+                padding: 0;
+                text-align: center;
+                color: #fff;
+                display: block;
+            }
+
+            app-toolbar span {
+                display: block;
+                padding-top: 15px;
+            }
+
+            app-drawer app-toolbar {
+                padding: 20px;
+                font-size: 18px;
+            }
+
+            app-header paper-icon-button {
+                color: #616161;
+            }
+
+            paper-button {
+                background: #64c064;
+                color: white;
+            }
+
+            paper-button:hover, paper-button:focus {
+                background: #39c03a;
+            }
+
+            .header-onboard {
+                text-align: center;
+                color: #bdbdbd;
+                font-size: 12px;
+            }
+
+            .header-onboard iron-icon + label {
+                font-size: 24px;
+                color: #9a9a9a;
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .header-onboard p {
+                line-height: 30px;
+                margin: 20px 0;
+            }
+
+            iron-icon {
+                width: 60px;
+                height: 60px;
+                margin-right: 10px;
+                display: inline-block;
+            }
+
+            iron-pages > div {
+                text-align: center;
+            }
+
+            iron-pages > div p {
+                color: #9a9a9a;
+                font-size: 16px;
+            }
+
+            .button-control {
+                text-align: center;
+                padding-top: 80px;
+            }
+
+            .on-board-wrap {
+                max-width: 560px;
+                margin: 50px auto;
+                padding: 0 10px;
+            }
+
+            .on-board-inner {
+                box-shadow: 0 2px 5px 1px #cecece;
+                padding: 50px 10px;
+            }
+
+            paper-input {
+                max-width: 250px;
+                margin: 0 auto;
+                text-align: left;
+            }
+
+            paper-dropdown-menu ::content paper-menu-button ::content iron-dropdown {
+                position: absolute !important;
+                top: 46px !important;
+                left: 0 !important;
+                right: 0 !important;
+            }
+
+            paper-dropdown-menu ::content iron-dropdown .dropdown-content {
+                max-width: 191px;
+                max-height: 627px;
+            }
+
+            .flatpickr,.flatpickr-input {
+                cursor: pointer;
+                z-index: 1;
+                font-size: 14px;
+                margin: 0 auto;
+                padding: 0 .5rem;
+                height: 40px;
+                background: #fff;
+                text-align: center;
+                border: 0;
+                border-bottom: 1px solid #ccc;
+                width: 100%;
+                max-width: 150px;
+                display: block;
+                transition: all .2s ease-out;
+            }
+
+            paper-radio-group {
+                display: block;
+                text-align: left;
+                max-width: 290px;
+                margin: 0 auto;
+            }
+
+            paper-radio-button {
+                display: block;
+                max-width: 170px;
+                text-align: left;
+                margin: 0 auto;
+            }
+
+            .work paper-radio-button {
+                max-width: 100%;
+            }
+
         </style>
         <iron-localstorage name="onboard" value="{{onboard}}">
         </iron-localstorage>
         <iron-ajax auto url="{{ baseUrl }}api/destinations" handle-as="json" last-response="{{destinations}}" debounce-duration="300"></iron-ajax>
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
-                स्वागतम्
+                <span>स्वागतम्</span>
             </app-toolbar>
         </app-header>
-        <header>
-            <iron-icon src="../images/app-icon-144.png"></iron-icon>
-            <label>Shuvayatra</label>
-        </header>
-        <p>निम्न प्रश्न का जवाफ दिएर तपाईं हामीलाई सन्दर्भिक जान्कारी दिना मद्दत गर्दै हुनुहुन्छ </p>
-        <iron-pages selected="{{selected}}" role="main">
-            <div class="name">
-                <p>तपाईंको नाम के हो</p>
-                <input is="iron-input" bind-value="{{onboard.name}}">
-            </div>
-            <div class="dob">
-                <p>तपाईंको जन्म मिती चयन गर्नुहोस्</p>
-                <label on-tap="_showDialog">{{ _getDOB(onboard.dob) }}</label>
-                <paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
-                    <paper-date-picker id="picker" date="{{ date }}"></paper-date-picker>
-                    <div class="buttons">
-                        <paper-button dialog-dismiss>Cancel</paper-button>
-                        <paper-button dialog-confirm>OK</paper-button>
+        <div class="on-board-wrap">
+            <div class="on-board-inner">
+                <header class="header-onboard">
+                    <iron-icon src="../images/app-icon-144.png"></iron-icon>
+                    <label>Shuvayatra</label>
+                    <p>निम्न प्रश्न का जवाफ दिएर तपाईं हामीलाई सन्दर्भिक जान्कारी दिना मद्दत गर्दै हुनुहुन्छ </p>
+                </header>
+                <iron-pages selected="{{selected}}" role="main">
+                    <div class="name">
+                        <p>तपाईंको नाम के हो</p>
+                        <paper-input is="iron-input" bind-value="{{onboard.name}}"></paper-input>
                     </div>
-                </paper-dialog>
+                    <div class="dob">
+                        <p>तपाईंको जन्म मिती चयन गर्नुहोस्</p>
+                        <!--<label on-tap="_showDialog">{{ _getDOB(onboard.dob) }}</label>-->
+                        <!--<paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">-->
+                        <!--<paper-date-picker id="picker" date="{{ date }}"></paper-date-picker>-->
+                        <!--<div class="buttons">-->
+                        <!--<paper-button dialog-dismiss>Cancel</paper-button>-->
+                        <!--<paper-button dialog-confirm>OK</paper-button>-->
+                        <!--</div>-->
+                        <!--</paper-dialog>-->
+                        <input id="test" class="flatpickr" type="text" placeholder="Select Date..">
+                    </div>
+                    <div class="gender">
+                        <p>तपाईंको लिङ्ग चयन गर्नुहोस्</p>
+                        <paper-radio-group selected="{{onboard.gender}}">
+                            <paper-radio-button name="male">पुरुष</paper-radio-button>
+                            <paper-radio-button name="female">महिला</paper-radio-button>
+                        </paper-radio-group>
+                    </div>
+                    <div class="region">
+                        <paper-dropdown-menu label="कृपया क्षेत्र चयन गर्नुहोस्">
+                            <!-- <paper-listbox class="dropdown-content"> -->
+                            <iron-selector attr-for-selected="name" selected={{onboard.region}} class="dropdown-content">
+                                <paper-item name="मेची">मेची</paper-item>
+                                <paper-item name="कोशी">कोशी</paper-item>
+                                <paper-item name="सगरमाथा">सगरमाथा</paper-item>
+                                <paper-item name="जनकपुर्">जनकपुर्</paper-item>
+                                <paper-item name="बागमती">बागमती</paper-item>
+                                <paper-item name="नारायनि">नारायनि</paper-item>
+                                <paper-item name="गण्डकी">गण्डकी</paper-item>
+                                <paper-item name="लुम्बिनि">लुम्बिनि</paper-item>
+                                <paper-item name="धौलागिरि">धौलागिरि</paper-item>
+                                <paper-item name="राप्ती">राप्ती</paper-item>
+                                <paper-item name="कर्णाली">कर्णाली</paper-item>
+                                <paper-item name="भेरी">भेरी</paper-item>
+                                <paper-item name="सेती">सेती</paper-item>
+                                <paper-item name="माहाकाली">माहाकाली</paper-item>
+                            </iron-selector>
+                            <!-- </paper-listbox> -->
+                        </paper-dropdown-menu>
+                    </div>
+                    <div class="work">
+                        <p>तपाईंले एस अघि बिदेश मा काम गर्नुभएको छ ?</p>
+                        <paper-radio-group selected="{{onboard.work}}">
+                            <paper-radio-button name="work_status_working_abroad">छ, म अझै काम गर्छु</paper-radio-button>
+                            <paper-radio-button name="work_status_back_from_abroad">छ, तर म नेपाल फर्किसकेँ</paper-radio-button>
+                            <paper-radio-button name="work_status_planning">छैन, जाने सोचाइ मा छु</paper-radio-button>
+                            <paper-radio-button name="work_status_not_going">छैन, जाने सोचाइ छैन</paper-radio-button>
+                        </paper-radio-group>
+                    </div>
+                    <div class="country">
+                        <paper-dropdown-menu label="मनपरेको गन्तव्य">
+                            <iron-selector selected={{onboard.country}} attr-for-selected="name" fallback-selection="default" class="dropdown-content">
+                                <template is="dom-repeat" items="[[destinations]]">
+                                    <paper-item name="{{ item.title_en }}">{{item.title}}</paper-item>
+                                </template>
+                            </iron-selector>
+                        </paper-dropdown-menu>
+                    </div>
+                </iron-pages>
+                <div class="button-control">
+                    <template is="dom-if" if="{{ !_isFirst(selected) }}">
+                        <paper-button on-tap="_prev" raised>Previous</paper-button>
+                    </template>
+                    <template is="dom-if" if="{{ _isLast(selected) }}">
+                        <paper-button on-tap="_finish" raised>Finish</paper-button>
+                    </template>
+                    <template is="dom-if" if="{{ !_isLast(selected) }}">
+                        <paper-button on-tap="_next" raised>Next</paper-button>
+                    </template>
+                </div>
             </div>
-            <div class="gender">
-                <p>तपाईंको लिङ्ग चयन गर्नुहोस्</p>
-                <paper-radio-group selected="{{onboard.gender}}">
-                    <paper-radio-button name="male">पुरुष</paper-radio-button>
-                    <paper-radio-button name="female">महिला</paper-radio-button>
-                </paper-radio-group>
-            </div>
-            <div class="region">
-                <paper-dropdown-menu label="कृपया क्षेत्र चयन गर्नुहोस्">
-                    <!-- <paper-listbox class="dropdown-content"> -->
-                    <iron-selector attr-for-selected="name" selected={{onboard.region}} class="dropdown-content">
-                        <paper-item name="मेची">मेची</paper-item>
-                        <paper-item name="कोशी">कोशी</paper-item>
-                        <paper-item name="सगरमाथा">सगरमाथा</paper-item>
-                        <paper-item name="जनकपुर्">जनकपुर्</paper-item>
-                        <paper-item name="बागमती">बागमती</paper-item>
-                        <paper-item name="नारायनि">नारायनि</paper-item>
-                        <paper-item name="गण्डकी">गण्डकी</paper-item>
-                        <paper-item name="लुम्बिनि">लुम्बिनि</paper-item>
-                        <paper-item name="धौलागिरि">धौलागिरि</paper-item>
-                        <paper-item name="राप्ती">राप्ती</paper-item>
-                        <paper-item name="कर्णाली">कर्णाली</paper-item>
-                        <paper-item name="भेरी">भेरी</paper-item>
-                        <paper-item name="सेती">सेती</paper-item>
-                        <paper-item name="माहाकाली">माहाकाली</paper-item>
-                    </iron-selector>
-                    <!-- </paper-listbox> -->
-                </paper-dropdown-menu>
-            </div>
-            <div class="work">
-                <p>तपाईंले एस अघि बिदेश मा काम गर्नुभएको छ ?</p>
-                <paper-radio-group selected="{{onboard.work}}">
-                    <paper-radio-button name="work_status_working_abroad">छ, म अझै काम गर्छु</paper-radio-button>
-                    <paper-radio-button name="work_status_back_from_abroad">छ, तर म नेपाल फर्किसकेँ</paper-radio-button>
-                    <paper-radio-button name="work_status_planning">छैन, जाने सोचाइ मा छु</paper-radio-button>
-                    <paper-radio-button name="work_status_not_going">छैन, जाने सोचाइ छैन</paper-radio-button>
-                </paper-radio-group>
-            </div>
-            <div class="country">
-                <paper-dropdown-menu label="मनपरेको गन्तव्य">
-                    <iron-selector selected={{onboard.country}} attr-for-selected="name" fallback-selection="default" class="dropdown-content">
-                        <template is="dom-repeat" items="[[destinations]]">
-                            <paper-item name="{{ item.title_en }}">{{item.title}}</paper-item>
-                        </template>
-                    </iron-selector>
-                </paper-dropdown-menu>
-            </div>
-        </iron-pages>
-        <div>
-            <template is="dom-if" if="{{ !_isFirst(selected) }}">
-                <paper-button on-tap="_prev" raised>Previous</paper-button>
-            </template>
-            <template is="dom-if" if="{{ _isLast(selected) }}">
-                <paper-button on-tap="_finish" raised>Finish</paper-button>
-            </template>
-            <template is="dom-if" if="{{ !_isLast(selected) }}">
-                <paper-button on-tap="_next" raised>Next</paper-button>
-            </template>
         </div>
     </template>
     <script>
-    Polymer({
-        is: 'shuvayatra-onboard',
-        behaviors: [GlobalBehavior],
+        Polymer({
+            is: 'shuvayatra-onboard',
+            behaviors: [GlobalBehavior],
 
-        properties: {
-            selected: {
-                type: Number,
-                value: 0
-            }
-        },
+            ready: function () {
+                $(this.$.test).flatpickr();
+            },
 
-        observers: [
-            '_onDateChanged(onboard.dob)'
-        ],
+            properties: {
+                selected: {
+                    type: Number,
+                    value: 0
+                }
+            },
 
-        ready: function() {
-            this.$.picker.dateFormat('YYYY/MM/DD');
-        },
+            observers: [
+                '_onDateChanged(onboard.dob)'
+            ],
 
-        _onDateChanged: function(value) {
-            this.date = new Date(this.onboard.dob);
-            console.log(this.date);
-        },
+//            ready: function () {
+//                this.$.picker.dateFormat('YYYY/MM/DD');
+//            },
 
-        dismissDialog: function(event) {
-            if (event.detail.confirmed) {
-                // console.log(this.date);
-                // var dob = new Date(this.date);
-                this.set('onboard.dob', (this.date.getYear() + 1900) + ' / ' + this.date.getMonth() + ' / ' + this.date.getDate());
-            }
-        },
+            _onDateChanged: function (value) {
+                this.date = new Date(this.onboard.dob);
+                console.log(this.date);
+            },
 
-        _showDialog: function() {
-            this.$.dialog.toggle();
-        },
+            dismissDialog: function (event) {
+                if (event.detail.confirmed) {
+                    // console.log(this.date);
+                    // var dob = new Date(this.date);
+                    this.set('onboard.dob', (this.date.getYear() + 1900) + ' / ' + this.date.getMonth() + ' / ' + this.date.getDate());
+                }
+            },
 
-        _getDOB: function(onboard) {
-            if (this.onboard && this.onboard.dob) {
-                return this.onboard.dob;
-            } else {
-                return "_ _ _ _ / _ _ / _ _";
-            }
-        },
+            _showDialog: function () {
+                this.$.dialog.toggle();
+            },
 
-        _isLast: function(selected) {
-            return (selected === 5);
-        },
+            _getDOB: function (onboard) {
+                if (this.onboard && this.onboard.dob) {
+                    return this.onboard.dob;
+                } else {
+                    return "_ _ _ _ / _ _ / _ _";
+                }
+            },
 
-        _isFirst: function(selected) {
-            return (selected == 0);
-        },
+            _isLast: function (selected) {
+                return (selected === 5);
+            },
 
-        _prev: function() {
-            this.selected -= 1;
-            if (this.selected < 0) this.selected = 0;
-        },
+            _isFirst: function (selected) {
+                return (selected == 0);
+            },
 
-        _next: function() {
-            var flag = true;
-            var message = "";
-            switch (this.selected) {
-                case 4:
-                    if (!this.onboard.work) flag = false;
-                    message = "कृपया एक विकल्प चयन गर्नुहोस्";
-                    break;
-                case 3:
-                    if (!this.onboard.region) flag = false;
-                    message = "कृपया एक विकल्प चयन गर्नुहोस्";
-                    break;
-                case 2:
-                    if (!this.onboard.gender) flag = false;
-                    message = "कृपया एक विकल्प चयन गर्नुहोस्";
-                    break;
-                case 1:
-                    if (!this.onboard.dob) flag = false;
-                    message = "कृपया आफ्नो जन्म मिती उपलब्ब्ध गराउनुहोस्";
-                    break;
-                case 0:
-                    if (!this.onboard.name) flag = false;
-                    message = "कृपया आफ्नो नाम उपलब्ब्ध गराउनुहोस्";
-                    break;
-            }
-            if (flag) {
-                this.selected += 1;
-                if (this.selected > 5) this.selected = 5;
-            } else {
-                this._showSnackbar(message);
-            }
-        },
+            _prev: function () {
+                this.selected -= 1;
+                if (this.selected < 0) this.selected = 0;
+            },
 
-        _finish: function() {
-            if ((this.onboard && this.onboard.country && this.onboard.dob && this.onboard.name && this.onboard.gender && this.onboard.region && this.onboard.work)) {
-                location.reload();
-            } else {
-                this._showSnackbar("कृपया एक विकल्प चयन गर्नुहोस्");
-            }
-        },
+            _next: function () {
+                var flag = true;
+                var message = "";
+                switch (this.selected) {
+                    case 4:
+                        if (!this.onboard.work) flag = false;
+                        message = "कृपया एक विकल्प चयन गर्नुहोस्";
+                        break;
+                    case 3:
+                        if (!this.onboard.region) flag = false;
+                        message = "कृपया एक विकल्प चयन गर्नुहोस्";
+                        break;
+                    case 2:
+                        if (!this.onboard.gender) flag = false;
+                        message = "कृपया एक विकल्प चयन गर्नुहोस्";
+                        break;
+                    case 1:
+                        if (!this.onboard.dob) flag = false;
+                        message = "कृपया आफ्नो जन्म मिती उपलब्ब्ध गराउनुहोस्";
+                        break;
+                    case 0:
+                        if (!this.onboard.name) flag = false;
+                        message = "कृपया आफ्नो नाम उपलब्ब्ध गराउनुहोस्";
+                        break;
+                }
+                if (flag) {
+                    this.selected += 1;
+                    if (this.selected > 5) this.selected = 5;
+                } else {
+                    this._showSnackbar(message);
+                }
+            },
 
-        _showSnackbar: function(message) {
-            if (!this._snackbar) {
-                this._snackbar = document.createElement('shuvayatra-snackbar');
-                Polymer.dom(this.root).appendChild(this._snackbar);
-            }
-            Polymer.dom(this._snackbar).innerHTML = message;
-            this._snackbar.open();
-        },
-    });
+            _finish: function () {
+                if ((this.onboard && this.onboard.country && this.onboard.dob && this.onboard.name && this.onboard.gender && this.onboard.region && this.onboard.work)) {
+                    location.reload();
+                } else {
+                    this._showSnackbar("कृपया एक विकल्प चयन गर्नुहोस्");
+                }
+            },
+
+            _showSnackbar: function (message) {
+                if (!this._snackbar) {
+                    this._snackbar = document.createElement('shuvayatra-snackbar');
+                    Polymer.dom(this.root).appendChild(this._snackbar);
+                }
+                Polymer.dom(this._snackbar).innerHTML = message;
+                this._snackbar.open();
+            },
+        });
     </script>
 </dom-module>
