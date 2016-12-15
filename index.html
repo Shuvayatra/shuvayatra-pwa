@@ -121,11 +121,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     (function(scope) {
 
         scope._showOnboard = function(onboard) {
-            return !(onboard && onboard.country && onboard.dob && onboard.name && onboard.gender && onboard.region && onboard.work);
+            return !(onboard && onboard.country && (onboard.dob.year && onboard.dob.month && onboard.dob.day) && onboard.name && onboard.gender && onboard.region && onboard.work);
         };
 
         scope._initializeDefaultOnboard = function(){
-            scope.onboard = {};
+            scope.onboard = {
+                dob:{}
+            };
         }
     })(document.querySelector('#app'));
     </script>

@@ -8,11 +8,17 @@
     "src/shuvayatra-news.html",
     "src/shuvayatra-notfound.html",
     "src/shuvayatra-radio.html",
+    "src/shuvayatra-feed.html",
+    "src/shuvayatra-channel.html",
+    "src/shuvayatra-post.html",
+    "src/shuvayatra-destinations.html",
     "src/shared-styles.html"
   ],
   "sourceGlobs": [
    "src/**/*",
+   "src/*",
    "images/**/*",
+   "images/*",
    "bower.json"
   ],
   "includeDependencies": [
