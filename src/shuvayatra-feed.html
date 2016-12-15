@@ -46,6 +46,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .feed-container {
             margin-top: 75px;
         }
+
+        @media only screen  and (min-width: 900px) {
+            .content {
+                max-width: 800px;
+                margin: 75px auto 0 auto;
+            }
+        }
+
         </style>
         <iron-ajax id="ajax" url="{{ baseUrl }}api/posts" params="{{params}}" handle-as="json" debounce-duration="300" loading="{{loading}}" on-response="_didRespond"></iron-ajax>
         <app-header condenses effects="waterfall" fixed>
@@ -57,7 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-        <div class="feed-container">
+        <div class="feed-container content">
 
             <iron-list id="list" items="[]" as="item">
                 <template>
