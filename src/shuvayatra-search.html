@@ -24,118 +24,134 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="shuvayatra-search">
     <template>
         <style include="shared-styles">
-        :host {
-            --app-primary-color: #00BBD5;
-            --app-secondary-color: black;
-            display: block;
-        }
-        
-        app-header {
-            padding: 0 10px;
-            background-color: var(--app-primary-color);
-        }
-        
-        app-toolbar {
-            padding: 0;
-        }
-        
-        app-drawer app-toolbar {
-            padding: 20px;
-            font-size: 18px;
-        }
-        
-        app-header paper-icon-button {
-            color: #616161;
-        }
+            :host {
+                --app-primary-color: #00BBD5;
+                --app-secondary-color: black;
+                display: block;
+            }
 
-        .filter-wrapper{
-            width:100%;
-            box-sizing: border-box;
-            margin: 16px 8px;
-        }
-        
-        .select-wrapper {
-            position: relative;
-        }
-        
-        .select-wrapper span.caret {
-            color: initial;
-            position: absolute;
-            right: 0;
-            top: 16px;
-            font-size: 10px;
-        }
-        
-        .select-wrapper input.select-dropdown {
-            position: relative;
-            cursor: pointer;
-            background-color: transparent;
-            border: none;
-            outline: none;
-            height: 3rem;
-            font-size: 1rem;
-            margin: 0;
-            padding: 0;
-            display: block;
-            width: 100%;
-        }
-        
-        .select-wrapper ul.dropdown-content {
-            width: 100%;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            padding: 0;
-            display: block;
-            background-color: #fff;
-            margin: 0;
-            min-width: 100px;
-            max-height: 650px;
-            overflow-y: auto;
-            z-index: 999;
-            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-            list-style-type: none;
-            transform: scaleY(0);
-            transform-origin: left 1.5rem;
-            transition: all 150ms ease-out;
-        }
-        
-        .select-wrapper ul.dropdown-content.active {
-            visibility: visible;
-            opacity: 1;
-            transform: scaleY(1);
-            transition: all 150ms ease-in;
-        }
-        
-        .select-wrapper ul li {
-            display: list-item;
-            cursor: pointer;
-            min-height: 50px;
-            line-height: 1.5rem;
-            width: 100%;
-            text-align: left;
-            text-transform: none;
-        }
-        
-        .select-wrapper ul li span {
-            color: #4a4a4a;
-            display: block;
-            line-height: 22px;
-            padding: 14px 16px;
-        }
-        
-        .select-wrapper ul li.disabled span {
-            color: rgba(0, 0, 0, 0.3);
-            background-color: transparent;
-        }
-        
-        .select-wrapper ul.dropdown-content li span {
-            top: 0;
-        }
-        
-        .select-wrapper ul li:hover {
-            background-color: #eee;
-        }
+            app-header {
+                padding: 0 10px;
+                background-color: var(--app-primary-color);
+            }
+
+            app-toolbar {
+                padding: 0;
+            }
+
+            app-drawer app-toolbar {
+                padding: 20px;
+                font-size: 18px;
+            }
+
+            app-header paper-icon-button {
+                color: #616161;
+            }
+
+            .filter-wrapper {
+                width: 100%;
+                box-sizing: border-box;
+                margin: 0 auto 20px;
+                display: block;
+            }
+
+            .feed-container {
+                margin-top: 20px;
+                padding: 0 10px;
+            }
+
+            .select-wrapper {
+                position: relative;
+                padding: 0 10px;
+            }
+
+            .select-wrapper span.caret {
+                color: initial;
+                position: absolute;
+                right: 10px;
+                top: 16px;
+                font-size: 10px;
+                padding: 0;
+            }
+
+            .select-wrapper input.select-dropdown {
+                position: relative;
+                cursor: pointer;
+                background-color: transparent;
+                border: none;
+                outline: none;
+                height: 3rem;
+                font-size: 1rem;
+                margin: 0;
+                padding: 0;
+                display: block;
+                width: 100%;
+            }
+
+            .select-wrapper ul.dropdown-content {
+                width: 100%;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                padding: 0;
+                display: block;
+                background-color: #fff;
+                margin: 0;
+                min-width: 100px;
+                max-height: 650px;
+                overflow-y: auto;
+                z-index: 999;
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+                list-style-type: none;
+                transform: scaleY(0);
+                transform-origin: left 1.5rem;
+                transition: all 150ms ease-out;
+            }
+
+            .select-wrapper ul.dropdown-content.active {
+                visibility: visible;
+                opacity: 1;
+                transform: scaleY(1);
+                transition: all 150ms ease-in;
+            }
+
+            .select-wrapper ul li {
+                display: list-item;
+                cursor: pointer;
+                min-height: 50px;
+                line-height: 1.5rem;
+                width: 100%;
+                text-align: left;
+                text-transform: none;
+            }
+
+            .select-wrapper ul li span {
+                color: #4a4a4a;
+                display: block;
+                line-height: 22px;
+                padding: 14px 16px;
+            }
+
+            .select-wrapper ul li.disabled span {
+                color: rgba(0, 0, 0, 0.3);
+                background-color: transparent;
+            }
+
+            .select-wrapper ul.dropdown-content li span {
+                top: 0;
+            }
+
+            .select-wrapper ul li:hover {
+                background-color: #eee;
+            }
+
+            @media only screen and (min-width: 768px){
+                .feed-container {
+                    max-width: 750px;
+                    margin: 20px auto;
+                }
+            }
+
         </style>
         <style is="custom-style">
             paper-input#search {
@@ -155,6 +171,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
         <iron-ajax id="ajax" url="{{ baseUrl }}api/posts" params="{{params}}" handle-as="json" debounce-duration="300" loading="{{loading}}" on-response="_didRespond"></iron-ajax>
+
         <app-header-layout>
             <app-header condenses effects="waterfall" fixed>
                 <app-toolbar>
@@ -168,7 +185,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-card class="menu filter-wrapper" elevation="2">
                     <div class="select-wrapper">
                         <span class="caret">▼</span>
-                        <input id="filterInput" type="text" class="select-dropdown" on-click="_showDropdown" readonly value="{{ selectedFilter }}" />
+                        <input id="filterInput" type="text" class="select-dropdown" on-click="_showDropdown" readonly value="{{ selectedFilter }}"/>
                         <ul id="myFilterList" class="select-dropdown dropdown-content">
                             <template id="filterList" is="dom-repeat" items="{{ filter }}">
                                 <li on-tap="_selectFilter">
@@ -205,136 +222,136 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header-layout>
     </template>
     <script>
-    Polymer({
-        is: 'shuvayatra-search',
-        behaviors: [GlobalBehavior],
+        Polymer({
+            is: 'shuvayatra-search',
+            behaviors: [GlobalBehavior],
 
-        properties: {
+            properties: {
 
-            params: {
-                type: Object,
-                value: {},
-                notify: true
+                params: {
+                    type: Object,
+                    value: {},
+                    notify: true
+                },
+
+                page: {
+                    type: Number,
+                    value: 0
+                },
+
+                query: {
+                    type: String,
+                    observer: '_onQueryChanged'
+                },
+
+                filter: {
+                    type: Array,
+                    value: [{
+                        title: "सामगृको प्रकर बाट हेर्नुहोस",
+                        value: ""
+                    }, {
+                        title: "अडियो",
+                        value: "audio"
+                    }, {
+                        title: "भिडियो",
+                        value: "video"
+                    }, {
+                        title: "लेख",
+                        value: "text"
+                    }, ]
+                }
             },
 
-            page: {
-                type: Number,
-                value: 0
+            ready: function() {
+                this.selectedFilter = this.filter[0].title;
+                this.$.search.focus();
             },
 
-            query: {
-                type: String,
-                observer: '_onQueryChanged'
+            _onQueryChanged: function(query) {
+                this.isLastPage = false;
+                this.page = 0;
+                this.params.query = query;
+                this._loadMoreData();
             },
 
-            filter: {
-                type: Array,
-                value: [{
-                    title: "सामगृको प्रकर बाट हेर्नुहोस",
-                    value: ""
-                }, {
-                    title: "अडियो",
-                    value: "audio"
-                }, {
-                    title: "भिडियो",
-                    value: "video"
-                }, {
-                    title: "लेख",
-                    value: "text"
-                }, ]
-            }
-        },
+            _loadMoreData: function() {
+                if (!this.isLastPage) {
+                    this.params.page = (this.page + 1);
+                    if(!this.params.query) delete this.params.query;
+                    if(!this.params.post_type) delete this.params.post_type;
+                    this.$.ajax.generateRequest();
+                }
+            },
 
-        ready: function() {
-            this.selectedFilter = this.filter[0].title;
-            this.$.search.focus();
-        },
+            _didRespond: function(e) {
+                var response = e.detail.response;
+                this.page = response.current_page;
+                this.isLastPage = this.page === response.last_page;
+                var feeds = response.data;
+                var parent = this;
 
-        _onQueryChanged: function(query) {
-            this.isLastPage = false;
-            this.page = 0;
-            this.params.query = query;
-            this._loadMoreData();
-        },
+                if (this.page == 1) {
+                    console.log('asd');
+                    parent.$.list.set('items', feeds);
+                } else {
+                    feeds.forEach(function(feed) {
+                        parent.$.list.push('items', feed);
+                    });
+                }
 
-        _loadMoreData: function() {
-            if (!this.isLastPage) {
-                this.params.page = (this.page + 1);
-                if(!this.params.query) delete this.params.query;
-                if(!this.params.post_type) delete this.params.post_type;
-                this.$.ajax.generateRequest();
-            }
-        },
+                parent.$.scrollTheshold.clearTriggers();
+            },
 
-        _didRespond: function(e) {
-            var response = e.detail.response;
-            this.page = response.current_page;
-            this.isLastPage = this.page === response.last_page;
-            var feeds = response.data;
-            var parent = this;
+            _showDropdown: function() {
+                this._toggleDropdownState();
+            },
 
-            if (this.page == 1) {
-                console.log('asd');
-                parent.$.list.set('items', feeds);
-            } else {
-                feeds.forEach(function(feed) {
-                    parent.$.list.push('items', feed);
-                });
-            }
+            _showCaret: function(value) {
+                return value === 0;
+            },
 
-            parent.$.scrollTheshold.clearTriggers();
-        },
+            _toggleDropdownState: function() {
+                var list = this.$.myFilterList;
+                var className = ' ' + list.className + ' ';
 
-        _showDropdown: function() {
-            this._toggleDropdownState();
-        },
+                if (className.indexOf(' active') !== -1) {
+                    className = className.replace(' active', ' ');
+                } else {
+                    className += ' active';
+                }
+                list.className = className;
+            },
 
-        _showCaret: function(value) {
-            return value === 0;
-        },
+            _getDefaultFilter: function(value) {
+                if (value.data)
+                    return value.data[0].title;
+            },
 
-        _toggleDropdownState: function() {
-            var list = this.$.myFilterList;
-            var className = ' ' + list.className + ' ';
+            _selectFilter: function(e) {
+                this._toggleDropdownState();
+                var filterValue = e.model.item.value;
+                this.selectedFilter = e.model.item.title;
 
-            if (className.indexOf(' active') !== -1) {
-                className = className.replace(' active', ' ');
-            } else {
-                className += ' active';
-            }
-            list.className = className;
-        },
+                this.isLastPage = false;
+                this.page = 0;
+                this.params.post_type = filterValue;
+                this._loadMoreData();
+            },
 
-        _getDefaultFilter: function(value) {
-            if (value.data)
-                return value.data[0].title;
-        },
+            _checkPostType: function(type, value) {
+                return (type === value);
+            },
 
-        _selectFilter: function(e) {
-            this._toggleDropdownState();
-            var filterValue = e.model.item.value;
-            this.selectedFilter = e.model.item.title;
+            _generateUrl: function(item) {
+                return "#";
+                if (item != null) {
+                    return "/post/" + item.id;
+                }
+            },
 
-            this.isLastPage = false;
-            this.page = 0;
-            this.params.post_type = filterValue;
-            this._loadMoreData();
-        },
-
-        _checkPostType: function(type, value) {
-            return (type === value);
-        },
-
-        _generateUrl: function(item) {
-            return "#";
-            if (item != null) {
-                return "/post/" + item.id;
-            }
-        },
-
-        _goBack: function() {
-            window.history.back();
-        },
-    });
+            _goBack: function() {
+                window.history.back();
+            },
+        });
     </script>
 </dom-module>
