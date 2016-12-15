@@ -56,7 +56,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <iron-ajax auto url="{{ baseUrl }}api/radio/categories" last-response="{{channels}}" handle-as="json" debounce-duration="300"></iron-ajax>
 
-        <p id="title">All Channels</p>
+        <p id="title">च्यानलहरू</p>
         <div class="feed-container">
             <template id="list" is="dom-repeat" items="{{ channels }}">
                 <a class="link" href="{{ _generateUrl(item) }}">

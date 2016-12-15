@@ -1,19 +1,18 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
-<link rel="import" href="../bower_components/iron-image/iron-image.html">
+
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="shuvayatra-radio-widget.html">
+<link rel="import" href="shuvayatra-weather-widget.html">
+<link rel="import" href="shuvayatra-notice.html">
+<link rel="import" href="shuvayatra-list-block.html">
+<link rel="import" href="shuvayatra-slider-block.html">
 <link rel="import" href="behaviors/global-behavior.html">
+
 <dom-module id="shuvayatra-destination">
     <template>
         <style include="shared-styles">
@@ -22,35 +21,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 padding: 20px 10px;
             }
 
-            iron-image {
-                max-width: 100%;
-                height: 115px;
+            app-header {
+	            @apply(--layout-fixed-top);
+	            z-index: 2;
+	            color: #fff;
+	            background-color: var(--app-primary-color);
+	            --app-header-shadow: {
+	                box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.2);
+	                height: 10px;
+	                bottom: -10px;
+	            }
+	            ;
+	        }
+
+	        .feed-container{
+	        	margin-top: 50px;
+	        }
+
+            paper-card {
                 width: 100%;
-                display: block;
-            }
-
-            iron-image.featured-image {
-                max-width: 100%;
-                height: 195px;
-                width: 100%;
-                display: block;
-                border-top-left-radius: 4px;
-                border-top-right-radius: 4px;
-            }
-
-            .card {
-                width: 100%;
-            }
-
-            @media only screen and (min-width: 700px) {
-                iron-image {
-                    height: 200px;
-                }
-
-                .destination-country-list p {
-                    text-align: center;
-                    font-size: 18px;
-                }
             }
 
             @media only screen and (min-width: 768px) {
@@ -60,35 +49,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
         </style>
-        <iron-localstorage name="onboard" value="{{onboard}}">
+        
+        <iron-localstorage
+            name="dismiss_notice_id"
+            value="{{ dismissId }}">
         </iron-localstorage>
-        <!-- on-response="onResponse" -->
-        <!-- last-response="{{destinations}}" -->
-        <iron-ajax auto url="{{ baseUrl }}api/destinations" handle-as="json" on-response="onResponse" debounce-duration="300"></iron-ajax>
 
-        <template is="dom-if" if="{{hasSelectedCountry}}">
-            <paper-card class="card" elevation="1" animated-shadow="false">
-                <div class="destination card-content">
-                    <iron-image class="featured-image" src="{{ selectedCountry.featured_image }}" sizing="cover"></iron-image>
-                    <div class="country-description">
-                        <iron-image src="{{ selectedCountry.icon }}" sizing="cover"></iron-image>
-                        <div class="country-text-info">
-                            <span>{{ selectedCountry.title }}</span>
-                            <span>{{ getInformation(selectedCountry) }}</span>
-                        </div>
-                    </div>
-                </div>
-            </paper-card>
-        </template>
+        <app-header condenses effects="waterfall" fixed>
+            <app-toolbar>
+                <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
+                <label>{{title}}</label>
+            </app-toolbar>
+        </app-header>
 
-        <div class="country-list-grid">
-            <template id="list" is="dom-repeat" items="{{ destinations }}">
-                <paper-card class="card" elevation="1" animated-shadow="false">
-                    <div class="destination-country-list card-content">
-                        <iron-image src="{{ item.icon }}" sizing="cover"></iron-image>
-                        <p>{{ item.title }}</p>
-                    </div>
-                </paper-card>
+        <iron-ajax auto url="{{ baseUrl }}api/screen/destination/{{destinationId}}" handle-as="json" last-response="{{blocks}}" debounce-duration="300"></iron-ajax>
+        <div class="feed-container">
+            <template is="dom-repeat" items="[[blocks]]" filter="{{ _isNotDismissedId(dismissId) }}">
+                <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
+                    <shuvayatra-notice notice="{{item.notice}}" dismiss-id="{{ dismissId }}">
+                    </shuvayatra-notice>
+                </template>
+                <template is="dom-if" if="{{checkLayout(item.layout,'radio_widget')}}">
+                    <shuvayatra-radio-widget title="{{item.title}}" description="{{item.description}}">
+                    </shuvayatra-radio-widget>
+                </template>
+                <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
+                    <shuvayatra-list-block data="{{ item }}">
+                    </shuvayatra-list-block>
+                </template>
+                <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
+                    <shuvayatra-slider-block data="{{ item }}">
+                    </shuvayatra-slider-block>
+                </template>
             </template>
         </div>
     </template>
@@ -97,38 +89,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'shuvayatra-destination',
             behaviors: [GlobalBehavior],
 
-            properties: {
-                selectedCountry: {
-                    type: Object,
-                    value: {}
+            properties:{
+                destinationId: {
+                    type: Number
                 }
             },
 
-            checkIfSelected: function (title) {
-                return (title === this.onboard.country);
-            },
-
-            getInformation: function (item) {
-                if (item.information.length > 0) {
-                    return item.information[0].attribute + " : " + item.information[0].value;
-                }
-                return "";
-            },
-
-            onResponse: function (e) {
-                var response = e.detail.response;
-                var destinations = [];
-                for (var i = 0, len = response.length; i < len; i += 1) {
-                    if (response[i].title_en === this.onboard.country) {
-                        this.hasSelectedCountry = true;
-                        this.selectedCountry = response[i];
-                    } else {
-                        destinations.push(response[i]);
+            _isNotDismissedId: function(id){
+                if(!id){
+                    return null;
+                }else{
+                    return function(item){
+                        return !(item.notice && (id === item.notice.id));
                     }
                 }
-                this.set('destinations', destinations);
-            }
+            },
 
+            checkLayout: function (value, layout) {
+                return (value === layout);
+            },
+
+            _goBack: function() {
+            	window.history.back();
+        	},
         });
     </script>
 </dom-module>

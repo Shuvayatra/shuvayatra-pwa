@@ -62,7 +62,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-list id="list" items="[]" as="item">
                 <template>
                 <div>
-
                     <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
                         <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
                     </template>

@@ -197,7 +197,7 @@
                 <iron-pages selected="{{selected}}" role="main">
                     <div class="name">
                         <p>तपाईंको नाम के हो</p>
-                        <paper-input is="iron-input" bind-value="{{onboard.name}}"></paper-input>
+                        <paper-input is="iron-input" value="{{onboard.name}}"></paper-input>
                     </div>
                     <div class="dob">
                         <p>तपाईंको जन्म मिती चयन गर्नुहोस्</p>
@@ -209,7 +209,9 @@
                         <!--<paper-button dialog-confirm>OK</paper-button>-->
                         <!--</div>-->
                         <!--</paper-dialog>-->
-                        <input id="test" class="flatpickr" type="text" placeholder="Select Date..">
+                        <!-- placeholder="{{ _getDOB(onboard.dob) }}" -->
+                        <input is="iron-input" id="dob" class="flatpickr" placeholder="{{ _getDOB(onboard.dob) }}" value="{{ onboard.dob }}">
+                        </input>
                     </div>
                     <div class="gender">
                         <p>तपाईंको लिङ्ग चयन गर्नुहोस्</p>
@@ -279,7 +281,12 @@
             behaviors: [GlobalBehavior],
 
             ready: function () {
-                $(this.$.test).flatpickr();
+                var parent = this;
+                $(this.$.dob).flatpickr({
+                    onChange: function(selectedDates, dateStr, instance) {
+                        parent.set('onboard.dob', dateStr);
+                    },
+                });
             },
 
             properties: {
@@ -289,17 +296,8 @@
                 }
             },
 
-            observers: [
-                '_onDateChanged(onboard.dob)'
-            ],
-
-//            ready: function () {
-//                this.$.picker.dateFormat('YYYY/MM/DD');
-//            },
-
             _onDateChanged: function (value) {
-                this.date = new Date(this.onboard.dob);
-                console.log(this.date);
+                this.onboard.dob = value;
             },
 
             dismissDialog: function (event) {
@@ -318,7 +316,7 @@
                 if (this.onboard && this.onboard.dob) {
                     return this.onboard.dob;
                 } else {
-                    return "_ _ _ _ / _ _ / _ _";
+                    return "";
                 }
             },
 

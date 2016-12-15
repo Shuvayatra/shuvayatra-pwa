@@ -25,49 +25,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template>
         <style include="shared-styles">
         :host {
+            --app-primary-color: #00BBD5;
+            --app-secondary-color: black;
             display: block;
-            padding: 10px;
         }
         
         app-header {
-            @apply(--layout-fixed-top);
-            z-index: 2;
-            color: #fff;
+            padding: 0 10px;
             background-color: var(--app-primary-color);
-            --app-header-shadow: {
-                box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.2);
-                height: 10px;
-                bottom: -10px;
-            }
-            ;
         }
         
         app-toolbar {
-            margin: 8px;
-            background-color: #fff;
+            padding: 0;
         }
         
-        app-toolbar paper-icon-button {
-            color: #000;
+        app-drawer app-toolbar {
+            padding: 20px;
+            font-size: 18px;
         }
         
-        paper-input#search {
-            background-color: #FFF;
-            --paper-input-container-underline: {
-                display: none;
-            }
-            --paper-input-container-underline-focus: {
-                display: none;
-            }
-            --paper-input-container-label: {
-                line-height: 32px;
-            }
-            display: block;
-            width: 100%;
+        app-header paper-icon-button {
+            color: #616161;
         }
-        
-        .feed-container {
-            margin-top: 75px;
+
+        .filter-wrapper{
+            width:100%;
+            box-sizing: border-box;
+            margin: 16px 8px;
         }
         
         .select-wrapper {
@@ -153,53 +137,72 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             background-color: #eee;
         }
         </style>
+        <style is="custom-style">
+            paper-input#search {
+                background-color: #FFF;
+                border-radius: 4px;
+                box-shadow: 0 0 5px 2px rgba(144, 144, 144, 0.45);
+                --paper-input-container: {
+                    padding: 0px;
+                } --paper-input-container-underline: {
+                display: none;
+            } --paper-input-container-underline-focus: {
+                display: none;
+            } --paper-input-container-label: {
+                line-height: 32px;
+            } display: block;
+                width: 100%;
+            }
+        </style>
         <iron-ajax id="ajax" url="{{ baseUrl }}api/posts" params="{{params}}" handle-as="json" debounce-duration="300" loading="{{loading}}" on-response="_didRespond"></iron-ajax>
-        <app-header condenses effects="waterfall" fixed>
-            <app-toolbar>
-                <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
-                <paper-input value="{{query}}" id="search" label="Search" type="search" no-label-float="false">
-                    <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
-                </paper-input>
-            </app-toolbar>
-        </app-header>
-        <div class="feed-container">
-            <paper-card class="menu filter-wrapper" elevation="2">
-                <div class="select-wrapper">
-                    <span class="caret">▼</span>
-                    <input id="filterInput" type="text" class="select-dropdown" on-click="_showDropdown" readonly value="{{ selectedFilter }}" />
-                    <ul id="myFilterList" class="select-dropdown dropdown-content">
-                        <template id="filterList" is="dom-repeat" items="{{ filter }}">
-                            <li on-tap="_selectFilter">
-                                <span>{{ item.title }}</span>
-                                <template is="dom-if" if="{{ _showCaret(index) }}">
-                                    <span class="caret">▼</span>
-                                </template>
-                            </li>
-                        </template>
-                    </ul>
-                </div>
-            </paper-card>
-            <iron-list id="list" items="[]" as="item">
-                <template>
-                    <div>
-                        <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
-                            <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
-                        </template>
-                        <template is="dom-if" if="{{ _checkPostType(item.type, 'audio') }}">
-                            <shuvayatra-audio-card class="post-card" post="{{ item }}"></shuvayatra-audio-card>
-                        </template>
-                        <template is="dom-if" if="{{ _checkPostType(item.type, 'text') }}">
-                            <shuvayatra-text-card class="post-card" post="{{ item }}"></shuvayatra-text-card>
-                        </template>
+        <app-header-layout>
+            <app-header condenses effects="waterfall" fixed>
+                <app-toolbar>
+                    <paper-input value="{{query}}" id="search" label="Search" no-label-float="false">
+                        <paper-icon-button id="back" icon="arrow-back" on-click="_goBack" prefix=""></paper-icon-button>
+                        <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
+                    </paper-input>
+                </app-toolbar>
+            </app-header>
+            <div class="feed-container">
+                <paper-card class="menu filter-wrapper" elevation="2">
+                    <div class="select-wrapper">
+                        <span class="caret">▼</span>
+                        <input id="filterInput" type="text" class="select-dropdown" on-click="_showDropdown" readonly value="{{ selectedFilter }}" />
+                        <ul id="myFilterList" class="select-dropdown dropdown-content">
+                            <template id="filterList" is="dom-repeat" items="{{ filter }}">
+                                <li on-tap="_selectFilter">
+                                    <span>{{ item.title }}</span>
+                                    <template is="dom-if" if="{{ _showCaret(index) }}">
+                                        <span class="caret">▼</span>
+                                    </template>
+                                </li>
+                            </template>
+                        </ul>
                     </div>
-                </template>
-            </iron-list>
-            <div class="loadingIndicator">
-                <paper-spinner active="{{loading}}"></paper-spinner>
+                </paper-card>
+                <iron-list id="list" items="[]" as="item">
+                    <template>
+                        <div>
+                            <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
+                                <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
+                            </template>
+                            <template is="dom-if" if="{{ _checkPostType(item.type, 'audio') }}">
+                                <shuvayatra-audio-card class="post-card" post="{{ item }}"></shuvayatra-audio-card>
+                            </template>
+                            <template is="dom-if" if="{{ _checkPostType(item.type, 'text') }}">
+                                <shuvayatra-text-card class="post-card" post="{{ item }}"></shuvayatra-text-card>
+                            </template>
+                        </div>
+                    </template>
+                </iron-list>
+                <div class="loadingIndicator">
+                    <paper-spinner active="{{loading}}"></paper-spinner>
+                </div>
+                <iron-scroll-threshold id="scrollTheshold" lower-threshold="500" scroll-target="document" on-lower-threshold="_loadMoreData">
+                </iron-scroll-threshold>
             </div>
-            <iron-scroll-threshold id="scrollTheshold" lower-threshold="500" scroll-target="document" on-lower-threshold="_loadMoreData">
-            </iron-scroll-threshold>
-        </div>
+        </app-header-layout>
     </template>
     <script>
     Polymer({
@@ -227,16 +230,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             filter: {
                 type: Array,
                 value: [{
-                    title: "All",
+                    title: "सामगृको प्रकर बाट हेर्नुहोस",
                     value: ""
                 }, {
-                    title: "Audio",
+                    title: "अडियो",
                     value: "audio"
                 }, {
-                    title: "Video",
+                    title: "भिडियो",
                     value: "video"
                 }, {
-                    title: "Text",
+                    title: "लेख",
                     value: "text"
                 }, ]
             }
@@ -244,6 +247,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         ready: function() {
             this.selectedFilter = this.filter[0].title;
+            this.$.search.focus();
         },
 
         _onQueryChanged: function(query) {
@@ -256,6 +260,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _loadMoreData: function() {
             if (!this.isLastPage) {
                 this.params.page = (this.page + 1);
+                if(!this.params.query) delete this.params.query;
+                if(!this.params.post_type) delete this.params.post_type;
                 this.$.ajax.generateRequest();
             }
         },
@@ -308,7 +314,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this._toggleDropdownState();
             var filterValue = e.model.item.value;
             this.selectedFilter = e.model.item.title;
-            
+
             this.isLastPage = false;
             this.page = 0;
             this.params.post_type = filterValue;

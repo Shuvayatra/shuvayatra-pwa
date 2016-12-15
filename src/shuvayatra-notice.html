@@ -2,6 +2,7 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="shared-styles.html">
 <dom-module id="shuvayatra-notice">
     <template>
@@ -27,6 +28,10 @@
             }
 
         </style>
+        <!-- <iron-localstorage
+            name="dismiss_notice_id"
+            value="{{dismissId}}"> -->
+        </iron-localstorage>
         <div class="card-container">
             <paper-card class="card" elevation="1" animated-shadow="false">
                 <div class="notice card-content">
@@ -35,7 +40,7 @@
                         <h4>[[notice.title]]</h4>
                         <article>[[notice.description]]</article>
                     </div>
-                    <iron-icon icon="close"></iron-icon>
+                    <iron-icon icon="close" on-tap="_dismiss"></iron-icon>
                 </div>
             </paper-card>
         </div>
@@ -48,7 +53,17 @@
                 notice: {
                     type: Object
                 },
+
+                dismissId:{
+                    type: Number,
+                    notify: true
+                }
             },
+
+            _dismiss: function(){
+                console.log('test me');
+                this.dismissId = this.notice.id;
+            }
 
         });
     </script>
