@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shuvayatra-audio-card.html">
 <link rel="import" href="shuvayatra-video-card.html">
 <link rel="import" href="shuvayatra-text-card.html">
+
 <dom-module id="shuvayatra-feed">
     <template>
         <style include="shared-styles">
@@ -53,10 +54,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <label>{{title}}</label>
             </app-toolbar>
         </app-header>
+
+
+
         <div class="feed-container">
+
             <iron-list id="list" items="[]" as="item">
                 <template>
                 <div>
+
                     <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
                         <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
                     </template>
@@ -118,6 +124,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             feeds.forEach(function(feed) {
                 parent.list.push('items', feed);
             });
+
+            console.log(feeds);
 
             parent.scrollTheshold.clearTriggers();
         },

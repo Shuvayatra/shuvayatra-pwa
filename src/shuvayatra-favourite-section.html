@@ -1,0 +1,68 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
+
+<link rel="import" href="behaviors/post-behavior.html">
+
+<dom-module id="shuvayatra-favourite-section">
+<template>
+    <style is="custom-style">
+        :host{
+            display: block;
+        }
+
+        iron-icon {
+            color: #00BBD5;
+            height: 14px;
+            width: 14px;
+        }
+
+        label, span {
+            font-size: 13px;
+            color: #717171;
+        }
+
+        .span-block {
+            display: block;
+        }
+
+        .span-block span {
+            display: inline-block;
+            margin-right: 25px;
+        }
+
+        .span-block span:last-child {
+            margin-right: 0;
+        }
+    </style>
+
+    <label>{{ category }}</label> - <label>{{ _getRelativeTime(date) }}</label>
+
+    <div class="span-block">
+        <span><iron-icon icon="favorite"></iron-icon> {{ _getFormattedLikeCount(likes) }}</span>
+        <span><iron-icon icon="social:share"></iron-icon> {{ _getFormattedShareCount(shares) }}</span>
+    </div>
+
+</template>
+<script>
+	Polymer({
+        is: 'shuvayatra-favourite-section',
+        behaviors: [ PostBehavior ],
+        
+        properties: {
+            category: String,
+            date: Number,
+            likes: Number,
+            shares: Number
+        },
+
+        _updateData: function(data){
+            this.category = data.category;
+            this.likes = data.like_count;
+            this.shares = data.share_count;
+            this.date = data.updated_at;
+        }
+
+    });
+</script>
+</dom-module>

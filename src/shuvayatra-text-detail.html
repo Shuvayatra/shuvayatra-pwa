@@ -1,0 +1,88 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="behaviors/post-behavior.html">
+<link rel="import" href="shuvayatra-favourite-section.html">
+<link rel="import" href="shuvayatra-html-placeholder.html">
+<link rel="import" href="shuvayatra-text-card.html">
+
+<dom-module id="shuvayatra-text-detail">
+    <template>
+        <style is="custom-style">
+
+
+            :host {
+                display: block;
+            }
+
+            .wrapper{
+                background: #eeeeee;
+                padding: 10px 0px;
+            }
+
+            h3 {
+                margin: 0 0 10px;
+                font-size: 18px;
+                line-height: 26px;
+                font-weight: normal;
+            }
+
+            .content{
+                padding: 18px 20px;
+            }
+
+            @media only screen  and (min-width: 900px) {
+                .content {
+                    max-width: 800px;
+                    margin: 0 auto;
+                }
+            }
+
+        </style>
+
+
+        <div class="content">
+
+
+            <h3>{{ post.title }}</h3>
+
+
+            <shuvayatra-favourite-section id="favSection" category="{{ post.category }}"
+                                          date="{{ post.created_at }}"
+                                          likes="{{ post.like_count }}"
+                                          shares="{{ post.share_count }}"></shuvayatra-favourite-section>
+
+            <shuvayatra-html-placeholder html="{{ post.description }}"></shuvayatra-html-placeholder>
+
+        </div>
+
+
+        <div class="wrapper">
+
+
+            <div class="content">
+
+                <div class="similar-type" hidden$="{{ _hasSimilar(post) }}">
+                    <p>मिल्दोजुल्दो article haru </p>
+
+                    <template is="dom-repeat" items="{{ post.similar }}">
+                        <div>
+                            <!--<p>{{item}}</p>-->
+                            <shuvayatra-text-card post="{{ item }}"></shuvayatra-text-card>
+                        </div>
+                    </template>
+                </div>
+
+            </div>
+
+        </div>
+        </div>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-text-detail',
+            behaviors: [PostBehavior],
+            properties: {},
+        });
+    </script>
+</dom-module>

@@ -37,10 +37,12 @@
         },
 
         _hasSimilar: function(post){
+
             return (post.similar) && (post.similar.length == 0);
         },
 
         _generateUrl: function(post){
+
             if(post != null){
                 return "/post/" + post.id;
             }
