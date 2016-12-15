@@ -157,6 +157,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <shuvayatra-channel name="channel" channel-id={{id}}></shuvayatra-channel>
             <shuvayatra-feed name="feed" params="{{queryParams}}" title="{{queryParams.title}}"></shuvayatra-feed>
             <shuvayatra-post name="post" post-id="{{id}}"></shuvayatra-post>
+            <shuvayatra-destination name="destination" destination-id="{{id}}"></shuvayatra-destination>
             <shuvayatra-search name="search"></shuvayatra-search>
             <div name="main">
                 <!-- start tab on wide layout -->
@@ -176,12 +177,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <app-header condenses reveals>
                             <app-toolbar>
                                 <img id="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}"/>
-                                <a href="/search" style="width:100%;">
-                                <paper-input disabled  id="search" label="Search" type="search" no-label-float="false">
+                                <paper-input on-tap="_search" id="search" label="Search" type="search" no-label-float="false">
                                     <paper-icon-button prefix id="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
                                     <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
                                 </paper-input>
-                                </a>
                             </app-toolbar>
                             <app-toolbar class="tabs-bar" hidden$="{{!wideLayout}}">
                                 <!-- Nav on desktop: tabs -->
@@ -195,7 +194,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="notfound" role="main">
                             <shuvayatra-home name="home"></shuvayatra-home>
                             <shuvayatra-journey name="journey"></shuvayatra-journey>
-                            <shuvayatra-destination name="destination"></shuvayatra-destination>
+                            <shuvayatra-destinations name="destinations"></shuvayatra-destinations>
                             <shuvayatra-news name="news"></shuvayatra-news>
                             <shuvayatra-radio name="radio"></shuvayatra-radio>
                             <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
@@ -227,11 +226,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             route: '/journey'
                         }, {
                             label: 'destination',
-                            route: '/destination'
-                        }, {
+                            route: '/destinations'
+                        }, /*{
                             label: 'news',
                             route: '/news'
-                        }, {
+                        },*/ {
                             label: 'radio',
                             route: '/radio'
                         }];
@@ -245,7 +244,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 headerPages: {
                     type: Array,
                     value: function () {
-                        return ["channel", "feed", "search","post"];
+                        return ["channel", "feed", "search", "post", "destination"];
                     }
                 }
             },
@@ -254,6 +253,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 '_routePageChanged(routeData.page)',
                 '_subrouteIdChanged(subrouteData.id)'
             ],
+
+            _search: function(){
+                this.set('routeData.page', 'search');
+            },
 
             _routePageChanged: function (page) {
                 if (this.headerPages.indexOf(page) === -1) {

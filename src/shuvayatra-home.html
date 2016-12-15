@@ -44,11 +44,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             name="onboard"
             value="{{onboard}}">
         </iron-localstorage>
+        
+        <iron-localstorage
+            name="dismiss_notice_id"
+            value="{{ dismissId }}">
+        </iron-localstorage>
+
         <iron-ajax auto url="{{ baseUrl }}api/screen/home" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300"></iron-ajax>
         <div class="feed-container">
-            <template is="dom-repeat" items="[[homefeeds]]">
+            <template is="dom-repeat" items="[[homefeeds]]" filter="{{ _isNotDismissedId(dismissId) }}">
                 <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
-                    <shuvayatra-notice notice="{{item.notice}}">
+                    <shuvayatra-notice notice="{{item.notice}}" dismiss-id="{{ dismissId }}">
                     </shuvayatra-notice>
                 </template>
                 <template is="dom-if" if="{{showCountryWidget(index)}}">
@@ -74,6 +80,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'shuvayatra-home',
             behaviors: [GlobalBehavior],
+
+            _isNotDismissedId: function(id){
+                if(!id){
+                    return null;
+                }else{
+                    return function(item){
+                        return !(item.notice && (id === item.notice.id));
+                    }
+                }
+            },
 
             checkLayout: function (value, layout) {
                 if (value === 'notice') {

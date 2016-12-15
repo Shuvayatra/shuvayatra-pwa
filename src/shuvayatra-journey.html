@@ -35,11 +35,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
         </style>
+        <iron-localstorage
+            name="dismiss_notice_id"
+            value="{{ dismissId }}">
+        </iron-localstorage>
+        
         <iron-ajax auto url="{{ baseUrl }}api/screen/journey" handle-as="json" last-response="{{journeyFeeds}}" debounce-duration="300"></iron-ajax>
         <div class="feed-container">
-            <template is="dom-repeat" items="[[journeyFeeds]]">
+            <template is="dom-repeat" items="[[journeyFeeds]]"  filter="{{ _isNotDismissedId(dismissId) }}">
                 <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
-                    <shuvayatra-notice notice="{{item.notice}}">
+                    <shuvayatra-notice notice="{{item.notice}}" dismiss-id="{{ dismissId }}">
                     </shuvayatra-notice>
                 </template>
                 <template is="dom-if" if="{{checkLayout(item.layout,'radio_widget')}}">
@@ -61,6 +66,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'shuvayatra-journey',
             behaviors: [GlobalBehavior],
+
+            _isNotDismissedId: function(id){
+                if(!id){
+                    return null;
+                }else{
+                    return function(item){
+                        return !(item.notice && (id === item.notice.id));
+                    }
+                }
+            },
 
             checkLayout: function (value, layout) {
                 return (value === layout);
