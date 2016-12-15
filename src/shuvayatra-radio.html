@@ -54,7 +54,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
         </style>
-        <iron-ajax auto url="{{ baseUrl }}api/radio/categories" last-response="{{channels}}" handle-as="json" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{ baseUrl }}api/radio/categories" last-response="{{channels}}" handle-as="json" debounce-duration="300" loading="{{loading}}"></iron-ajax>
 
         <p id="title">च्यानलहरू</p>
         <div class="feed-container">
@@ -68,6 +68,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-card>
                 </a>
             </template>
+        </div>
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loading}}"></paper-spinner>
         </div>
     </template>
     <script>

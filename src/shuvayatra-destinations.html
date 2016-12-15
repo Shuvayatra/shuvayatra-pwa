@@ -8,6 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
@@ -63,7 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </iron-localstorage>
         <!-- on-response="onResponse" -->
         <!-- last-response="{{destinations}}" -->
-        <iron-ajax auto url="{{ baseUrl }}api/destinations" handle-as="json" on-response="onResponse" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{ baseUrl }}api/destinations" handle-as="json" on-response="onResponse" debounce-duration="300" loading="{{loading}}"></iron-ajax>
         <template is="dom-if" if="{{hasSelectedCountry}}">
             <a href="{{ _generateUrl(selectedCountry) }}">
                 <paper-card class="card" elevation="1" animated-shadow="false">
@@ -91,6 +92,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </a>
                     </paper-card>
             </template>
+        </div>
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loading}}"></paper-spinner>
         </div>
     </template>
     <script>

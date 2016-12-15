@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="shuvayatra-radio-widget.html">
@@ -50,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value="{{ dismissId }}">
         </iron-localstorage>
 
-        <iron-ajax auto url="{{ baseUrl }}api/screen/home" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{ baseUrl }}api/screen/home" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
         <div class="feed-container">
             <template is="dom-repeat" items="[[homefeeds]]" filter="{{ _isNotDismissedId(dismissId) }}">
                 <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
@@ -74,6 +75,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </shuvayatra-slider-block>
                 </template>
             </template>
+        </div>
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loading}}"></paper-spinner>
         </div>
     </template>
     <script>

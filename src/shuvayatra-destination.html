@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
@@ -62,7 +63,7 @@
             </app-toolbar>
         </app-header>
 
-        <iron-ajax auto url="{{ baseUrl }}api/screen/destination/{{destinationId}}" handle-as="json" last-response="{{blocks}}" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{ baseUrl }}api/screen/destination/{{destinationId}}" handle-as="json" last-response="{{blocks}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
         <div class="feed-container">
             <template is="dom-repeat" items="[[blocks]]" filter="{{ _isNotDismissedId(dismissId) }}">
                 <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
@@ -82,6 +83,9 @@
                     </shuvayatra-slider-block>
                 </template>
             </template>
+        </div>
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loading}}"></paper-spinner>
         </div>
     </template>
     <script>

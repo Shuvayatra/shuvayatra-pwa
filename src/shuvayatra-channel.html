@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="behaviors/global-behavior.html">
 <link rel="import" href="shuvayatra-mini-player.html">
@@ -174,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         }
         </style>
-        <iron-ajax auto url="{{ baseUrl }}api/podcasts/?category={{channelId}}" on-response="_didRespond" last-response="{{channel}}" handle-as="json" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{ baseUrl }}api/podcasts/?category={{channelId}}" on-response="_didRespond" last-response="{{channel}}" handle-as="json" debounce-duration="300" loading="{{loading}}"></iron-ajax>
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
                 <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
@@ -193,6 +194,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </div>
                 </paper-card>
             </template>
+        </div>
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loading}}"></paper-spinner>
         </div>
         <shuvayatra-mini-player id="player" tracks="{{ tracks }}" play-index="{{playIndex}}"></shuvayatra-mini-player>
     </template>
