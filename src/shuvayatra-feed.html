@@ -47,11 +47,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             margin-top: 75px;
         }
 
-        @media only screen  and (min-width: 900px) {
-            .content {
-                max-width: 800px;
+        .col{
+            width: 100%;
+        }
+
+        #scrollTheshold{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+
+        }
+
+        @media only screen  and (min-width: 768px) {
+            .col{
+                width: 32%;
+            }
+
+            .feed-container{
+                max-width: 1024px;
                 margin: 75px auto 0 auto;
             }
+
         }
 
         </style>
@@ -65,11 +81,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-        <div class="feed-container content">
+        <div class="feed-container">
 
-            <iron-list id="list" items="[]" as="item">
-                <template>
-                <div>
+            <iron-scroll-threshold id="scrollTheshold" lower-threshold="500" scroll-target="document" on-lower-threshold="_loadMoreData">
+            <template id="list" is="dom-repeat" items="[]" as="item">
+
+                <div class="col">
                     <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
                         <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
                     </template>
@@ -80,13 +97,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <shuvayatra-text-card class="post-card" post="{{ item }}"></shuvayatra-text-card>
                     </template>
                 </div>
-                </template>
-            </iron-list>
+            </template>
+            </iron-scroll-threshold>
             <div class="loadingIndicator">
                 <paper-spinner active="{{loading}}"></paper-spinner>
             </div>
-            <iron-scroll-threshold id="scrollTheshold" lower-threshold="500" scroll-target="document" on-lower-threshold="_loadMoreData">
-            </iron-scroll-threshold>
+
         </div>
     </template>
     <script>
@@ -131,8 +147,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             feeds.forEach(function(feed) {
                 parent.list.push('items', feed);
             });
-
-            console.log(feeds);
 
             parent.scrollTheshold.clearTriggers();
         },
