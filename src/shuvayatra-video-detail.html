@@ -53,6 +53,15 @@
             }
         }
 
+        .video-wrap{
+            background: lightgray;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 64px;
+
+
+        }
+
         .similar-wrapper{
             display: flex;
             flex-wrap: wrap;
@@ -72,7 +81,7 @@
 
     </style>
 
-    <div style="background: lightgray;">
+    <div class="video-wrap">
         <google-youtube id="video"
           video-id="{{ _getVideoId(post.data.media_url) }}"
           fluid
