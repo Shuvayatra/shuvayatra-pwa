@@ -52,7 +52,24 @@
                 margin: 0 auto;
             }
         }
-        
+
+        .similar-wrapper{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .col{
+            width: 100%;
+        }
+
+        @media only screen  and (min-width: 768px) {
+            .col{
+                width: 49%;
+            }
+        }
+
+
     </style>
 
     <div style="background: lightgray;">
@@ -79,11 +96,14 @@
             <div class="similar-type" hidden$="{{ _hasSimilar(post) }}">
                 <p>मिल्दोजुल्दो कथाहरु</p>
 
+
+                <div class="similar-wrapper">
                 <template is="dom-repeat" items="{{ post.similar }}">
-                    <div>
+                    <div class="col">
                         <shuvayatra-video-card post="{{ item }}"></shuvayatra-video-card>
                     </div>
                 </template>
+                </div>
             </div>
         </div>
     </div>

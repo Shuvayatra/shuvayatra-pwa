@@ -216,6 +216,8 @@
                     </div>
                     <div class="dob">
                         <p>तपाईंको जन्म मिती चयन गर्नुहोस्</p>
+
+
                         <paper-dropdown-menu class="dob">
                             <iron-selector attr-for-selected="value" selected={{onboard.dob.year}} class="dropdown-content">
                                 <template is="dom-repeat" items="{{ years }}">
@@ -223,7 +225,7 @@
                                 </template>
                             </iron-selector>
                         </paper-dropdown-menu>
-                        /
+                        <span>/</span>
                         <paper-dropdown-menu>
                             <iron-selector attr-for-selected="value" selected={{onboard.dob.month}} class="dropdown-content">
                                 <template is="dom-repeat" items="{{ months }}">
