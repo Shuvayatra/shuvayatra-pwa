@@ -14,7 +14,7 @@
     "src/shuvayatra-destinations.html",
     "src/shared-styles.html"
   ],
-  "sourceGlobs": [
+  "sources": [
    "src/**/*",
    "src/*",
    "images/**/*",
