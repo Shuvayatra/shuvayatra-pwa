@@ -16,7 +16,6 @@
             }
         </style>
         <div class="card-container">
-
                 <paper-card class="card" elevation="1" animated-shadow="false">
                     <div class="health-wrap card-content">
                         <h4>[[data.title]]</h4>
@@ -24,7 +23,7 @@
                             <shuvayatra-list-item data={{item}}></shuvayatra-list-item>
                         </template>
                         <template is="dom-if" if="{{data.view_more}}">
-                            <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter) }}">
+                            <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter,country) }}">
                                 <p>[[data.view_more_title]]</p>
                             </a>
                         </template>

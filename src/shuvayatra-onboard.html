@@ -196,7 +196,16 @@
         </style>
         <iron-localstorage name="onboard" value="{{onboard}}">
         </iron-localstorage>
-        <iron-ajax auto url="{{ baseUrl }}api/destinations" handle-as="json" last-response="{{destinations}}" debounce-duration="300"></iron-ajax>
+        <iron-ajax auto url="{{ baseUrl }}api/destinations" handle-as="json" last-response="{{destinations}}" on-response="handleResponse" debounce-duration="300"></iron-ajax>
+        <iron-ajax
+                id="AjaxPost"
+                url="{{ baseUrl }}api/onboarding/save"
+                method="POST"
+                content-type="application/json"
+                handle-as="json"
+                on-response="_handleAjaxPostResponse"
+                on-error="_handleAjaxPostError"
+        ></iron-ajax>
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
                 <span>स्वागतम्</span>
@@ -252,7 +261,7 @@
                     <div class="region">
                         <paper-dropdown-menu label="कृपया क्षेत्र चयन गर्नुहोस्">
                             <!-- <paper-listbox class="dropdown-content"> -->
-                            <iron-selector attr-for-selected="name" selected={{onboard.region}} class="dropdown-content">
+                            <iron-selector attr-for-selected="name" selected={{onboard.location}} class="dropdown-content">
                                 <paper-item name="मेची">मेची</paper-item>
                                 <paper-item name="कोशी">कोशी</paper-item>
                                 <paper-item name="सगरमाथा">सगरमाथा</paper-item>
@@ -273,7 +282,7 @@
                     </div>
                     <div class="work">
                         <p>तपाईंले एस अघि बिदेश मा काम गर्नुभएको छ ?</p>
-                        <paper-radio-group selected="{{onboard.work}}">
+                        <paper-radio-group selected="{{onboard.work_status}}">
                             <paper-radio-button name="work_status_working_abroad">छ, म अझै काम गर्छु</paper-radio-button>
                             <paper-radio-button name="work_status_back_from_abroad">छ, तर म नेपाल फर्किसकेँ</paper-radio-button>
                             <paper-radio-button name="work_status_planning">छैन, जाने सोचाइ मा छु</paper-radio-button>
@@ -282,9 +291,9 @@
                     </div>
                     <div class="country">
                         <paper-dropdown-menu label="मनपरेको गन्तव्य">
-                            <iron-selector selected={{onboard.country}} attr-for-selected="name" fallback-selection="default" class="dropdown-content">
+                            <iron-selector selected={{onboard.country}} attr-for-selected="value" fallback-selection="default" class="dropdown-content">
                                 <template is="dom-repeat" items="[[destinations]]">
-                                    <paper-item name="{{ item.title_en }}">{{item.title}}</paper-item>
+                                    <paper-item value="{{ item.id }}">{{item.title}}</paper-item>
                                 </template>
                             </iron-selector>
                         </paper-dropdown-menu>
@@ -318,14 +327,49 @@
                 yearsTemp.push(1900 + i);
             }
             this.years = yearsTemp;
+
+
+
+
+
         },
 
         properties: {
             selected: {
                 type: Number,
                 value: 0
-            }
+            },
+
+            onboard: {
+                type: Object
+            },
+
+            dest: {
+                type:Array,
+                value: []
+            },
+
+
         },
+
+        handleResponse: function(e){
+            e.detail.response.push(e.detail.response[0]);
+            console.log(e.detail.response);
+
+           // debugger;
+            var name = ["hello"];
+
+            console.log(this.dest);
+
+            var self = this;
+
+            e.detail.response.forEach(function(item){
+                self.dest.push({"id": item.id, "country": item.title})
+            })
+
+
+        },
+
 
         _getDOB: function(onboard) {
             if (this.onboard && this.onboard.dob) {
@@ -334,6 +378,7 @@
                 return;
             }
         },
+
 
         _isLast: function(selected) {
             return (selected === 5);
@@ -353,11 +398,11 @@
             var message = "";
             switch (this.selected) {
                 case 4:
-                    if (!this.onboard.work) flag = false;
+                    if (!this.onboard.work_status) flag = false;
                     message = "कृपया एक विकल्प चयन गर्नुहोस्";
                     break;
                 case 3:
-                    if (!this.onboard.region) flag = false;
+                    if (!this.onboard.location) flag = false;
                     message = "कृपया एक विकल्प चयन गर्नुहोस्";
                     break;
                 case 2:
@@ -365,8 +410,14 @@
                     message = "कृपया एक विकल्प चयन गर्नुहोस्";
                     break;
                 case 1:
-                    if (!this.onboard.dob.year || !this.onboard.dob.month || !this.onboard.dob.day) flag = false;
-                    message = "कृपया आफ्नो जन्म मिती उपलब्ब्ध गराउनुहोस्";
+                    if (!this.onboard.dob.year || !this.onboard.dob.month || !this.onboard.dob.day){
+                        message = "कृपया आफ्नो जन्म मिती उपलब्ब्ध गराउनुहोस्";
+                        flag = false;
+                    } else if(this.onboard.dob.year > 2002){
+                        message = "तपाईं कम्तिमा १५ वर्ष हुनुपर्छ अगाडि बढ्न";
+                        flag = false;
+                    }
+
                     break;
                 case 0:
                     if (!this.onboard.name) flag = false;
@@ -382,11 +433,38 @@
         },
 
         _finish: function() {
-            if ((this.onboard && this.onboard.country && this.onboard.dob && this.onboard.name && this.onboard.gender && this.onboard.region && this.onboard.work)) {
-                location.reload();
+            if ((this.onboard && this.onboard.country && this.onboard.dob && this.onboard.name && this.onboard.gender && this.onboard.location && this.onboard.work_status)) {
+                this.submitOnboardData();
+
+
             } else {
                 this._showSnackbar("कृपया एक विकल्प चयन गर्नुहोस्");
             }
+        },
+
+
+        submitOnboardData() {
+
+
+
+            this.onboard.dob = this.onboard.dob.year + "-" + this.onboard.dob.month + "-" + this.onboard.dob.day;
+
+            var userDetail = this.onboard;
+            console.log(userDetail);
+
+            console.log(this.onboard);
+            this.$.AjaxPost.body = this.onboard;
+            this.$.AjaxPost.generateRequest();
+
+
+        },
+
+        _handleAjaxPostResponse: function(){
+            location.reload();
+        },
+
+        _handleAjaxPostError: function(){
+            this._showSnackbar("server error");
         },
 
         _showSnackbar: function(message) {

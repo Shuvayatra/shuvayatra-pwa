@@ -5,7 +5,7 @@
             baseUrl:{
                 type: String,
                 value: "https://api.shuvayatra.org/v1/"
-                //value: "http://nrna.yipl.com.np/"
+//                value: "http://nrna.yipl.com.np/"
             },
 
             forexUrl:{
@@ -41,12 +41,14 @@
             }
         },
 
-        _handleDeeplink: function(title, deeplink, params){
+        _handleDeeplink: function(title, deeplink, params,country){
+
+
             var url = "#";
             if(deeplink === this.appUrl.deeplink.feed){
                 url = this.appUrl.url.feed;
                 if(params){
-                    url += "?title= "+ title + "&category_id=" + params.join(",");
+                    url += "?title= "+ title + "&category_id=" + params.join(",") + "&country_id=" + country;
                 }
                 console.log(url);
             }

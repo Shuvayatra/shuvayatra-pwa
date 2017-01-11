@@ -116,12 +116,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <shuvayatra-app></shuvayatra-app>
         </template>
     </template>
-    <!-- Built with love using Polymer Starter Kit -->
+
     <script>
     (function(scope) {
 
         scope._showOnboard = function(onboard) {
-            return !(onboard && onboard.country && (onboard.dob.year && onboard.dob.month && onboard.dob.day) && onboard.name && onboard.gender && onboard.region && onboard.work);
+
+            console.log('onboard',!(onboard && onboard.country && onboard.dob && onboard.name && onboard.gender && onboard.location && onboard.work_status));
+
+            return !(onboard && onboard.country && (onboard && onboard.country && onboard.dob && onboard.name && onboard.gender && onboard.location && onboard.work_status));
         };
 
         scope._initializeDefaultOnboard = function(){

@@ -94,6 +94,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             paper-tab a {
+                font-size: 18px;
+                padding-bottom: 12px;
                 color: #FFF;
             }
 
@@ -177,7 +179,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-menu selected="{{selected}}" attr-for-selected="name">
                             <template is="dom-repeat" items="[[items]]">
                                 <paper-item name="[[item.label]]">
-                                    <iron-icon icon="home"></iron-icon>
+                                    <iron-icon icon="[[item.icon]]"></iron-icon>
                                     <a href="[[item.route]]">[[item.label]]</a></paper-item>
                             </template>
                         </paper-menu>
@@ -204,7 +206,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <shuvayatra-home name="home"></shuvayatra-home>
                             <shuvayatra-journey name="journey"></shuvayatra-journey>
                             <shuvayatra-destinations name="destinations"></shuvayatra-destinations>
-                            <shuvayatra-news name="news"></shuvayatra-news>
+                            <shuvayatra-news name="news" params="{{queryParams}}" title="{{queryParams.title}}"></shuvayatra-news>
                             <shuvayatra-radio name="radio"></shuvayatra-radio>
                             <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
                         </iron-pages>
@@ -228,20 +230,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: Array,
                     value: function () {
                         return [{
-                            label: 'home',
-                            route: '/'
+                            label: 'गृह',
+                            route: '/',
+                            icon: 'home'
                         }, {
-                            label: 'journey',
-                            route: '/journey'
+                            label: 'यात्रा ',
+                            route: '/journey',
+                            icon: 'flight-takeoff',
                         }, {
-                            label: 'destination',
-                            route: '/destinations'
-                        }, /*{
-                            label: 'news',
-                            route: '/news'
-                        },*/ {
-                            label: 'radio',
-                            route: '/radio'
+                            label: 'गन्तब्य',
+                            route: '/destinations',
+                            icon: 'explore'
+                        }, {
+                            label: 'न्युज',
+                            route: '/news',
+                            icon: 'speaker-notes'
+                        },{
+                            label: 'रेडियो ',
+                            route: '/radio',
+                            icon: 'av:library-music'
                         }];
                     }
                 },
@@ -262,6 +269,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 '_routePageChanged(routeData.page)',
                 '_subrouteIdChanged(subrouteData.id)'
             ],
+
+            ready: function(){
+                this.selected = 'गृह';
+            },
 
             _search: function(){
                 this.set('routeData.page', 'search');
