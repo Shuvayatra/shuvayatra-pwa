@@ -132,10 +132,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             #search-button {
                 margin-right: -1em;
             }
-
             paper-icon-button#burger{
                 position: absolute;
                 z-index: 1000;
+            }
+            @media (max-width: 600px) {
+                #search{
+                    padding-left: 48px;
+                }
             }
         </style>
         <style is="custom-style">
@@ -182,9 +186,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <app-header condenses reveals>
                             <app-toolbar>
                                 <img id="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}"/>
-                                <paper-icon-button id="burger" id="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
+                                <paper-icon-button id="burger" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
                                 <paper-input on-tap="_search" id="search" label="Search" type="search" no-label-float="false">
-                                    <paper-icon-button prefix id="menu-button" icon="menu" hidden$="{{wideLayout}}"></paper-icon-button>
                                     <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
                                 </paper-input>
                             </app-toolbar>
