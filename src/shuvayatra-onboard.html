@@ -290,10 +290,11 @@
                         </paper-radio-group>
                     </div>
                     <div class="country">
+
                         <paper-dropdown-menu label="मनपरेको गन्तव्य">
-                            <iron-selector selected={{onboard.country}} attr-for-selected="value" fallback-selection="default" class="dropdown-content">
+                            <iron-selector selected={{onboard.country}} attr-for-selected="name" fallback-selection="default" on-iron-select="_itemSelected" class="dropdown-content">
                                 <template is="dom-repeat" items="[[destinations]]">
-                                    <paper-item value="{{ item.id }}">{{item.title}}</paper-item>
+                                    <paper-item value="{{ item.id }}" name="{{ item.title}}">{{item.title}}</paper-item>
                                 </template>
                             </iron-selector>
                         </paper-dropdown-menu>
@@ -344,28 +345,25 @@
                 type: Object
             },
 
-            dest: {
-                type:Array,
-                value: []
-            },
+            destinations: {
+                type: Array,
+                value: [],
+                notify: true
+            }
 
 
         },
 
         handleResponse: function(e){
-            e.detail.response.push(e.detail.response[0]);
-            console.log(e.detail.response);
 
-           // debugger;
-            var name = ["hello"];
+            this.push("destinations",{"id": "","title": "मलाई थाहा छैन "})
 
-            console.log(this.dest);
 
-            var self = this;
+        },
 
-            e.detail.response.forEach(function(item){
-                self.dest.push({"id": item.id, "country": item.title})
-            })
+        _itemSelected : function(e) {
+            console.log(e.target.selectedItem.value);
+            this.set('onboard.country_id',e.target.selectedItem.value);
 
 
         },
@@ -397,6 +395,10 @@
             var flag = true;
             var message = "";
             switch (this.selected) {
+                case 5:
+                    if (!this.onboard.country) flag = false;
+                    message = "कृपया एक";
+                    break;
                 case 4:
                     if (!this.onboard.work_status) flag = false;
                     message = "कृपया एक विकल्प चयन गर्नुहोस्";
@@ -433,7 +435,7 @@
         },
 
         _finish: function() {
-            if ((this.onboard && this.onboard.country && this.onboard.dob && this.onboard.name && this.onboard.gender && this.onboard.location && this.onboard.work_status)) {
+            if ((this.onboard && this.onboard.country && this.onboard.dob && this.onboard.name && this.onboard.gender && this.onboard.location && this.onboard.work_status && this.onboard.country)) {
                 this.submitOnboardData();
 
 
@@ -445,17 +447,20 @@
 
         submitOnboardData() {
 
+            var onboardDob = this.onboard.dob.year + "-" + this.onboard.dob.month + "-" + this.onboard.dob.day;
 
+            var userDetail = {
+                name: this.onboard.name,
+                gender: this.onboard.gender,
+                location: this.onboard.location,
+                work_status: this.onboard.work_status,
+                country: this.onboard.country,
+                dob: onboardDob
 
-            this.onboard.dob = this.onboard.dob.year + "-" + this.onboard.dob.month + "-" + this.onboard.dob.day;
+            }
 
-            var userDetail = this.onboard;
-            console.log(userDetail);
-
-            console.log(this.onboard);
             this.$.AjaxPost.body = this.onboard;
             this.$.AjaxPost.generateRequest();
-
 
         },
 

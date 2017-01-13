@@ -51,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value="{{ dismissId }}">
         </iron-localstorage>
 
-        <iron-ajax auto url="{{ baseUrl }}api/screen/home?country_id={{onboard.country}}" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+        <iron-ajax auto url="{{ baseUrl }}api/screen/home?country_id={{onboard.country_id}}" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
         <div class="feed-container">
             <template is="dom-repeat" items="[[homefeeds]]" filter="{{ _isNotDismissedId(dismissId) }}">
                 <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
@@ -67,11 +67,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </shuvayatra-radio-widget>
                 </template>
                 <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
-                    <shuvayatra-list-block data="{{ item }}" country="{{onboard.country}}">
+                    <shuvayatra-list-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}">
                     </shuvayatra-list-block>
                 </template>
                 <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
-                    <shuvayatra-slider-block data="{{ item }}" country="{{onboard.country}}">
+                    <shuvayatra-slider-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}">
                     </shuvayatra-slider-block>
                 </template>
             </template>
@@ -103,7 +103,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             showCountryWidget: function (index) {
-                return ((index === 1 && this.hasNotice) || (index === 0 && !this.hasNotice));
+
+
+                if(this.onboard.country_id === ""){
+                    this.onboard.country_id = false;
+                    console.log(this.onboard.country_id );
+                }
+
+
+
+                return (this.onboard.country_id && ((index === 1 && this.hasNotice) || (index === 0 && !this.hasNotice)));
             },
         });
     </script>

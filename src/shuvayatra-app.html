@@ -95,7 +95,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             paper-tab a {
                 font-size: 18px;
-                padding-bottom: 12px;
+                padding-bottom: 5px;
                 color: #FFF;
             }
 
@@ -123,7 +123,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             #drawer app-toolbar {
-                background-color: var(--app-primary-color);
+                /*background-color: var(--app-primary-color);*/
+                background: url('/images/nepal.jpg') 0 0/cover;
+
                 color: #FFF;
             }
 
@@ -161,6 +163,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 100%;
             }
         </style>
+
         <app-location route="{{route}}"></app-location>
         <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
@@ -242,7 +245,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             route: '/destinations',
                             icon: 'explore'
                         }, {
-                            label: 'न्युज',
+                            label: 'समाचार',
                             route: '/news',
                             icon: 'speaker-notes'
                         },{
@@ -271,7 +274,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ],
 
             ready: function(){
-                this.selected = 'गृह';
+
+                var activeRoute = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
+                console.log('ative routea',activeRoute);
+
+                switch (activeRoute) {
+                    case "home":
+                        console.log("home");
+                            this.selected = 'गृह';
+                        break;
+                    case "journey":
+                        this.selected = 'यात्रा ';
+                        break;
+                    case "destinations":
+                       this.selected = 'गन्तब्य';
+                        break;
+                    case "news":
+                        this.selected = 'समाचार'
+                        break;
+                    case "radio":
+                        this.selected = 'रेडियो ';
+                        break;
+                    case "":
+                        this.selected = 'गृह';
+                        break;
+                    default:
+                        console.log("Sorry, we are out of ");
+                }
+
+
+//                console.log(window.location.href.substr(window.location.href.lastIndexOf('/') + 1));
+
             },
 
             _search: function(){
