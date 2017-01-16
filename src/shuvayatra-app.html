@@ -94,6 +94,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             paper-tab a {
+                font-size: 18px;
+                padding-bottom: 5px;
                 color: #FFF;
             }
 
@@ -114,14 +116,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: #333;
             }
 
-            #logo {
+            .logo {
                 width: 48px;
                 height: 48px;
                 margin-right: 1em;
             }
 
             #drawer app-toolbar {
-                background-color: var(--app-primary-color);
+                background: url('/images/nepal.jpg') 0 0/cover;
                 color: #FFF;
             }
 
@@ -172,12 +174,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <!-- start tab on wide layout -->
                 <app-drawer-layout force-narrow fullbleed>
                     <app-drawer id="drawer">
-                        <app-toolbar>Shuvayatra</app-toolbar>
+                        <app-toolbar>
+                            <img class="logo" src="/images/nav_logo.png"/>
+                            <span>शुभयात्रा </span>
+                        </app-toolbar>
                         <!-- Nav on mobile: side nav menu -->
                         <paper-menu selected="{{selected}}" attr-for-selected="name">
                             <template is="dom-repeat" items="[[items]]">
                                 <paper-item name="[[item.label]]">
-                                    <iron-icon icon="home"></iron-icon>
+                                    <iron-icon icon="[[item.icon]]"></iron-icon>
                                     <a href="[[item.route]]">[[item.label]]</a></paper-item>
                             </template>
                         </paper-menu>
@@ -185,7 +190,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <app-header-layout>
                         <app-header condenses reveals>
                             <app-toolbar>
-                                <img id="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}"/>
+                                <img class="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}"/>
                                 <paper-icon-button id="burger" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
                                 <paper-input on-tap="_search" id="search" label="Search" type="search" no-label-float="false">
                                     <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
@@ -204,7 +209,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <shuvayatra-home name="home"></shuvayatra-home>
                             <shuvayatra-journey name="journey"></shuvayatra-journey>
                             <shuvayatra-destinations name="destinations"></shuvayatra-destinations>
-                            <shuvayatra-news name="news"></shuvayatra-news>
+                            <shuvayatra-news name="news" params="{{queryParams}}"
+                                             title="{{queryParams.title}}"></shuvayatra-news>
                             <shuvayatra-radio name="radio"></shuvayatra-radio>
                             <shuvayatra-user name="user"></shuvayatra-user>
                             <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
@@ -229,24 +235,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: Array,
                     value: function () {
                         return [{
-                            label: 'home',
-                            route: '/'
+                            label: 'गृह',
+                            route: '/',
+                            icon: 'home'
                         }, {
-                            label: 'journey',
-                            route: '/journey'
+                            label: 'यात्रा ',
+                            route: '/journey',
+                            icon: 'flight-takeoff',
                         }, {
-                            label: 'destination',
-                            route: '/destinations'
-                        }, /*{
-                            label: 'news',
-                            route: '/news'
-                        },*/ {
-                            label: 'radio',
-                            route: '/radio'
+                            label: 'गन्तब्य',
+                            route: '/destinations',
+                            icon: 'explore'
                         }, {
-                            label: 'user',
-                            route: '/user',
+                            label: 'समाचार',
+                            route: '/news',
+                            icon: 'speaker-notes'
+                        }, {
+                            label: 'रेडियो ',
+                            route: '/radio',
                             icon: 'av:library-music'
+                        },
+                            {
+                                label: 'user',
+                                route: '/user',
+                                icon: 'av:library-music'
                             }];
                     }
                 },
@@ -267,6 +279,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 '_routePageChanged(routeData.page)',
                 '_subrouteIdChanged(subrouteData.id)'
             ],
+
+            ready: function () {
+
+                var activeRoute = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
+                console.log('ative routea', activeRoute);
+
+                switch (activeRoute) {
+                    case "home":
+                        console.log("home");
+                        this.selected = 'गृह';
+                        break;
+                    case "journey":
+                        this.selected = 'यात्रा ';
+                        break;
+                    case "destinations":
+                        this.selected = 'गन्तब्य';
+                        break;
+                    case "news":
+                        this.selected = 'समाचार'
+                        break;
+                    case "radio":
+                        this.selected = 'रेडियो ';
+                        break;
+                    case "":
+                        this.selected = 'गृह';
+                        break;
+                    default:
+                        this.selected = 'गृह';
+                }
+
+            },
 
             _search: function(){
                 this.set('routeData.page', 'search');
