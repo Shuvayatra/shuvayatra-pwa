@@ -3,6 +3,7 @@
   "shell": "src/shuvayatra-app.html",
   "fragments": [
     "src/shuvayatra-home.html",
+    "src/shuvayatra-onboard.html",
     "src/shuvayatra-destination.html",
     "src/shuvayatra-journey.html",
     "src/shuvayatra-news.html",

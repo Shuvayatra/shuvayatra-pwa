@@ -1,0 +1,198 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+
+<link rel="import" href="../bower_components/paper-datatable/paper-datatable.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="shuvayatra-radio-widget.html">
+<link rel="import" href="shuvayatra-notice.html">
+<link rel="import" href="shuvayatra-list-block.html">
+<link rel="import" href="shuvayatra-slider-block.html">
+<link rel="import" href="behaviors/global-behavior.html">
+<link rel="import" href="shuvayatra-onboard-user.html">
+
+
+
+<dom-module id="shuvayatra-user">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 20px 10px;
+            }
+            shuvayatra-slider-block {
+                margin-bottom: 20px;
+            }
+
+            @media only screen and (min-width: 768px) {
+                :host {
+                    max-width: 750px;
+                    margin: 0 auto;
+                }
+            }
+
+            .sy-table{
+                width: 100%;
+                display: table;
+            }
+
+            paper-card{
+                padding: 12px;
+            }
+
+            .sy-table tr{
+                border-bottom: 1px solid #d0d0d0 !important;
+            }
+
+            .sy-table tr > td{
+                padding: 12px 0;
+
+            }
+
+            .button-control{
+                margin-top: 30px;
+            }
+
+           .button-control paper-button{
+               background: #00bbd5;
+               color: #fff;
+           }
+
+
+
+            /*.sy-table tr:last-child > td{*/
+                /*border-bottom: none;*/
+            /*}*/
+
+        </style>
+
+        <iron-localstorage
+                name="onboard"
+                value="{{onboard}}"
+                on-iron-localstorage-load="handleLocalstorageLoadEvent"
+        >
+        </iron-localstorage>
+
+        <iron-localstorage
+                name="dismiss_notice_id"
+                value="{{ dismissId }}">
+        </iron-localstorage>
+
+        <iron-ajax auto url="{{ baseUrl }}api/screen/journey?country_id={{onboard.country_id}}" handle-as="json" last-response="{{journeyFeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+
+
+
+        <div class="feed-container">
+
+                <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
+                    <shuvayatra-notice notice="{{item.notice}}" dismiss-id="{{ dismissId }}">
+                    </shuvayatra-notice>
+                </template>
+
+
+
+            <paper-card class="card" elevation="1" animated-shadow="false">
+                <table class="sy-table">
+                    <tr>
+                        <td>User</td>
+                        <td>{{onboard.name}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Date</td>
+                        <td>{{onboard.dob.year}}-{{onboard.dob.month}}-{{onboard.dob.day}}</td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>{{onboard.gender}}</td>
+                    </tr>
+                    <tr>
+                        <td>Location</td>
+                        <td>{{onboard.location}}</td>
+                    </tr>
+                    <tr>
+                        <td>Work Status</td>
+                        <td>{{onboard.work_status}}</td>
+                    </tr>
+                    <tr>
+                        <td>Country</td>
+                        <td>{{onboard.country}}</td>
+                    </tr>
+                </table>
+            </paper-card>
+
+            <div class="button-control">
+                <paper-button on-tap="editData" raised>Edit</paper-button>
+            </div>
+
+
+
+
+        </div>
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loading}}"></paper-spinner>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-user',
+            behaviors: [GlobalBehavior],
+
+            properties: {
+                onboardList: {
+                    type: Array,
+                    value: [],
+                    notify: true
+                },
+
+               onboard: {
+                   type: Object,
+                   notify:true
+               }
+            },
+
+            handleLocalstorageLoadEvent: function(){
+                console.log('success');
+//                console.log(this.onboard);
+                this.onboardList.push(this.onboard);
+
+                console.log(this.onboardList);
+            },
+
+
+            editData: function(){
+
+                this.set('onboard.status',false);
+                location.reload();
+
+            },
+
+            _isNotDismissedId: function(id){
+                if(!id){
+                    return null;
+                }else{
+                    return function(item){
+                        return !(item.notice && (id === item.notice.id));
+                    }
+                }
+            },
+
+            checkLayout: function (value, layout) {
+                return (value === layout);
+            },
+        });
+    </script>
+</dom-module>

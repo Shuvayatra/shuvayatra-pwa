@@ -206,6 +206,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <shuvayatra-destinations name="destinations"></shuvayatra-destinations>
                             <shuvayatra-news name="news"></shuvayatra-news>
                             <shuvayatra-radio name="radio"></shuvayatra-radio>
+                            <shuvayatra-user name="user"></shuvayatra-user>
                             <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
                         </iron-pages>
                     </app-header-layout>
@@ -242,7 +243,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         },*/ {
                             label: 'radio',
                             route: '/radio'
-                        }];
+                        }, {
+                            label: 'user',
+                            route: '/user',
+                            icon: 'av:library-music'
+                            }];
                     }
                 },
                 wideLayout: {
