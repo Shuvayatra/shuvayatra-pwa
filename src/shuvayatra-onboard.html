@@ -374,10 +374,6 @@
             },
 
             _skipOnboard: function(){
-                console.log('on board skipped');
-//                onboard.country && (onboard.dob.year && onboard.dob.month && onboard.dob.day) && onboard.name && onboard.gender && onboard.location && onboard.work_status
-//                this.set('onboard',{dob:{year: "1",month:"3",day:"3"},name:"f",gender:"f",location:"f",work_status:"f",country: "f"});
-                this.onboard.status
 
                 this.set('onboard.status',true);
 
@@ -473,6 +469,7 @@
             },
 
             _handleAjaxPostResponse: function(){
+
 
                 this.set('onboard.status',true);
 

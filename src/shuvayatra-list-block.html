@@ -23,8 +23,12 @@
                         <template is="dom-repeat" items="[[data.content]]">
                             <shuvayatra-list-item data={{item}}></shuvayatra-list-item>
                         </template>
+
+
                         <template is="dom-if" if="{{data.view_more}}">
-                            <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter) }}">
+
+
+                            <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter, country_id,gender) }}">
                                 <p>[[data.view_more_title]]</p>
                             </a>
                         </template>

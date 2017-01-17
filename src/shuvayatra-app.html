@@ -26,6 +26,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
+
 <dom-module id="shuvayatra-app">
     <template>
         <style>
@@ -125,7 +127,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             #drawer app-toolbar {
                 background: url('/images/nepal.jpg') 0 0/cover;
                 color: #FFF;
+                position: relative;
             }
+
+            #drawer app-toolbar:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                background-image: -webkit-linear-gradient(-180deg, rgba(0,0,0,0.00) 0%, #000000 100%);
+                background-image: linear-gradient(-180deg, rgba(0,0,0,0.00) 0%, #000000 100%);
+                opacity: .5;
+            }
+
+
+
+            #drawer app-toolbar > div {
+                position: absolute;
+                bottom: 8px;
+            }
+
+            #drawer app-toolbar > div > img,#drawer app-toolbar > div >span{
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            #drawer a{
+                text-decoration: none;
+                color: #333;
+                cursor: pointer;
+            }
+
+
 
             #menu-button {
                 margin-left: -1em;
@@ -176,15 +211,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <app-drawer-layout force-narrow fullbleed>
                     <app-drawer id="drawer">
                         <app-toolbar>
-                            <img class="logo" src="/images/nav_logo.png"/>
-                            <span>शुभयात्रा </span>
+                            <div>
+                                <img class="logo" src="/images/nav_logo.png"/>
+                                <span>शुभयात्रा </span>
+                            </div>
                         </app-toolbar>
                         <!-- Nav on mobile: side nav menu -->
                         <paper-menu selected="{{selected}}" attr-for-selected="name">
                             <template is="dom-repeat" items="[[items]]">
-                                <paper-item name="[[item.label]]">
-                                    <iron-icon icon="[[item.icon]]"></iron-icon>
-                                    <a href="[[item.route]]">[[item.label]]</a></paper-item>
+
+                                <a href="[[item.route]]">
+                                    <paper-item name="[[item.label]]">
+
+                                        <iron-icon icon="[[item.icon]]"></iron-icon>
+                                        <!--<a href="[[item.route]]">[[item.label]]</a>-->
+                                        <span>[[item.label]]</span>
+                                    </paper-item>
+                                </a>
+
                             </template>
                         </paper-menu>
                     </app-drawer>
@@ -261,9 +305,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             icon: 'av:library-music'
                         },
                             {
-                                label: 'user',
+                                label: 'प्रयोगकर्ता',
                                 route: '/user',
-                                icon: 'av:library-music'
+                                icon: 'social:person'
                             }];
                     }
                 },
@@ -288,7 +332,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ready: function () {
 
                 var activeRoute = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
-                console.log('ative routea', activeRoute);
 
                 switch (activeRoute) {
                     case "home":
@@ -307,9 +350,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     case "radio":
                         this.selected = 'रेडियो ';
                         break;
+                    case "user":
+                        this.selected = 'प्रयोगकर्ता';
+                        break;
                     case "":
                         this.selected = 'गृह';
                         break;
+
                     default:
                         this.selected = 'गृह';
                 }

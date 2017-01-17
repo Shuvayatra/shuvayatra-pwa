@@ -43,7 +43,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <iron-localstorage
             name="onboard"
-            value="{{onboard}}">
+            value="{{onboard}}"
+            on-iron-localstorage-load="handleLocalstorageLoadEvent">
         </iron-localstorage>
         
         <iron-localstorage
@@ -51,7 +52,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value="{{ dismissId }}">
         </iron-localstorage>
 
-        <iron-ajax auto url="{{ baseUrl }}api/screen/home?country_id={{onboard.country_id}}&gender={{onboard.gender}}" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+
+
+        <iron-ajax
+                auto
+                url={{url}}
+                params={{option}}
+                handle-as="json",
+                last-response="{{response}}">
+        </iron-ajax>
+
+
+
+        <template is="dom-if" if="{{onboard.country_id}}">
+            <iron-ajax auto url="{{ baseUrl }}api/screen/home?country_id={{onboard.country_id}}&gender={{onboard.gender}}" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+        </template>
+
+        <template is="dom-if" if="{{!onboard.country_id}}">
+            <iron-ajax auto url="{{ baseUrl }}api/screen/home" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+        </template>
+
+
         <div class="feed-container">
             <template is="dom-repeat" items="[[homefeeds]]" filter="{{ _isNotDismissedId(dismissId) }}">
                 <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
@@ -67,11 +88,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </shuvayatra-radio-widget>
                 </template>
                 <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
-                    <shuvayatra-list-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}">
+                    <shuvayatra-list-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
                     </shuvayatra-list-block>
                 </template>
                 <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
-                    <shuvayatra-slider-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}">
+                    <shuvayatra-slider-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
                     </shuvayatra-slider-block>
                 </template>
             </template>
@@ -84,6 +105,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'shuvayatra-home',
             behaviors: [GlobalBehavior],
+
 
             _isNotDismissedId: function(id){
                 if(!id){
@@ -103,7 +125,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             showCountryWidget: function (index) {
-                return ((index === 1 && this.hasNotice) || (index === 0 && !this.hasNotice));
+
+                if(this.onboard.country_id === ""){
+                    this.onboard.country_id = false;
+                }
+
+                return (this.onboard.country_id && ((index === 1 && this.hasNotice) || (index === 0 && !this.hasNotice)));
             },
         });
     </script>
