@@ -49,12 +49,19 @@
                 padding: 0;
                 text-align: center;
                 color: #fff;
-                display: block;
+                /*display: block;*/
+                display: flex;
+                justify-content: center;
             }
 
             app-toolbar span {
-                display: block;
-                padding-top: 15px;
+                /*display: block;*/
+                padding: 15px 60px;
+            }
+
+            app-toolbar span:nth-child(2) {
+                font-size: 14px;
+                cursor: pointer;
             }
 
             app-drawer app-toolbar {
@@ -191,6 +198,11 @@
             .dob .dropdown-content {
                 max-height: 200px;
             }
+
+            .skip-text{
+                text-align: center;
+            }
+
         </style>
         <iron-localstorage name="onboard" value="{{onboard}}">
         </iron-localstorage>
@@ -209,8 +221,10 @@
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
                 <span>स्वागतम्</span>
+                <span on-tap="_skipOnboard">पछी वर्नुहोस </span>
             </app-toolbar>
         </app-header>
+
         <div class="on-board-wrap">
             <div class="on-board-inner">
                 <header class="header-onboard">
@@ -257,9 +271,9 @@
                     <div class="gender">
                         <p>तपाईंको लिङ्ग चयन गर्नुहोस्</p>
                         <paper-radio-group selected="{{onboard.gender}}">
-                            <paper-radio-button name="male">पुरुष</paper-radio-button>
-                            <paper-radio-button name="female">महिला</paper-radio-button>
-                            <paper-radio-button name="female">अरु  </paper-radio-button>
+                            <paper-radio-button name="m">पुरुष</paper-radio-button>
+                            <paper-radio-button name="f">महिला</paper-radio-button>
+                            <paper-radio-button name="o">अरु  </paper-radio-button>
                         </paper-radio-group>
                     </div>
                     <div class="region">
@@ -319,9 +333,9 @@
                         <paper-button on-tap="_next" raised>Next</paper-button>
                     </template>
 
-                    <template is="dom-if" if="{{ _isFirst(selected) }}">
-                        <paper-button on-tap="_skipOnboard" raised>Skip</paper-button>
-                    </template>
+                    <!--<template is="dom-if" if="{{ _isFirst(selected) }}">-->
+                        <!--<paper-button on-tap="_skipOnboard" raised>Skip</paper-button>-->
+                    <!--</template>-->
 
 
                 </div>

@@ -47,15 +47,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .sy-table{
                 width: 100%;
                 display: table;
+                border-bottom: 1px solid #d0d0d0;
             }
 
             paper-card{
                 padding: 12px;
             }
 
-            .sy-table tr{
-                border-bottom: 1px solid #d0d0d0 !important;
-            }
 
             .sy-table tr > td{
                 padding: 12px 0;
@@ -71,11 +69,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                color: #fff;
            }
 
+            .edit-content span{
+                cursor: pointer;
+                float: right;
+                padding: 10px 20px 0px;
+            }
 
-
-            /*.sy-table tr:last-child > td{*/
-                /*border-bottom: none;*/
-            /*}*/
 
         </style>
 
@@ -132,19 +131,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <td>{{onboard.country}}</td>
                     </tr>
                 </table>
+
+                <div class="edit-content">
+                    <span on-tap="editData">Edit</span>
+                    <div class="spacer" style="clear: both;"></div>
+                </div>
+
             </paper-card>
 
-            <div class="button-control">
-                <paper-button on-tap="editData" raised>Edit</paper-button>
-            </div>
-
-
-
 
         </div>
-        <div class="loadingIndicator">
-            <paper-spinner active="{{loading}}"></paper-spinner>
-        </div>
+
     </template>
     <script>
         Polymer({

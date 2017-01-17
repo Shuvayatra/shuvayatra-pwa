@@ -76,7 +76,7 @@
         </template>
 
         <template id="videoIf" is="dom-if" if="{{ _checkIfTypeVideo(data.type) }}">
-            <shuvayatra-header post data="{{ data }}"  change-flag="{{ changeFlag }}"></shuvayatra-header>
+            <shuvayatra-header post data="{{ data }}" video change-flag="{{ changeFlag }}"></shuvayatra-header>
             <shuvayatra-video-detail id="detail" post="{{ data }}"></shuvayatra-video-detail>
         </template>
 

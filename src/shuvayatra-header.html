@@ -11,6 +11,7 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../bower_components/google-youtube/google-youtube.html">
 <link rel="import" href="behaviors/global-behavior.html">
 
 <dom-module id="shuvayatra-header">
@@ -131,6 +132,16 @@
                 display: block;
             }
 
+            .video-wrap{
+                background: #fff;
+                margin-top: 64px;
+            }
+
+            .content{
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
             @media only screen  and (min-width: 900px) {
                 app-toolbar {
                     max-width: 800px;
@@ -242,6 +253,21 @@
                     </div>
                 </template>
             </app-header>
+
+            <template id="videoIf" is="dom-if" if="{{ video }}" restamp="true">
+
+                <div class="video-wrap">
+                    <div class="content">
+                        <google-youtube id="video"
+                                        video-id="{{ _getVideoId(data.data.media_url) }}"
+                                        fluid
+                                        autoplay="0">
+                        </google-youtube>
+
+                    </div>
+
+                </div>
+            </template>
         </template>
 
         <!-- normal header for detail pages with back icon and title and featured-image-->
@@ -323,6 +349,12 @@
                     observer: '_isAudio'
                 },
 
+                video: {
+                    type: Boolean,
+                    value: false,
+                    observer: '_isVideo'
+                },
+
                 category: {
                     type: Boolean,
                     value: false
@@ -366,6 +398,15 @@
                     this.$$("#playerIf").render();
                     this.player = this.$$("#player");
                 }
+
+
+                if(this.video){
+                    console.log('video ready');
+                    this.$.postIf.render();
+                    this.$$("#videoIf").render();
+                    console.log(this.$$("#video"));
+                    this.videoPlayer = this.$$("#video");
+                }
             },
 
             _goBack: function () {
@@ -374,15 +415,45 @@
             },
 
             _stopPlayback: function(){
+
+                console.log('in stop play back');
                 if (this.player) {
+                    console.log('pause audio player');
                     this.player._stop();
                 }
+
+                if(this.videoPlayer){
+                    console.log('pause video player');
+                    this.videoPlayer.pause();
+                }
+
+
             },
 
             _isAudio: function (value) {
                 if (value) {
                     this.importHref(this.resolveUrl('shuvayatra-audio-player.html'), null, null, true);
                 }
+            },
+
+            _isVideo: function (value) {
+                console.log('video val',value);
+            },
+
+
+
+            _getVideoId: function(url){
+                var ID = '';
+                if(url){
+                    url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+                    if(url[2] !== undefined) {
+                        ID = url[2].split(/[^0-9a-z_\-]/i);
+                        ID = ID[0];
+                    } else {
+                        ID = url;
+                    }
+                }
+                return ID;
             },
 
             _toggleFavourite: function() {

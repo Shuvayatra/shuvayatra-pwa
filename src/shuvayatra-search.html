@@ -175,9 +175,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header-layout>
             <app-header condenses effects="waterfall" fixed>
                 <app-toolbar>
-                    <paper-input value="{{query}}" id="search" label="Search" no-label-float="false">
+                    <paper-input id="search" label="Search" no-label-float="false">
                         <paper-icon-button id="back" icon="arrow-back" on-click="_goBack" prefix=""></paper-icon-button>
-                        <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
+                        <paper-icon-button id="search-button" icon="search" on-click="_onQueryChanged" suffix></paper-icon-button>
                     </paper-input>
                 </app-toolbar>
             </app-header>
@@ -270,7 +270,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _onQueryChanged: function(query) {
                 this.isLastPage = false;
                 this.page = 0;
-                this.params.query = query;
+                this.params.query = this.$.search.value;
                 this._loadMoreData();
             },
 
