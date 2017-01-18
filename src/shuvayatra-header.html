@@ -393,6 +393,8 @@
             },
 
             ready: function () {
+
+
                 if (this.audio) {
                     this.$.postIf.render();
                     this.$$("#playerIf").render();
@@ -408,6 +410,7 @@
                     this.videoPlayer = this.$$("#video");
                 }
             },
+
 
             _goBack: function () {
                 this._stopPlayback();
@@ -519,8 +522,12 @@
 
                     this.$.postIf.render();
                     var ajax = this.$$('#shareAjax');
+                    console.log('ajax',ajax);
 
                     ajax.url = this.baseUrl + "api/post/" + this.data.id + "/share";
+
+                    console.log('ajax url',this.baseUrl + "api/post/" + this.data.id + "/share");
+                    debugger;
                     ajax.headers = {
                         "Token": this.apiKey,
                         "Content-Type": "application/json"

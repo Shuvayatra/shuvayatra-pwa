@@ -41,14 +41,16 @@
             }
         },
 
-        _handleDeeplink: function(title, deeplink, params,country_id,gender){
+        _handleDeeplink: function(title, deeplink, params, country_id,gender){
 
             var url = "#";
             if(deeplink === this.appUrl.deeplink.feed){
                 url = this.appUrl.url.feed;
                 if(params && country_id){
+                    console.log('url',url);
                     url += "?title= "+ title + "&category_id=" + params.join(",") + "&country_id="+country_id + "&gender="+gender;
                 }else if(params){
+                    console.log('url',url);
                     url += "?title= "+ title + "&category_id=" + params.join(",");
                 }
             }

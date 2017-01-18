@@ -11,8 +11,10 @@
                 margin-bottom: 20px;
             }
 
+
             paper-card {
                 width: 100%;
+                cursor: pointer;
             }
 
             paper-fab {
@@ -22,7 +24,7 @@
             }
         </style>
         <div class="card-container">
-            <paper-card class="card" elevation="1" animated-shadow="false">
+            <paper-card class="card" elevation="1" animated-shadow="false" on-tap="_showRadio">
                 <div class="radio card-content">
                     <div>
                         <h4>[[title]]</h4>

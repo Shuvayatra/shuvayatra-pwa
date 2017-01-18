@@ -3,8 +3,8 @@
   "short_name": "Shuvayatra",
   "start_url": "/?homescreen=1",
   "display": "standalone",
-  "theme_color": "#00BBD5",
-  "background_color": "#3f51b5",
+  "theme_color": "#27a8d8",
+  "background_color": "#27a8d8",
   "icons": [
     {
       "src": "images/app-icon-32.png",

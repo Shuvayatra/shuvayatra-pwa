@@ -51,15 +51,23 @@
             }
 
             @media only screen  and (min-width: 768px) {
-                .col{
-                    width: 49%;
+
+                .post-title{
+                    display: none;
                 }
             }
+
+
 
         </style>
 
 
+
+
         <div class="content">
+
+            <h3 class="post-title">{{ post.title }}</h3>
+
             <shuvayatra-favourite-section id="favSection" category="{{ post.category }}" date="{{ post.created_at }}"
                                           likes="{{ post.like_count }}"
                                           shares="{{ post.share_count }}"></shuvayatra-favourite-section>

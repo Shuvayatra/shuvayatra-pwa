@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
     <title>Shuvayatra</title>
+
     <meta name="description" content="Safe Travel For Migrant Workers">
     <link rel="icon" href="/images/favicon.ico">
     <!-- See https://goo.gl/OOhYW5 -->
@@ -27,6 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Shuvayatra">
+
     <!-- Homescreen icons -->
     <link rel="apple-touch-icon" href="/images/manifest/icon-48x48.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/images/manifest/icon-72x72.png">
@@ -118,14 +120,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
     <!-- Built with love using Polymer Starter Kit -->
     <script>
+        document.title = "hello world";
+        window.onload = function(){
+            console.log('document title',document.title);
+
+
+        };
+
     (function(scope) {
+
 
         scope._showOnboard = function(onboard) {
 
 
-            return !(onboard.status);
-//            return !(onboard && onboard.country && (onboard.dob.year && onboard.dob.month && onboard.dob.day) && onboard.name && onboard.gender && onboard.location && onboard.work_status);
+            var domainUrl = window.location.href == "https://app.shuvayatra.org/" || window.location.href == "https://app.shuvayatra.org/user";
+
+            return (!(onboard.status) && domainUrl);
+
         };
+
+        scope.getDomainUrl =  function(url){
+
+
+            var domain;
+            //find & remove protocol (http, ftp, etc.) and get domain
+            if (url.indexOf("://") > -1) {
+                domain = url.split('/')[2];
+            }
+            else {
+                domain = url.split('/')[0];
+            }
+
+            //find & remove port number
+            domain = domain.split(':')[0];
+
+            return domain;
+
+
+        },
 
         scope._initializeDefaultOnboard = function(){
             scope.onboard = {

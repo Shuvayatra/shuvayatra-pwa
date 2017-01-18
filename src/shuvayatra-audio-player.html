@@ -51,6 +51,16 @@
             #duration {
                 margin-top: 10px;
             }
+
+            @media only screen  and (max-width: 768px) {
+                    .post-title{
+                        display: none;
+                    }
+                #duration {
+                    margin-top: 18px;
+                }
+            }
+
         </style>
 
         <div id="wrapper" class$="{{ _computeClass(mini) }}">
@@ -61,7 +71,7 @@
                     <paper-icon-button icon="av:pause-circle-outline" hidden$="{{ !isPlaying }}"></paper-icon-button>
                 </div>
                 <div class="audio-title">
-                    <label>{{ title }}</label>
+                    <label class="post-title">{{ title }}</label>
                     <audio id="audio" src="{{ src }}"></audio>
                     <div id="duration">
                         <span class="fit">{{ _getProgress(currentTime) }}</span>
