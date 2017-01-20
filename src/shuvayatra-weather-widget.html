@@ -105,27 +105,69 @@
 
                 var response = e.detail.response;
 
+                console.log(response.data);
+
+
+                console.log(this.info.englishFormatted);
+
+                var d = new Date();
+
+                var currentCurrencyData = this.getEngDate(d);
+
+                console.log(currentCurrencyData);
+
+
+                for(var i = 0; i< response.data.length; i++){
+
+                    if(response.data[i].indexOf(this.getEngDate(d)) > -1){
+                        var exchangeRates = response.data[i];
+                    }
+
+                }
+
+
+//                response.data.forEach(function(item){
+//                    if(item.indexOf(this.getEngDate(d)) > -1){
+//                        var testArr = console.log(response.data[i]);
+//                    }
+//                })
+
+//                response.data.forEach(function(item){
+////                    if(item.indexOf(this.getEngDate(d)) > -1){
+////                        var testArr = console.log(response.data[i]);
+////                    }
+//                    )
+//                }
+
+                console.log(exchangeRates);
+
                 switch (this.country_id) {
                     case 3:
                         console.log("malaysia");
-                        this.currencyVal = response.data[response.data.length -2][29];
+//                        this.currencyVal = response.data[response.data.length -2][29];
+
+                        this.currencyVal = exchangeRates[29];
                         break;
                     case 4:
                         console.log("saudi arabia");
-                        this.currencyVal = response.data[response.data.length -2][21];
+                        this.currencyVal = exchangeRates[21];
+//                        this.currencyVal = response.data[response.data.length -2][21];
                         break;
                     case 13:
                         console.log("katar");
-                        this.currencyVal = response.data[response.data.length -2][23];
+                        this.currencyVal = exchangeRates[23];
+//                        this.currencyVal = response.data[response.data.length -2][23];
                         break;
                     case 106:
                         console.log("UAE");
-                        this.currencyVal = response.data[response.data.length -2][27];
+                        this.currencyVal = exchangeRates[27];
+//                        this.currencyVal = response.data[response.data.length -2][27];
                         break;
                     case 107:
                         console.log("kuwait");
                         console.log("UAE");
-                        this.currencyVal = response.data[response.data.length -2][39];
+                        this.currencyVal = exchangeRates[39];
+//                        this.currencyVal = response.data[response.data.length -2][39];
                         break;
 
                     case 131:
@@ -138,8 +180,6 @@
                 }
 
 
-
-                console.log(this);
 
 
 //                console.log('response',response);
@@ -160,9 +200,22 @@
                     },
                     date: {
                         nepali: this.getNepaliDate(date),
-                        english: ('0' + date.getDate()).slice(-2) + " " + this.months.english[date.getMonth()] + " " + date.getFullYear()
+                        english: ('0' + date.getDate()).slice(-2) + " " + this.months.english[date.getMonth()] + " " + date.getFullYear(),
+                        englishFormatted: this.getEngDate(date)
                     }
                 };
+ },
+
+            getEngDate: function(date){
+
+
+                var mm = date.getMonth() + 1; // getMonth() is zero-based
+                var dd = date.getDate();
+
+                return [date.getFullYear(),
+                    (mm>9 ? '' : '0') + mm,
+                    (dd>9 ? '' : '0') + dd
+                ].join('-');
             },
 
             getNepaliDate: function (currentDate) {
@@ -195,7 +248,42 @@
                     }
                     dayDiff--;
                 }
+//                return nepaliYear + "-" + nepaliMonth + "-" + nepaliDay;
                 return this.getNepaliNumericalValue(nepaliDay) + " " + this.months.nepali[nepaliMonth] + " " + this.getNepaliNumericalValue(nepaliYear);
+            },
+
+            getNepaliDateEng: function (currentDate) {
+                var baseDate = new Date(this.initialData.english.year, this.initialData.english.month, this.initialData.english.dayOfMonth);
+
+                var dayDiff = Math.round((currentDate - baseDate) / (1000 * 60 * 60 * 24));
+
+                var nepaliYear = this.initialData.nepali.year;
+                var nepaliMonth = this.initialData.nepali.month;
+                var nepaliDay = this.initialData.nepali.dayOfMonth;
+
+                var initialDay = this.initialData.day;
+
+                while (dayDiff != 0) {
+                    var diffDate = this.nepaliDateMap[nepaliYear][nepaliMonth];
+                    nepaliDay++;
+
+                    if (nepaliDay > diffDate) {
+                        nepaliMonth++;
+                        nepaliDay = 1;
+                    }
+                    if (nepaliMonth > 12) {
+                        nepaliYear++;
+                        nepaliMonth = 1;
+                    }
+
+                    initialDay++;
+                    if (initialDay > 6) {
+                        initialDay = 0;
+                    }
+                    dayDiff--;
+                }
+                return nepaliYear + "-" + nepaliMonth + "-" + nepaliDay;
+//                return this.getNepaliNumericalValue(nepaliDay) + " " + this.months.nepali[nepaliMonth] + " " + this.getNepaliNumericalValue(nepaliYear);
             },
 
             getNepaliNumericalValue: function (number) {

@@ -211,10 +211,17 @@
         </template>
 
         <template id="postIf" is="dom-if" if="{{ post }}" restamp="true">
+
+            <template is="dom-if" if="{{ post }}">
+
+            </template>
+
+
+
             <app-header class$="{{ _generateClass(hasFeatureImage) }}" condenses fixed
                             effects="waterfall resize-snapped-title fade-background"
                             effects-config='{"resize-snapped-title": {"startsAt": 0.3, "duration": "100ms"}, "fade-background": {"startsAt": 0.3, "endsAt": 0.9}}'
-                            style="background-image: url([[ data.featured_image ]]);">
+                            style="background-image: url({{ featureImages}} );">
 
                 <app-toolbar>
                     <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
@@ -252,7 +259,11 @@
                         </shuvayatra-audio-player>
                     </div>
                 </template>
+
             </app-header>
+
+
+
 
             <template id="videoIf" is="dom-if" if="{{ video }}" restamp="true">
 
@@ -343,6 +354,11 @@
                     value: false
                 },
 
+                featureImages: {
+                    type: String,
+                    notify: true
+                },
+
                 audio: {
                     type: Boolean,
                     value: false,
@@ -395,10 +411,16 @@
             ready: function () {
 
 
-                if (this.audio) {
+                if (this.hasFeatureImage && this.audio) {
                     this.$.postIf.render();
                     this.$$("#playerIf").render();
                     this.player = this.$$("#player");
+
+                    this.featureImages = this.data.data.thumbnail;
+
+
+                } else if(this.hasFeatureImage && !this.audio & !this.video){
+                    this.featureImages = this.data.featured_image;
                 }
 
 
