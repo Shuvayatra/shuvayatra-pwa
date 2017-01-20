@@ -53,11 +53,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </shuvayatra-radio-widget>
                 </template>
                 <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
-                    <shuvayatra-list-block data="{{ item }}">
+                    <shuvayatra-list-block data="{{ item }}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
                     </shuvayatra-list-block>
                 </template>
-                <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
-                    <shuvayatra-slider-block data="{{ item }}">
+                <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}" >
+                    <shuvayatra-slider-block data="{{ item }}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
                     </shuvayatra-slider-block>
                 </template>
             </template>

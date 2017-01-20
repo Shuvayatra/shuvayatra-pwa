@@ -25,6 +25,8 @@
                         </template>
 
 
+
+
                         <template is="dom-if" if="{{data.view_more}}">
 
                             <template is="dom-if" if="{{country_id}}">
@@ -38,6 +40,11 @@
                                     <p>[[data.view_more_title]]</p>
                                 </a>
                             </template>
+
+                            <!--<h2>{{country_id}}</h2>-->
+                            <!--<a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter) }}">-->
+                                <!--<p>[[data.view_more_title]]</p>-->
+                            <!--</a>-->
 
                         </template>
                     </div>

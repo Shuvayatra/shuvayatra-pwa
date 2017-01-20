@@ -80,7 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </shuvayatra-notice>
                 </template>
                 <template is="dom-if" if="{{showCountryWidget(index)}}">
-                    <shuvayatra-weather-widget country="{{onboard.country}}">
+                    <shuvayatra-weather-widget country="{{onboard.country}}" country_id="{{onboard.country_id}}">
                     </shuvayatra-weather-widget>
                 </template>
                 <template is="dom-if" if="{{checkLayout(item.layout,'radio_widget')}}">

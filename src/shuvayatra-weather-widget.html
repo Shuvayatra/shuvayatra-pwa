@@ -23,6 +23,7 @@
         </style>
         <!-- <iron-ajax auto url="{{ forexUrl }}" handle-as="json" debounce-duration="300"></iron-ajax> -->
         <iron-ajax id="weatherAjax" handle-as="json" debounce-duration="300" on-response="onWeatherResponse"></iron-ajax>
+        <iron-ajax id="currencyAjax" handle-as="json" debounce-duration="300" on-response="onCurrencyResponse"></iron-ajax>
 
         <div class="card-container">
             <paper-card class="card" elevation="1" animated-shadow="false">
@@ -30,7 +31,7 @@
                     <ul>
                         <li class="title">{{country}}</li>
                         <li class="date">{{info.date.nepali}}, {{info.day.nepali}}</li>
-                        <li class="currency">KWD 1 = NPR 345.88</li>
+                        <li class="currency">KWD 1 = NPR {{currencyVal}}</li>
                         <li class="clearfix">
                             <div class="eng-date">
                                 <p>{{info.day.english}},</p>
@@ -55,6 +56,11 @@
                 country: {
                     type: String
                 },
+
+                currencyVal: {
+                    type: String,
+                    notify: true
+                }
             },
 
             ready: function () {
@@ -69,6 +75,7 @@
                 this.initNepaliDateData();
                 this.getInfo();
 
+                this.getCurrencyData();
                 this.getWeatherData();
             },
 
@@ -84,6 +91,64 @@
                     info: response.weather[0].description,
                     icon: "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png"
                 }
+
+
+
+            },
+
+            getCurrencyData: function () {
+                this.$.currencyAjax.url = "http://hamropatro-android.appspot.com/fetchForex";
+                this.$.currencyAjax.generateRequest();
+            },
+
+            onCurrencyResponse: function (e) {
+
+                var response = e.detail.response;
+
+                switch (this.country_id) {
+                    case 3:
+                        console.log("malaysia");
+                        this.currencyVal = response.data[response.data.length -2][29];
+                        break;
+                    case 4:
+                        console.log("saudi arabia");
+                        this.currencyVal = response.data[response.data.length -2][21];
+                        break;
+                    case 13:
+                        console.log("katar");
+                        this.currencyVal = response.data[response.data.length -2][23];
+                        break;
+                    case 106:
+                        console.log("UAE");
+                        this.currencyVal = response.data[response.data.length -2][27];
+                        break;
+                    case 107:
+                        console.log("kuwait");
+                        console.log("UAE");
+                        this.currencyVal = response.data[response.data.length -2][39];
+                        break;
+
+                    case 131:
+                        console.log("nepal");
+                        this.currencyVal = 1;
+                        break;
+
+                    default:
+
+                }
+
+
+
+                console.log(this);
+
+
+//                console.log('response',response);
+
+//                this.weather = {
+//                    temperature: response.main.temp + " \xB0C",
+//                    info: response.weather[0].description,
+//                    icon: "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png"
+//                }
             },
 
             getInfo: function () {

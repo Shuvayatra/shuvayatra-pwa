@@ -1,0 +1,569 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../bower_components/google-youtube/google-youtube.html">
+<link rel="import" href="behaviors/global-behavior.html">
+
+<dom-module id="shuvayatra-header">
+    <template>
+        <style>
+            :host {
+            }
+
+
+            app-header {
+                @apply(--layout-fixed-top);
+                z-index: 2;
+                color: #fff;
+
+                background-color: var(--app-primary-color);
+                --app-header-shadow: {
+                    box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.2);
+                    height: 10px;
+                    bottom: -10px;
+                };
+            }
+
+            app-header paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
+
+            app-header.with-image {
+                --app-header-background-front-layer: {
+                    background: #27a8d8;
+                };
+                --app-header-background-rear-layer: {
+                    background-color: var(--app-primary-color);
+                };
+                background-position: bottom center;
+                background-size: cover;
+                background-repeat: no-repeat;
+                height: 250px;
+            }
+
+            app-toolbar {
+                background: #27a8d8;
+                z-index: 1;
+            }
+
+            app-toolbar a, span {
+                display: inline-block;
+                margin-left: 16px;
+                line-height: 40px;
+                text-decoration: none;
+                color: #FFFFFF;
+                float: right;
+            }
+
+            app-toolbar iron-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            iron-selector {
+                display: block;
+                width: 100%;
+            }
+
+            #logo-title {
+                float: left;
+                line-height: 40px;
+                margin-left: 0;
+            }
+
+            #logo-title span {
+                display: inline-block;
+            }
+
+            #logo-icon {
+                margin-right: 0.5em;
+                vertical-align: middle;
+            }
+
+            .audio-player-wrap {
+                position: absolute;
+                bottom: 0;
+                max-width: 800px;
+                margin: 0 auto;
+                left: 0;
+                right: 0;
+                width: 100%
+            }
+
+            form, paper-input {
+                width: 100%;
+                --paper-input-container-focus-color: white;
+                --paper-input-container-input-color: white;
+            }
+
+            paper-icon-button[hidden],
+            .category-header > div iron-image[hidden] {
+                display: none;
+            }
+
+            .category-header {
+                display: block;
+            }
+
+            .category-header > div {
+                padding-left: 15px;
+                margin-top: 75px;
+            }
+
+            .category-header > div iron-image {
+                margin-bottom: 10px;
+            }
+
+            .category-header > div iron-image,
+            .category-header > div label {
+                display: block;
+            }
+
+            paper-icon-button + label {
+                position: relative;
+                white-space: nowrap;
+                overflow: hidden;
+                width: 150px;
+                text-overflow: ellipsis;
+                display: block;
+            }
+
+            .video-wrap{
+                background: #fff;
+                margin-top: 64px;
+            }
+
+            .content{
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            @media only screen  and (min-width: 900px) {
+                app-toolbar {
+                    max-width: 800px;
+                    margin: 0 auto;
+                }
+            }
+
+            @media only screen  and (min-width: 1024px) {
+                app-header.with-image {
+                    height: 350px;
+                }
+
+                .category-header > div {
+                    margin-top: 175px;
+                }
+            }
+
+            @media only screen  and (min-width: 1600px) {
+                app-header.with-image {
+                    height: 450px;
+                }
+
+                .category-header > div {
+                    margin-top: 290px;
+                }
+            }
+        </style>
+
+        <template>
+
+        </template>
+
+        <!-- main header for with navigation icons -->
+        <template is="dom-if" if="{{ main }}" restamp="true">
+            <app-header condenses effects="waterfall" fixed>
+                <app-toolbar>
+                    <iron-selector selected="[[ page ]]" attr-for-selected="name" role="navigation">
+                        <a id="logo-title" name="home" href="/">
+                            <iron-image id="logo-icon" src="../images/logo-square.png" preload sizing="cover"
+                                        height="32" width="32"></iron-image>
+                        </a>
+                        <a name="profile" href="/profile">
+                            <iron-icon icon="icons:account-circle"></iron-icon>
+                        </a>
+                        <a name="question" href="/question">
+                            <iron-icon icon="icons:question-answer"></iron-icon>
+                        </a>
+                        <a name="journey" href="/journey">
+                            <iron-icon icon="maps:flight"></iron-icon>
+                        </a>
+                        <a name="destination" href="/destination">
+                            <iron-icon icon="maps:place"></iron-icon>
+                        </a>
+                    </iron-selector>
+                </app-toolbar>
+            </app-header>
+        </template>
+
+        <!-- normal header for detail pages with back icon and title -->
+        <template id="postIf" is="dom-if" if="{{ regular }}" restamp="true">
+            <app-header condenses effects="waterfall" fixed>
+                <app-toolbar>
+                    <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
+                    <label>{{data.title}}</label>
+                </app-toolbar>
+            </app-header>
+        </template>
+
+        <template id="postIf" is="dom-if" if="{{ post }}" restamp="true">
+            <app-header class$="{{ _generateClass(hasFeatureImage) }}" condenses fixed
+                        effects="waterfall resize-snapped-title fade-background"
+                        effects-config='{"resize-snapped-title": {"startsAt": 0.3, "duration": "100ms"}, "fade-background": {"startsAt": 0.3, "endsAt": 0.9}}'
+                        style="background-image: url([[ data.featured_image ]]);">
+
+                <app-toolbar>
+                    <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
+                    <label condensed-title>{{ data.title }}</label>
+
+                    <template is="dom-if" if="{{ audio }}" restamp="true">
+                        <a href="{{ data.data.media_url }}" download>
+                            <paper-icon-button id="download" icon="cloud-download"></paper-icon-button>
+                        </a>
+                    </template>
+
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ data.share_url }}" target="_blank" on-click="_makeShareApiCall">
+                        <paper-icon-button id="share" icon="social:share"></paper-icon-button>
+                    </a>
+                    <span id="favourite" on-tap="_toggleFavourite">
+                        <paper-icon-button icon="favorite"
+                                           hidden$="{{ !_checkIfFavourite(favoriteData, data) }}"></paper-icon-button>
+                        <paper-icon-button icon="favorite-border"
+                                           hidden$="{{ _checkIfFavourite(favoriteData, data) }}"></paper-icon-button>
+                    </span>
+
+                    <iron-ajax id="shareAjax" method="POST"
+                               loading="{{ isSubmittingShare }}">
+                    </iron-ajax>
+                    <iron-ajax id="favAjax" method="POST"
+                               loading="{{ isSubmittingFav }}">
+                    </iron-ajax>
+                </app-toolbar>
+
+                <template id="playerIf" is="dom-if" if="{{ audio }}" restamp="true">
+                    <div class="audio-player-wrap" title>
+                        <shuvayatra-audio-player
+                                id="player" src="{{ data.data.media_url }}"
+                                title="{{ data.title }}">
+                        </shuvayatra-audio-player>
+                    </div>
+                </template>
+            </app-header>
+
+            <template id="videoIf" is="dom-if" if="{{ video }}" restamp="true">
+
+                <div class="video-wrap">
+                    <div class="content">
+                        <google-youtube id="video"
+                                        video-id="{{ _getVideoId(data.data.media_url) }}"
+                                        fluid
+                                        autoplay="0">
+                        </google-youtube>
+
+                    </div>
+
+                </div>
+            </template>
+        </template>
+
+        <!-- normal header for detail pages with back icon and title and featured-image-->
+        <template is="dom-if" if="{{ category }}" restamp="true">
+            <app-header class="with-image" condenses fixed
+                        effects="waterfall resize-snapped-title fade-background"
+                        effects-config='{"resize-snapped-title": {"startsAt": 0.2, "duration": "100ms"}, "fade-background": {"startsAt": 0.8, "endsAt": 0.9}}'
+                        style="background-image: url([[ data.featured_image ]]);">
+                <app-toolbar class="category-header">
+                    <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
+                    <label condensed-title>{{ data.title }}</label>
+                    <div title>
+                        <iron-image src="{{ data.small_icon }}" sizing="contain" width="25" height="25" hidden$="{{ !_hasIcon(data) }}"></iron-image>
+                        <label>{{ data.title }}</label>
+                    </div>
+                </app-toolbar>
+            </app-header>
+        </template>
+
+        <!-- header with search field -->
+        <template is="dom-if" if="{{ search }}" restamp="true">
+            <app-header condenses effects="waterfall" fixed>
+                <app-toolbar>
+                    <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
+                    <paper-input placeholder="Search"
+                                 no-label-float no-ink
+                                 on-keydown="_submitForm"
+                                 value="{{ searchTerm }}">
+                        <!-- <iron-icon icon="search" prefix></div> -->
+                    </paper-input>
+                </app-toolbar>
+            </app-header>
+        </template>
+
+        <app-localstorage-document key="favorite-data" data="{{ favoriteData }}"></app-localstorage-document>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-header',
+            behaviors: [GlobalBehavior],
+
+            properties: {
+                changeFlag: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+
+                data: {
+                    type: Object,
+                    value: {},
+                    notify: true
+                },
+
+                main: {
+                    type: Boolean,
+                    value: false
+                },
+
+                regular: {
+                    type: Boolean,
+                    value: false
+                },
+
+                post:{
+                    type: Boolean,
+                    value: false
+                },
+
+                hasFeatureImage: {
+                    type: Boolean,
+                    value: false
+                },
+
+                audio: {
+                    type: Boolean,
+                    value: false,
+                    observer: '_isAudio'
+                },
+
+                video: {
+                    type: Boolean,
+                    value: false,
+                    observer: '_isVideo'
+                },
+
+                category: {
+                    type: Boolean,
+                    value: false
+                },
+
+                search: {
+                    type: Boolean,
+                    value: false
+                },
+
+                searchTerm: {
+                    type: String,
+                    value: "",
+                    notify: true
+                },
+
+                favoriteData: {
+                    type: Array,
+                    value: []
+                },
+            },
+
+            _hasIcon: function(data){
+                return (data.parent_alias === "journey");
+            },
+
+            _generateClass: function(hasFeatureImage){
+                return hasFeatureImage ? "with-image" : "no-image";
+            },
+
+            _submitForm: function (e) {
+                if (e.which == 13) {
+                    e.preventDefault();
+                    window.location = "/search/query/" + this.searchTerm;
+                }
+            },
+
+            ready: function () {
+
+
+                if (this.audio) {
+                    this.$.postIf.render();
+                    this.$$("#playerIf").render();
+                    this.player = this.$$("#player");
+                }
+
+
+                if(this.video){
+                    console.log('video ready');
+                    this.$.postIf.render();
+                    this.$$("#videoIf").render();
+                    console.log(this.$$("#video"));
+                    this.videoPlayer = this.$$("#video");
+                }
+            },
+
+
+            _goBack: function () {
+                this._stopPlayback();
+                window.history.back();
+            },
+
+            _stopPlayback: function(){
+
+                console.log('in stop play back');
+                if (this.player) {
+                    console.log('pause audio player');
+                    this.player._stop();
+                }
+
+                if(this.videoPlayer){
+                    console.log('pause video player');
+                    this.videoPlayer.pause();
+                }
+
+
+            },
+
+            _isAudio: function (value) {
+                if (value) {
+                    this.importHref(this.resolveUrl('shuvayatra-audio-player.html'), null, null, true);
+                }
+            },
+
+            _isVideo: function (value) {
+                console.log('video val',value);
+            },
+
+
+
+            _getVideoId: function(url){
+                var ID = '';
+                if(url){
+                    url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+                    if(url[2] !== undefined) {
+                        ID = url[2].split(/[^0-9a-z_\-]/i);
+                        ID = ID[0];
+                    } else {
+                        ID = url;
+                    }
+                }
+                return ID;
+            },
+
+            _toggleFavourite: function() {
+                var dataSet = new Set(this.favoriteData);
+                if(this._checkIfFavourite(this.favoriteData)){
+                    dataSet = this._deleteFromSet(dataSet);
+                    this._updateFavCount(false);
+                    this._makeFavApiCall(false);
+                }else{
+                    dataSet.add(this.data);
+                    this._updateFavCount(true);
+                    this._makeFavApiCall(true);
+                }
+                this.favoriteData = Array.from(dataSet);
+            },
+
+            _updateFavCount: function(flag){
+                if(this.data.like_count){
+                    if(flag)
+                        this.data.like_count++;
+                    else
+                        this.data.like_count--;
+                }else{
+                    if(flag)
+                        this.data.like_count = 1;
+                    else
+                        this.data.like_count = 0;
+                }
+                this.changeFlag = !this.changeFlag;
+            },
+
+            _updateShareCount: function(){
+                if(this.data.share_count){
+                    this.data.share_count++;
+                }else{
+                    this.data.share_count = 1;
+                }
+                this.changeFlag = !this.changeFlag;
+            },
+
+            _makeFavApiCall: function(flag){
+                if(!this.isSubmittingFav) {
+                    this.$.postIf.render();
+                    var ajax = this.$$('#favAjax');
+
+                    ajax.url = this.baseUrl + "api/post/" + this.data.id + "/favorite";
+                    ajax.headers = {
+                        "Token": this.apiKey,
+                        "Content-Type": "application/json"
+                    };
+                    if(flag){
+                        ajax.body = {type: "up"};
+                    }else{
+                        ajax.body = {type: "down"};
+                    }
+                    ajax.generateRequest();
+                }
+            },
+
+            _makeShareApiCall: function(){
+                if(!this.isSubmittingShare) {
+                    this._updateShareCount();
+
+                    this.$.postIf.render();
+                    var ajax = this.$$('#shareAjax');
+                    console.log('ajax',ajax);
+
+                    ajax.url = this.baseUrl + "api/post/" + this.data.id + "/share";
+
+                    console.log('ajax url',this.baseUrl + "api/post/" + this.data.id + "/share");
+                    debugger;
+                    ajax.headers = {
+                        "Token": this.apiKey,
+                        "Content-Type": "application/json"
+                    };
+                    ajax.generateRequest();
+                }
+            },
+
+            _deleteFromSet: function(source){
+                var set = new Set();
+                var parent = this;
+                source.forEach(function(item, index){
+                    if(item.id !== parent.data.id){
+                        set.add(item);
+                    }
+                });
+                return set;
+            },
+
+            _checkIfFavourite: function(favoriteData, data) {
+                var ids = favoriteData.map(this._getIdFromData);
+                var set = new Set(ids);
+                return set.has(this.data.id);
+
+            },
+
+            _getIdFromData: function(data){
+                return data.id;
+            }
+
+        });
+    </script>
+</dom-module>
