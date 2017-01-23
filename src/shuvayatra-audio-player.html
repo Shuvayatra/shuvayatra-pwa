@@ -19,6 +19,7 @@
 
             #wrapper {
                 color: #fff;
+                margin-bottom: 56px;
             }
 
             paper-icon-button {
@@ -36,7 +37,7 @@
 
             .audio-duration-wrap {
                 overflow: hidden;
-                margin-bottom: 30px;
+
             }
 
             .audio-duration-wrap > div {
@@ -53,11 +54,18 @@
             }
 
             @media only screen  and (max-width: 768px) {
-                    .post-title{
-                        display: none;
-                    }
+                .post-title{
+                    display: none;
+                }
                 #duration {
                     margin-top: 18px;
+                }
+
+            }
+
+            @media only screen and (min-width: 992px){
+                .audio-duration-wrap{
+                    margin-bottom: 30px;
                 }
             }
 

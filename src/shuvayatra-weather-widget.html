@@ -31,7 +31,11 @@
                     <ul>
                         <li class="title">{{country}}</li>
                         <li class="date">{{info.date.nepali}}, {{info.day.nepali}}</li>
-                        <li class="currency">KWD 1 = NPR {{currencyVal}}</li>
+
+                        <template is="dom-if" if="{{showRate}}">
+                            <li class="currency">{{countryCode}} 1 = NPR {{currencyVal}}</li>
+                        </template>
+
                         <li class="clearfix">
                             <div class="eng-date">
                                 <p>{{info.day.english}},</p>
@@ -57,10 +61,22 @@
                     type: String
                 },
 
+                countryCode: {
+                    type: String,
+                    notify: true
+                },
+
                 currencyVal: {
                     type: String,
                     notify: true
+                },
+
+                showRate: {
+                    type: Boolean,
+                    value: true,
+                    notify: true
                 }
+
             },
 
             ready: function () {
@@ -105,17 +121,7 @@
 
                 var response = e.detail.response;
 
-                console.log(response.data);
-
-
-                console.log(this.info.englishFormatted);
-
                 var d = new Date();
-
-                var currentCurrencyData = this.getEngDate(d);
-
-                console.log(currentCurrencyData);
-
 
                 for(var i = 0; i< response.data.length; i++){
 
@@ -126,69 +132,81 @@
                 }
 
 
-//                response.data.forEach(function(item){
-//                    if(item.indexOf(this.getEngDate(d)) > -1){
-//                        var testArr = console.log(response.data[i]);
-//                    }
-//                })
-
-//                response.data.forEach(function(item){
-////                    if(item.indexOf(this.getEngDate(d)) > -1){
-////                        var testArr = console.log(response.data[i]);
-////                    }
-//                    )
-//                }
-
-                console.log(exchangeRates);
-
                 switch (this.country_id) {
                     case 3:
                         console.log("malaysia");
-//                        this.currencyVal = response.data[response.data.length -2][29];
 
-                        this.currencyVal = exchangeRates[29];
+                        this.countryCode = "Malaysian ringgit";
+
+                        if(exchangeRates){
+                            this.currencyVal = exchangeRates[29];
+                        }else{
+                            this.currencyVal = response.data[response.data.length -2][29];
+                        }
+
                         break;
                     case 4:
                         console.log("saudi arabia");
-                        this.currencyVal = exchangeRates[21];
-//                        this.currencyVal = response.data[response.data.length -2][21];
+
+                        this.countryCode = "Saudi Arabian riyal";
+
+                        if(exchangeRates){
+                            this.currencyVal = exchangeRates[21];
+                        }
+                        else{
+                            this.currencyVal = response.data[response.data.length -2][21];
+                        }
+
                         break;
                     case 13:
                         console.log("katar");
-                        this.currencyVal = exchangeRates[23];
-//                        this.currencyVal = response.data[response.data.length -2][23];
+
+                        this.countryCode = "Qatari riyal";
+
+                        if(exchangeRates){
+                            this.currencyVal = exchangeRates[23];
+                        } else{
+                            this.currencyVal = response.data[response.data.length -2][23];
+                        }
+
+
+
                         break;
                     case 106:
                         console.log("UAE");
-                        this.currencyVal = exchangeRates[27];
-//                        this.currencyVal = response.data[response.data.length -2][27];
+
+                        this.countryCode = "UAE Dirham";
+
+                        if(exchangeRates){
+
+                            this.currencyVal = exchangeRates[27];
+                        } else{
+                            this.currencyVal = response.data[response.data.length -2][27];
+                        }
+
                         break;
                     case 107:
                         console.log("kuwait");
-                        console.log("UAE");
-                        this.currencyVal = exchangeRates[39];
-//                        this.currencyVal = response.data[response.data.length -2][39];
+
+                        this.countryCode = "Kuwaity Dinar";
+
+                        if(exchangeRates){
+                            this.currencyVal = exchangeRates[39];
+                        } else{
+                            this.currencyVal = response.data[response.data.length -2][39];
+                        }
+
                         break;
 
                     case 131:
                         console.log("nepal");
-                        this.currencyVal = 1;
+                        this.showRate = false;
                         break;
 
                     default:
 
                 }
 
-
-
-
-//                console.log('response',response);
-
-//                this.weather = {
-//                    temperature: response.main.temp + " \xB0C",
-//                    info: response.weather[0].description,
-//                    icon: "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png"
-//                }
             },
 
             getInfo: function () {
@@ -204,7 +222,7 @@
                         englishFormatted: this.getEngDate(date)
                     }
                 };
- },
+            },
 
             getEngDate: function(date){
 
