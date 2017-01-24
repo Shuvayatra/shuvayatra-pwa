@@ -114,7 +114,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </tr>
                     <tr>
                         <td>Gender</td>
-                        <td>{{onboard.gender}}</td>
+                        <td>{{gender}}</td>
                     </tr>
                     <tr>
                         <td>Location</td>
@@ -122,7 +122,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </tr>
                     <tr>
                         <td>Work Status</td>
-                        <td>{{onboard.work_status}}</td>
+                        <td>{{work_status}}</td>
                     </tr>
                     <tr>
                         <td>Country</td>
@@ -156,10 +156,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                onboard: {
                    type: Object,
                    notify:true
-               }
+               },
+
+                gender: {
+                    type: String,
+                    notify: true
+                },
+
+                work_status: {
+                    type: String,
+                    notify: true
+                }
             },
 
             handleLocalstorageLoadEvent: function(){
+                console.log('data loaded');
+                console.log(this.onboard.gender);
+
+//                if(this.onboard.gender == "m"){
+//                    this.gender = "male";
+//                } else if(this.onboard.gender  == "f"){
+//                    this.gender = "female"
+//                } else if(this.onboard.gender == "o"){
+//                    this.gender = "other"
+//                }
+
+
+                switch (this.onboard.gender) {
+                    case "m":
+                        this.gender = "male";
+                        break;
+                    case "f":
+                        this.gender = "female";
+                        break;
+                    case "o":
+                        this.gender = "other"
+                        break;
+                    default:
+
+                }
+
+                switch (this.onboard.work_status) {
+                    case "work_status_working_abroad":
+                        this.work_status = "छ, म अझै काम गर्छु"
+                        break;
+                    case "work_status_back_from_abroad":
+                        this.work_status = "छ, तर म नेपाल फर्किसक";
+                        break;
+                    case "work_status_planning":
+                        this.work_status = "छैन, जाने सोचाइ मा छु";
+                        break;
+                    case "work_status_planning":
+                        this.work_status = "छैन, जाने सोचाइ छैनु";
+                        break;
+
+                    default:
+
+                }
+
+
                 this.onboardList.push(this.onboard);
             },
 

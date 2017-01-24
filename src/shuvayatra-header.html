@@ -441,14 +441,14 @@
 
             _stopPlayback: function(){
 
-                console.log('in stop play back');
+
                 if (this.player) {
-                    console.log('pause audio player');
+
                     this.player._stop();
                 }
 
                 if(this.videoPlayer){
-                    console.log('pause video player');
+
                     this.videoPlayer.pause();
                 }
 
@@ -462,7 +462,6 @@
             },
 
             _isVideo: function (value) {
-                console.log('video val',value);
             },
 
 
@@ -544,11 +543,11 @@
 
                     this.$.postIf.render();
                     var ajax = this.$$('#shareAjax');
-                    console.log('ajax',ajax);
+
 
                     ajax.url = this.baseUrl + "api/post/" + this.data.id + "/share";
 
-                    console.log('ajax url',this.baseUrl + "api/post/" + this.data.id + "/share");
+
                     debugger;
                     ajax.headers = {
                         "Token": this.apiKey,
