@@ -11,9 +11,12 @@ module.exports = {
   ],
   navigateFallback: '/index.html',
   runtimeCaching: [{
-    urlPattern: /^https:\/\/api\.shuvayatra\.org\/v1\/api/,
+    urlPattern: /^https:\/\/api\.shuvayatra\.org\/v1\/api\/post\//,
     handler: 'fastest'
-  }, {
+  } ,  {
+    urlPattern: /^https:\/\/api\.shuvayatra\.org\/v1\/api\/posts\//,
+    handler: 'networkFirst'
+  }  , {
     urlPattern: /^https:\/\/fonts\.googleapis\.com\/css/,
     handler: 'fastest'
   }, {
