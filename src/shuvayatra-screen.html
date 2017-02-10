@@ -21,7 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shuvayatra-slider-block.html">
 <link rel="import" href="behaviors/global-behavior.html">
 
-<dom-module id="shuvayatra-home">
+<dom-module id="shuvayatra-screen">
     <template>
         <style include="shared-styles">
             :host {
@@ -61,17 +61,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 last-response="{{response}}">
         </iron-ajax>
 
+        <app-location route="{{route}}"></app-location>
+        <app-route
+            route="{{route}}"
+            pattern="/screen"
+            data="{{routeData}}"
+            tail="{{subroute}}">
+        </app-route>
+        <app-route
+            route="{{subroute}}"
+            pattern="/:screen"
+            data="{{subrouteData}}">
+        </app-route>
 
-        <template is="dom-if" if="{{onboard.country_id}}">
-        <iron-ajax auto url="{{ baseUrl }}api/screen/home?country_id={{onboard.country_id}}&gender={{onboard.gender}}" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
-        </template>
+        <iron-ajax auto url="{{ baseUrl }}api/screens/{{subrouteData.screen}}" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
 
-        <template is="dom-if" if="{{!onboard.country_id}}">
-            <iron-ajax auto url="{{ baseUrl }}api/screen/home" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
-        </template>
-
+        
         <div class="feed-container">
-            <template is="dom-repeat" items="[[homefeeds]]" filter="{{ _isNotDismissedId(dismissId) }}">
+            <template is="dom-repeat" items="[[homefeeds.blocks]]" filter="{{ _isNotDismissedId(dismissId) }}">
                 <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
                     <shuvayatra-notice notice="{{item.notice}}" dismiss-id="{{ dismissId }}">
                     </shuvayatra-notice>
@@ -100,7 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </template>
     <script>
         Polymer({
-            is: 'shuvayatra-home',
+            is: 'shuvayatra-screen',
             behaviors: [GlobalBehavior],
 
 
