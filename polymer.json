@@ -3,16 +3,24 @@
   "shell": "src/shuvayatra-app.html",
   "fragments": [
     "src/shuvayatra-home.html",
+    "src/shuvayatra-onboard.html",
     "src/shuvayatra-destination.html",
     "src/shuvayatra-journey.html",
+    "src/shuvayatra-user.html",
     "src/shuvayatra-news.html",
     "src/shuvayatra-notfound.html",
     "src/shuvayatra-radio.html",
+    "src/shuvayatra-feed.html",
+    "src/shuvayatra-channel.html",
+    "src/shuvayatra-post.html",
+    "src/shuvayatra-destinations.html",
     "src/shared-styles.html"
   ],
-  "sourceGlobs": [
+  "sources": [
    "src/**/*",
+   "src/*",
    "images/**/*",
+   "images/*",
    "bower.json"
   ],
   "includeDependencies": [

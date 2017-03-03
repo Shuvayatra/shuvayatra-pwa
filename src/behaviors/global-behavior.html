@@ -1,0 +1,63 @@
+<script type="text/javascript">
+
+    GlobalBehavior = {
+
+        properties: {
+            baseUrl:{
+                type: String,
+                value: "https://api.shuvayatra.org/v1/"
+                //value: "http://nrna.yipl.com.np/"
+            },
+
+            forexUrl:{
+                type: String,
+                value: "https://hamropatro-android.appspot.com/fetchForex"
+            },
+
+            weatherUrl: {
+                type: String,
+                value: "http://api.openweathermap.org/data/2.5/weather"
+            },
+
+            weatherAppId:{
+                type: String,
+                value: "07824720b667303cc16885d917a071c3"
+            },
+
+            apiKey: {
+            	type: String,
+            	value: "eeee0c3eaa204f98acac4102c90676abc674f191"
+            },
+
+            appUrl: {
+                type: Object,
+                value: {
+                    deeplink:{
+                        feed: "shuvayatra://feed"
+                    },
+                    url:{
+                        feed: "/feed/"
+                    }
+                }
+            }
+        },
+
+        _handleDeeplink: function(title, deeplink, params, country_id,gender){
+
+            var url = "#";
+            if(deeplink === this.appUrl.deeplink.feed){
+                url = this.appUrl.url.feed;
+                if(params && country_id){
+                    url += "?title= "+ title + "&category_id=" + params.join(",") + "&country_id="+country_id + "&gender="+gender;
+                }else if(params){
+                    url += "?title= "+ title + "&category_id=" + params.join(",");
+                }
+            }
+            return url;
+        },
+
+        _fetchData: function(){
+
+        }
+    };
+</script>

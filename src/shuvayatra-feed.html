@@ -1,0 +1,184 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/nebula-storage/nebula-storage.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="behaviors/global-behavior.html">
+<link rel="import" href="shuvayatra-audio-card.html">
+<link rel="import" href="shuvayatra-video-card.html">
+<link rel="import" href="shuvayatra-text-card.html">
+
+<dom-module id="shuvayatra-feed">
+    <template>
+        <style include="shared-styles">
+        :host {
+            display: block;
+            padding: 10px;
+        }
+        iron-list {
+            height: 100vh;
+            width: 100%;
+            padding-top:75px;
+        }
+        app-header {
+            @apply(--layout-fixed-top);
+            z-index: 2;
+            color: #fff;
+            background-color: var(--app-primary-color);
+            --app-header-shadow: {
+                box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.2);
+                height: 10px;
+                bottom: -10px;
+            }
+            ;
+        }
+
+        .col{
+            width: 100%;
+        }
+
+        #scrollTheshold{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+
+        }
+
+        @media only screen  and (min-width: 768px) {
+            .col{
+                width: 32%;
+            }
+
+            iron-list{
+                max-width: 1024px;
+                margin: 0 auto;
+            }
+
+        }
+
+        </style>
+        <iron-ajax id="ajax" url="{{ baseUrl }}api/posts" params="{{params}}" handle-as="json" debounce-duration="300" loading="{{loading}}" on-response="_didRespond"></iron-ajax>
+        <app-header condenses effects="waterfall" fixed>
+            <app-toolbar>
+                <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
+                <label>[[title]]</label>
+            </app-toolbar>
+        </app-header>
+
+
+        <nebula-storage id="caches" key="feed-cat-{{category}}" data="{{feeds}}" default-value="[]" auto-save auto-load> </nebula-storage>
+
+        <iron-scroll-threshold id="scrollTheshold" lower-threshold="500" scroll-target="document" on-lower-threshold="_loadMoreData">
+            <iron-list id="list" items="[[feeds]]" as="item" scroll-target="document">
+                <template>
+                <div class="col">
+                    <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
+                        <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
+                    </template>
+                    <template is="dom-if" if="{{ _checkPostType(item.type, 'audio') }}">
+                        <shuvayatra-audio-card class="post-card" post="{{ item }}"></shuvayatra-audio-card>
+                    </template>
+                    <template is="dom-if" if="{{ _checkPostType(item.type, 'text') }}">
+                        <shuvayatra-text-card class="post-card" post="{{ item }}"></shuvayatra-text-card>
+                    </template>
+                </div>
+                </template>
+             </iron-list>
+        </iron-scroll-threshold>
+
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loading}}"></paper-spinner>
+        </div>
+
+    </template>
+    <script>
+    Polymer({
+        is: 'shuvayatra-feed',
+        behaviors: [GlobalBehavior],
+
+        properties: {
+            title:{
+                type: String,
+            },
+
+            feeds:{
+                type:Array,
+                value:[],
+            },
+
+            category:{
+                type:Number
+            },
+
+            params: {
+                type: Object,
+                notify: true
+            },
+
+            page: {
+                type: Number,
+                value: 0
+            },
+            loadFromCache:{
+                type:Boolean,
+                value:true
+            }
+        },
+
+        ready: function() {
+            delete this.params.title;
+        },
+
+        _loadMoreData: function() {
+            if (!this.isLastPage) {
+                this.params.page = (this.page + 1);
+                this.$.ajax.generateRequest();
+            }
+        },
+
+        _didRespond: function(e) {
+            var response = e.detail.response;
+            this.page = response.current_page;
+            this.isLastPage = this.page === response.last_page;
+            if(this.loadFromCache){
+                this.feeds=response.data;
+                this.loadFromCache=false;
+            } else {
+                this.feeds=this.feeds.concat(response.data);
+            }
+            console.log(this.feeds);
+            this.$.scrollTheshold.clearTriggers();
+        },
+
+        _checkPostType: function(type, value) {
+            return (type === value);
+        },
+
+        _generateUrl: function(item) {
+            return "#";
+            if (item != null) {
+                return "/post/" + item.id;
+            }
+        },
+
+        _goBack: function() {
+            window.history.back();
+        },
+    });
+    </script>
+</dom-module>

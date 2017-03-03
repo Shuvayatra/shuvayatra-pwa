@@ -1,0 +1,74 @@
+<script>
+    PostBehavior = {
+
+        properties: {
+            post:{
+                type: Object,
+                value: null,
+                notify: true
+            }
+        },
+
+        _getRelativeTime: function(timestamp) {
+
+        	var current = new Date().getTime();
+
+		    var msPerMinute = 60 * 1000;
+		    var msPerHour = msPerMinute * 60;
+		    var msPerDay = msPerHour * 24;
+		    var msPerMonth = msPerDay * 30;
+		    var msPerYear = msPerDay * 365;
+
+		    var elapsed = current - (timestamp*1000);
+
+		    if (elapsed < msPerMinute) {
+		         return Math.round(elapsed/1000) + 'सेकेन्ड्स  अगाडि ';   
+		    } else if (elapsed < msPerHour) {
+		         return Math.round(elapsed/msPerMinute) + ' मिनेट अगाडि';   
+		    } else if (elapsed < msPerDay ) {
+		         return Math.round(elapsed/msPerHour ) + ' घण्टा अगाडि ';   
+		    } else if (elapsed < msPerMonth) {
+		        return Math.round(elapsed/msPerDay) + ' दिन अगाडि ';   
+		    } else if (elapsed < msPerYear) {
+		        return Math.round(elapsed/msPerMonth) + ' महिना अगाडि ';   
+		    } else {
+		        return Math.round(elapsed/msPerYear ) + ' बर्ष अगाडि ';   
+		    }
+        },
+
+        _hasSimilar: function(post){
+
+            return (post.similar) && (post.similar.length == 0);
+        },
+
+        _generateUrl: function(post){
+
+            if(post != null){
+                return "/post/" + post.id;
+            }
+        },
+
+        _getFormattedLikeCount: function(count) {
+        	if(!count){
+        		return "--";
+        	}else{
+        		return count + " लाइक";
+        	}
+        },
+
+        _getFormattedShareCount: function(count) {
+        	if(!count){
+        		return "--";
+        	}else{
+        		return count + " शेयर";
+        	}
+        },
+
+        _updateCountData: function(data){
+
+			console.log('in update count');
+            this.$.favSection._updateData(data);
+        }
+
+    };
+</script>

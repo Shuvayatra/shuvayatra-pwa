@@ -1,0 +1,67 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="shared-styles.html">
+<dom-module id="shuvayatra-slider-item">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                margin-right: 5px;
+            }
+
+            iron-image {
+                width: 140px;
+                height: 80px;
+            }
+
+            h5 {
+                font-weight: normal;
+                color: #333;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 130px;
+                margin: 0;
+                padding: 5px;
+            }
+
+            a{
+                text-decoration: none;
+            }
+
+            @media only screen and (min-width: 600px) {
+                iron-image {
+                    width: 200px;
+                    height: 150px;
+                }
+            }
+        </style>
+        <div>
+            <a href="{{ _generateUrl(data) }}">
+                <iron-image src="[[getImage(data)]]" preload sizing="cover"></iron-image>
+                <h5>[[data.title]]</h5>
+            </a>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-slider-item',
+            behaviors: [PostBehavior],
+
+            properties: {
+                data: {
+                    type: Object
+                }
+            },
+
+            getImage: function (data) {
+                if (this.data.type === 'text') {
+                    return this.data.featured_image;
+                } else {
+                    return this.data.data.thumbnail;
+                }
+            }
+
+        });
+    </script>
+</dom-module>

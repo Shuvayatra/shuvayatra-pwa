@@ -7,87 +7,84 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="shared-styles.html">
-
+<link rel="import" href="behaviors/global-behavior.html">
 <dom-module id="shuvayatra-radio">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
 
-        padding: 10px;
-      }
-    </style>
-    <div class="feed-container">
-      <div class="card-container">
-<div class="card">
-        <div class="circle">2</div>
-        <h1>View Two</h1>
-        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-        <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-      </div>
-</div>
-      <div class="card-container">
-<div class="card">
-        <div class="circle">2</div>
-        <h1>View Two</h1>
-        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-        <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-        <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-        <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-      </div>
-</div>
-      <div class="card-container">
-<div class="card">
-        <div class="circle">2</div>
-        <h1>View Two</h1>
-        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-        <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-         <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-      </div>
-</div>
-      <div class="card-container">
-<div class="card">
-        <div class="circle">2</div>
-        <h1>View Two</h1>
-        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-        <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-      </div>
-</div>
-      <div class="card-container">
-<div class="card">
-        <div class="circle">2</div>
-        <h1>View Two</h1>
-        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-        <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-      </div>
-</div>
-      <div class="card-container">
-<div class="card">
-        <div class="circle">2</div>
-        <h1>View Two</h1>
-        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-        <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-      </div>
-</div>
-      <div class="card-container">
-<div class="card">
-        <div class="circle">2</div>
-        <h1>View Two</h1>
-        <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-        <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-         <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-      </div>
-    </div>
-  </template>
+            iron-image {
+                max-width: 100%;
+                width: 100%;
+                height: 170px;
+                display: block;
+            }
 
-  <script>
-    Polymer({
-      is: 'shuvayatra-radio'
-    });
-  </script>
+            #title {
+                text-align: center;
+                color: #4a4a4a;
+                margin: 0;
+                padding: 20px 0;
+                font-size: 16px;
+            }
+
+            .feed-container {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                padding: 0 10px;
+            }
+
+            @media only screen and (min-width: 768px) {
+                :host {
+                    max-width: 750px;
+                    margin: 0 auto;
+                }
+
+                iron-image {
+                    height: 270px;
+                }
+            }
+        </style>
+        <iron-ajax auto url="{{ baseUrl }}api/radio/categories" last-response="{{channels}}" handle-as="json" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+
+        <p id="title">च्यानलहरू</p>
+        <div class="feed-container">
+            <template id="list" is="dom-repeat" items="{{ channels }}">
+                <a class="link" href="{{ _generateUrl(item) }}">
+                    <paper-card class="card" elevation="1" animated-shadow="false">
+                        <div class="radio-block card-content">
+                            <iron-image src="{{ item.image_url }}" sizing="cover"></iron-image>
+                            <p>{{ item.title }}</p>
+                        </div>
+                    </paper-card>
+                </a>
+            </template>
+        </div>
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loading}}"></paper-spinner>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-radio',
+            behaviors: [GlobalBehavior],
+
+            properties: {},
+
+            _generateUrl: function (item) {
+                if (item != null) {
+                    return "/channel/" + item.id;
+                }
+            },
+        });
+    </script>
 </dom-module>

@@ -1,0 +1,152 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/google-youtube/google-youtube.html">
+
+<link rel="import" href="behaviors/post-behavior.html">
+<link rel="import" href="shuvayatra-favourite-section.html">
+<link rel="import" href="shuvayatra-html-placeholder.html">
+
+<dom-module id="shuvayatra-video-detail">
+<template>
+    <style is="custom-style">
+        :host{
+            display: block;
+        }
+
+        h3 {
+            margin: 15px 0 10px;
+            font-size: 18px;
+            padding: 0 15px;
+            line-height: 26px;
+            font-weight: normal;
+        }
+
+        shuvayatra-favourite-section,
+        shuvayatra-html-placeholder {
+            padding: 0 15px;
+        }
+
+        .similar-type {
+            box-shadow: 765px 0 0 0 #ededed,-765px 0 0 0 #ededed;
+            background: #ededed;
+            padding: 20px 0;
+        }
+
+        .similar-type p {
+            font-size: 16px;
+            color: #636363;
+            margin: 0 0 10px;
+        }
+
+        .wrapper {
+            background: #eeeeee;
+            padding: 10px 0px;
+        }
+
+        .content{
+            padding: 18px 20px;
+        }
+
+        @media only screen  and (min-width: 900px) {
+            .content {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+
+        .video-wrap{
+            background: lightgray;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 64px;
+
+
+        }
+
+        .similar-wrapper{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .col{
+            width: 100%;
+        }
+
+        @media only screen  and (min-width: 768px) {
+            .col{
+                width: 49%;
+            }
+        }
+
+
+    </style>
+
+    <!--<div class="video-wrap">-->
+        <!--<google-youtube id="video"-->
+          <!--video-id="{{ _getVideoId(post.data.media_url) }}"-->
+          <!--fluid-->
+          <!--autoplay="0">-->
+        <!--</google-youtube>-->
+    <!--</div>-->
+
+    <div class="content">
+
+
+
+    <h3>{{ post.title }}</h3>
+
+    <shuvayatra-favourite-section id="favSection" category="{{ post.category }}" date="{{ post.created_at }}" likes="{{ post.like_count }}" shares="{{ post.share_count }}"></shuvayatra-favourite-section>
+    <shuvayatra-html-placeholder html="{{ post.description }}"></shuvayatra-html-placeholder>
+
+    </div>
+
+    <div class="wrapper">
+        <div class="content">
+            <div class="similar-type" hidden$="{{ _hasSimilar(post) }}">
+                <p>मिल्दोजुल्दो कथाहरु</p>
+
+
+                <div class="similar-wrapper">
+                <template is="dom-repeat" items="{{ post.similar }}">
+                    <div class="col">
+                        <shuvayatra-video-card post="{{ item }}"></shuvayatra-video-card>
+                    </div>
+                </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</template>
+<script>
+	Polymer({
+        is: 'shuvayatra-video-detail',
+        behaviors: [PostBehavior],
+        
+        properties: {
+
+        },
+
+        _stopPlayback: function() {
+            this.$.video.pause();
+        },
+
+        _getVideoId: function(url){
+            var ID = '';
+            if(url){
+                url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+                if(url[2] !== undefined) {
+                    ID = url[2].split(/[^0-9a-z_\-]/i);
+                    ID = ID[0];
+                } else {
+                    ID = url;
+                }
+            }
+            return ID;
+        }
+
+    });
+</script>
+</dom-module>

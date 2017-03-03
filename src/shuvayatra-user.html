@@ -1,0 +1,244 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="shuvayatra-radio-widget.html">
+<link rel="import" href="shuvayatra-notice.html">
+<link rel="import" href="shuvayatra-list-block.html">
+<link rel="import" href="shuvayatra-slider-block.html">
+<link rel="import" href="behaviors/global-behavior.html">
+
+<dom-module id="shuvayatra-user">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 20px 10px;
+            }
+            shuvayatra-slider-block {
+                margin-bottom: 20px;
+            }
+
+            @media only screen and (min-width: 768px) {
+                :host {
+                    max-width: 750px;
+                    margin: 0 auto;
+                }
+            }
+
+            .sy-table{
+                width: 100%;
+                display: table;
+                border-bottom: 1px solid #d0d0d0;
+            }
+
+            paper-card{
+                padding: 12px;
+            }
+
+
+            .sy-table tr > td:first-child{
+                font-weight: bold;
+            }
+
+            .sy-table tr > td{
+                padding: 12px 0;
+
+            }
+
+            .button-control{
+                margin-top: 30px;
+            }
+
+           .button-control paper-button{
+               background: #00bbd5;
+               color: #fff;
+           }
+
+            .edit-content span{
+                cursor: pointer;
+                float: right;
+                padding: 10px 20px 0px;
+            }
+
+
+        </style>
+
+        <iron-localstorage
+                name="onboard"
+                value="{{onboard}}"
+                on-iron-localstorage-load="handleLocalstorageLoadEvent"
+        >
+        </iron-localstorage>
+
+        <iron-localstorage
+                name="dismiss_notice_id"
+                value="{{ dismissId }}">
+        </iron-localstorage>
+
+        <iron-ajax auto url="{{ baseUrl }}api/screen/journey?country_id={{onboard.country_id}}" handle-as="json" last-response="{{journeyFeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+
+
+
+        <div class="feed-container">
+
+                <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
+                    <shuvayatra-notice notice="{{item.notice}}" dismiss-id="{{ dismissId }}">
+                    </shuvayatra-notice>
+                </template>
+
+
+
+            <paper-card class="card" elevation="1" animated-shadow="false">
+                <table class="sy-table">
+                    <tr>
+                        <td>User</td>
+                        <td>{{onboard.name}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Date</td>
+                        <td>{{onboard.dob.year}}-{{onboard.dob.month}}-{{onboard.dob.day}}</td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>{{gender}}</td>
+                    </tr>
+                    <tr>
+                        <td>Location</td>
+                        <td>{{onboard.location}}</td>
+                    </tr>
+                    <tr>
+                        <td>Work Status</td>
+                        <td>{{work_status}}</td>
+                    </tr>
+                    <tr>
+                        <td>Country</td>
+                        <td>{{onboard.country}}</td>
+                    </tr>
+                </table>
+
+                <div class="edit-content">
+                    <span on-tap="editData">Edit</span>
+                    <div class="spacer" style="clear: both;"></div>
+                </div>
+
+            </paper-card>
+
+
+        </div>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-user',
+            behaviors: [GlobalBehavior],
+
+            properties: {
+                onboardList: {
+                    type: Array,
+                    value: [],
+                    notify: true
+                },
+
+               onboard: {
+                   type: Object,
+                   notify:true
+               },
+
+                gender: {
+                    type: String,
+                    notify: true
+                },
+
+                work_status: {
+                    type: String,
+                    notify: true
+                }
+            },
+
+            handleLocalstorageLoadEvent: function(){
+                console.log('data loaded');
+                console.log(this.onboard.gender);
+
+//                if(this.onboard.gender == "m"){
+//                    this.gender = "male";
+//                } else if(this.onboard.gender  == "f"){
+//                    this.gender = "female"
+//                } else if(this.onboard.gender == "o"){
+//                    this.gender = "other"
+//                }
+
+
+                switch (this.onboard.gender) {
+                    case "m":
+                        this.gender = "male";
+                        break;
+                    case "f":
+                        this.gender = "female";
+                        break;
+                    case "o":
+                        this.gender = "other"
+                        break;
+                    default:
+
+                }
+
+                switch (this.onboard.work_status) {
+                    case "work_status_working_abroad":
+                        this.work_status = "छ, म अझै काम गर्छु"
+                        break;
+                    case "work_status_back_from_abroad":
+                        this.work_status = "छ, तर म नेपाल फर्किसक";
+                        break;
+                    case "work_status_planning":
+                        this.work_status = "छैन, जाने सोचाइ मा छु";
+                        break;
+                    case "work_status_planning":
+                        this.work_status = "छैन, जाने सोचाइ छैनु";
+                        break;
+
+                    default:
+
+                }
+
+
+                this.onboardList.push(this.onboard);
+            },
+
+
+            editData: function(){
+
+                this.set('onboard.status',false);
+                location.reload();
+
+            },
+
+            _isNotDismissedId: function(id){
+                if(!id){
+                    return null;
+                }else{
+                    return function(item){
+                        return !(item.notice && (id === item.notice.id));
+                    }
+                }
+            },
+
+            checkLayout: function (value, layout) {
+                return (value === layout);
+            },
+        });
+    </script>
+</dom-module>

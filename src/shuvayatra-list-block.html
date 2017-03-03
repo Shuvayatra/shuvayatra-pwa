@@ -1,0 +1,72 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="shuvayatra-list-item.html">
+<link rel="import" href="behaviors/global-behavior.html">
+<dom-module id="shuvayatra-list-block">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                margin-bottom: 20px;
+            }
+
+            paper-card {
+                width: 100%;
+            }
+        </style>
+        <div class="card-container">
+
+                <paper-card class="card" elevation="1" animated-shadow="false">
+                    <div class="health-wrap card-content">
+                        <h4>[[data.title]]</h4>
+                        <template is="dom-repeat" items="[[data.content]]">
+                            <shuvayatra-list-item data={{item}}></shuvayatra-list-item>
+                        </template>
+
+
+
+
+                        <template is="dom-if" if="{{data.view_more}}">
+
+                            <template is="dom-if" if="{{country_id}}">
+                                <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter,country_id,gender) }}">
+                                    <p>[[data.view_more_title]]</p>
+                                </a>
+                            </template>
+
+                            <template is="dom-if" if="{{!country_id}}">
+                                <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter) }}">
+                                    <p>[[data.view_more_title]]</p>
+                                </a>
+                            </template>
+
+                            <h2>{{country_id}}</h2>
+                            <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter) }}">
+                                <p>[[data.view_more_title]]</p>
+                            </a>
+
+                        </template>
+                    </div>
+                </paper-card>
+
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-list-block',
+            behaviors: [GlobalBehavior],
+            properties: {
+                data: {
+                    type: Object,
+                },
+                test: {
+                    type: String,
+                    value: "testString"
+                }
+
+            },
+
+        });
+    </script>
+</dom-module>

@@ -7,7 +7,6 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
@@ -18,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
@@ -26,233 +26,399 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <dom-module id="shuvayatra-app">
-  <template>
-    <style>
-      :host {
-        --app-primary-color: #00BBD5;
-        --app-secondary-color: black;
-
-        display: block;
-      }
-
-      app-header {
-
-        background-color: var(--app-primary-color);
-      }
-      /*
-      app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
-      }
-      */
-      .drawer-list {
-        margin: 0 20px;
-      }
-
-      .drawer-list a {
-        display: block;
-
-        padding: 0 16px;
-
-        text-decoration: none;
-
-        color: var(--app-secondary-color);
-
-        line-height: 40px;
-      }
-
-      .drawer-list a.iron-selected {
-        color: black;
-
-        font-weight: bold;
-      }
+    <template>
+        <style>
+            :host {
+                --app-primary-color: #27a8d8;
+                --app-secondary-color: black;
+                display: block;
+            }
 
 
-      paper-tabs {
-        max-width: 640px;
-        margin: 0 auto;
-        --paper-tabs-selection-bar-color: black;
-      }
-      paper-tab {
-        --paper-tab-ink: #aaa;
-        text-transform: uppercase;
-      }
-      [hidden] {
-        display: none !important;
-      }
+            app-header {
+                padding: 0 10px;
+                background-color: var(--app-primary-color);
+            }
 
-      paper-tab a,paper-item a{
-        text-decoration: none;
-        text-align: center;
-        vertical-align: middle;
+            app-toolbar {
+                padding: 0;
+            }
 
-      }
-      paper-tab a{
-        color: #FFF;
-      }
+            app-drawer app-toolbar {
+                padding: 20px;
+                font-size: 18px;
+            }
 
-      paper-item a{
-        color: var(--app-primary-color);
-      }
+            app-header paper-icon-button {
+                color: #616161;
+            }
 
-      #logo{
-        width: 48px;
-        height: 48px;
-        margin-right: 1em;
-      }
-      #drawer app-toolbar{
-          background-color: var(--app-primary-color);
-          color:#FFF;
-      }
-      #menu-button{
-        margin-left: -1em;
-      }
-      #search-button{
-        margin-right: -1em;
-      }
-    </style>
-    <style is="custom-style">
-      paper-input#search {
-          background-color: #FFF;
-          border: 1px solid #CCC;
-          --paper-input-container:{
-              padding:0 1em;
-          }
-          --paper-input-container-underline:{
-              display:none;
-          }
-          --paper-input-container-underline-focus:{
-            display: none;
-          }
-          --paper-input-container-label:{
-              line-height: 32px;
-              
-          }
-        display:block;
-        width:100%;
-      }
-    </style>
-    <app-location route="{{route}}"></app-location>
-    <app-route
-        route="{{route}}"
-        pattern="/:page"
-        data="{{routeData}}"
-        tail="{{subroute}}"></app-route>
+            .drawer-list {
+                margin: 0 20px;
+            }
 
-    <!-- start tab on wide layout -->
-    <app-drawer-layout force-narrow fullbleed>
+            .drawer-list a {
+                display: block;
+                padding: 0 16px;
+                text-decoration: none;
+                color: var(--app-secondary-color);
+                line-height: 40px;
+            }
 
-      <app-drawer id="drawer">
+            .drawer-list a.iron-selected {
+                color: black;
+                font-weight: bold;
+            }
 
-        <app-toolbar>Shuvayatra</app-toolbar>
+            paper-tabs {
+                margin: 0 auto;
+                --paper-tabs-selection-bar-color: #FFF;
+                height: 30px;
+            }
 
-        <!-- Nav on mobile: side nav menu -->
-        <paper-menu selected="{{selected}}" attr-for-selected="name">
-          <template is="dom-repeat" items="[[items]]">
-            <paper-item name="[[item.label]]"><a href="[[item.route]]">[[item.label]]</a></paper-item>
-          </template>
-        </paper-menu>
+            paper-tab {
+                --paper-tab-ink: #aaa;
+                text-transform: uppercase;
+            }
 
-      </app-drawer>
+            [hidden] {
+                display: none !important;
+            }
 
-      <app-header-layout>
-        <app-header condenses reveals>
+            paper-tab a,
+            paper-item a {
+                text-decoration: none;
+                text-align: center;
+                vertical-align: middle;
+            }
 
-          <app-toolbar>
-            <img id="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}" />
-            <paper-input id="search" label="Search" type="search" no-label-float="false">
-              <paper-icon-button prefix id="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
-              <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
-            </paper-input>
+            paper-tab a {
+                font-size: 18px;
+                padding-bottom: 5px;
+                color: #FFF;
+            }
+
+            paper-menu {
+                padding: 0;
+            }
+
+            paper-item {
+                text-transform: capitalize;
+            }
+
+            paper-item iron-icon {
+                margin-right: 20px;
+                color: #000;
+            }
+
+            paper-item a {
+                color: #333;
+            }
+
+            .logo {
+                width: 48px;
+                height: 48px;
+                margin-right: 1em;
+            }
+
+            #drawer app-toolbar {
+                background: url('/images/nepal.jpg') 0 0/cover;
+                color: #FFF;
+                position: relative;
+            }
+
+            #drawer app-toolbar:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                background-image: -webkit-linear-gradient(-180deg, rgba(0,0,0,0.00) 0%, #000000 100%);
+                background-image: linear-gradient(-180deg, rgba(0,0,0,0.00) 0%, #000000 100%);
+                opacity: .5;
+            }
+
+
+
+            #drawer app-toolbar > div {
+                position: absolute;
+                bottom: 8px;
+            }
+
+            #drawer app-toolbar > div > img,#drawer app-toolbar > div >span{
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            #drawer a{
+                text-decoration: none;
+                color: #333;
+                cursor: pointer;
+            }
+
+            #menu-button {
+                margin-left: -1em;
+            }
+
+            #search-button {
+                margin-right: -1em;
+            }
+            paper-icon-button#burger{
+                position: absolute;
+                z-index: 1000;
+            }
+            @media (max-width: 600px) {
+                #search{
+                    padding-left: 48px;
+                }
+            }
             
-          </app-toolbar>
-
-          <app-toolbar class="tabs-bar" hidden$="{{!wideLayout}}">
-            <!-- Nav on desktop: tabs -->
-            <paper-tabs selected="{{selected}}" attr-for-selected="name" bottom-item>
-              <template is="dom-repeat" items="[[items]]">
-                <paper-tab name="[[item.label]]"><a href="[[item.route]]">[[item.label]]</a></paper-tab>
-              </template>
-            </paper-tabs>
-          </app-toolbar>
-
-        </app-header>
-        <iron-pages
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="notfound"
-            role="main">
-          <shuvayatra-home name="home"></shuvayatra-home>
-          <shuvayatra-journey name="journey"></shuvayatra-journey>
-          <shuvayatra-destination name="destination"></shuvayatra-destination>
-          <shuvayatra-news name="news"></shuvayatra-news>
-          <shuvayatra-radio name="radio"></shuvayatra-radio>
-          <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
+        </style>
+        <style is="custom-style">
+            paper-input#search {
+                background-color: #FFF;
+                border-radius: 4px;
+                box-shadow: 0 0 5px 2px rgba(144, 144, 144, 0.45);
+                --paper-input-container: {
+                    padding: 0 1em;
+                } --paper-input-container-underline: {
+                display: none;
+            } --paper-input-container-underline-focus: {
+                display: none;
+            } --paper-input-container-label: {
+                line-height: 32px;
+            } display: block;
+                width: 100%;
+            }
+        </style>
+        <app-location route="{{route}}"></app-location>
+        <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
+        <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
+        <iron-pages selected="[[myPage]]" attr-for-selected="name" fallback-selection="notfound" role="main">
+            <shuvayatra-channel name="channel" channel-id={{id}}></shuvayatra-channel>
+            <shuvayatra-feed name="feed" params="{{queryParams}}" title="{{queryParams.title}}" category="{{queryParams.category_id}}"></shuvayatra-feed>
+            <shuvayatra-post name="post" post-id="{{id}}"></shuvayatra-post>
+            <shuvayatra-destination name="destination" destination-id="{{id}}"></shuvayatra-destination>
+            <shuvayatra-search name="search"></shuvayatra-search>
         </iron-pages>
-      </app-header-layout>
+            <div name="main">
+                <!-- start tab on wide layout -->
+                <app-drawer-layout force-narrow fullbleed>
+                    <app-drawer id="drawer">
+                        <app-toolbar>
+                            <div>
+                                <img class="logo" src="/images/nav_logo.png"/>
+                                <span>शुभयात्रा </span>
+                            </div>
+                        </app-toolbar>
+                        <!-- Nav on mobile: side nav menu -->
+                        <paper-menu selected="{{selected}}" attr-for-selected="name">
+                            <template is="dom-repeat" items="[[items]]">
 
-    </app-drawer-layout>
+                                <a href="[[item.route]]">
+                                    <paper-item name="[[item.label]]">
+                                        <iron-icon icon="[[item.icon]]"></iron-icon>
+                                        <span>[[item.label]]</span>
+                                    </paper-item>
+                                </a>
+                            </template>
+                            <template is="dom-repeat" items="[[screens]]">
+                                <a href="/screen/[[item.url_slug]]">
+                                        <paper-item name="[[item.title]]">
+                                            <iron-icon src="[[item.icon]]"></iron-icon>
+                                            <span>[[item.title]]</span>
+                                        </paper-item>
+                                </a>
+                            </template>
+                        </paper-menu>
+                    </app-drawer>
+                    <app-header-layout>
+                        <app-header>
+                            <app-toolbar>
+                                <img class="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}"/>
+                                <paper-icon-button id="burger" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
+                                <paper-input on-tap="_search" id="search" label="Search" type="search" no-label-float="false">
+                                    <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
+                                </paper-input>
+                            </app-toolbar>
+                            <iron-ajax
+                                auto
+                                url="https://api.shuvayatra.org/v1/api/screens"
+                                handle-as="json"
+                                last-response="{{screens}}"
+                                debounce-duration="300"></iron-ajax>
+                            <app-toolbar class="tabs-bar" hidden$="{{!wideLayout}}">
+                                <!-- Nav on desktop: tabs -->
+                                <paper-tabs selected="{{selected}}" attr-for-selected="name" bottom-item>
 
-    <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
+                                    <template is="dom-repeat" items="[[items]]">
+                                        <paper-tab name="[[item.label]]"><a href="[[item.route]]">[[item.label]]</a></paper-tab>
+                                    </template>
+                                    <template is="dom-repeat" items="[[screens]]">
+                                        <paper-tab name="[[item.title]]"><a href="/screen/[[item.url_slug]]">[[item.title]]</a></paper-tab>
+                                    </template>
+                                </paper-tabs>
+                            </app-toolbar>
+                        </app-header>
+                        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="notfound" role="main">
+                            <shuvayatra-home name="home"></shuvayatra-home>
+                            <shuvayatra-screen name="screen"></shuvayatra-screen>
+                            <shuvayatra-journey name="journey"></shuvayatra-journey>
+                            <shuvayatra-destinations name="destinations"></shuvayatra-destinations>
+                            <shuvayatra-news name="news" params="{{queryParams}}"
+                                             title="{{queryParams.title}}"></shuvayatra-news>
+                            <shuvayatra-radio name="radio"></shuvayatra-radio>
+                            <shuvayatra-user name="user"></shuvayatra-user>
+                            <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
+                        </iron-pages>
+                    </app-header-layout>
+                </app-drawer-layout>
+            </div>
+            <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
+            <!-- end tab on wide layout -->
+    </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-app',
 
-  
-    <!-- end tab on wide layout -->
-  </template>
+            properties: {
+                page: {
+                    type: String,
+                    reflectToAttribute: true,
+                    observer: '_pageChanged'
+                },
+                items: {
+                    type: Array,
+                    value: function () {
+                        return [{
+                            label: 'गृह',
+                            route: '/',
+                            icon: 'home'
+                        },
+//                            {
+//                            label: 'यात्रा ',
+//                            route: '/journey',
+//                            icon: 'flight-takeoff',
+//                        },
+                            {
+                            label: 'गन्तब्य',
+                            route: '/destinations',
+                            icon: 'explore'
+                        },
+//                            {
+//                            label: 'समाचार',
+//                            route: '/news',
+//                            icon: 'speaker-notes'
+//                        },
+                            {
+                            label: 'रेडियो ',
+                            route: '/radio',
+                            icon: 'av:library-music'
+                        },
+                            {
+                                label: 'प्रयोगकर्ता',
+                                route: '/user',
+                                icon: 'social:person'
+                            }];
+                    }
+                },
+                wideLayout: {
+                    type: Boolean,
+                    value: false,
+                    observer: 'onLayoutChange',
+                },
+                headerPages: {
+                    type: Array,
+                    value: function () {
+                        return ["channel", "feed", "search", "post", "destination"];
+                    }
+                }
+            },
 
-  <script>
-    Polymer({
-      is: 'shuvayatra-app',
+            observers: [
+                '_routePageChanged(routeData.page)',
+                '_subrouteIdChanged(subrouteData.id)'
+            ],
 
-      properties: {
-        page: {
-          type: String,
-          reflectToAttribute: true,
-          observer: '_pageChanged'
-        },
-        items:{
-          type: Array,
-          value:function(){ 
-            return [
-            {label:'home',route:'/'},
-            {label:'journey',route:'/journey'},
-            {label:'destination',route:'/destination'},
-            {label:'news',route:'/news'},
-            {label:'radio',route:'/radio'}
-          ];
-        }
-        },
-        wideLayout: {
-          type: Boolean,
-          value: false,
-          observer: 'onLayoutChange',
-        },
-      },
+            ready: function () {
 
-      observers: [
-        '_routePageChanged(routeData.page)'
-      ],
+                var activeRoute = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
 
-      _routePageChanged: function(page) {
-        this.page = page || 'home';
-      },
+                switch (activeRoute) {
+                    case "home":
+                        this.selected = 'गृह';
+                        break;
+                    case "journey":
+                        this.selected = 'यात्रा ';
+                        break;
+                    case "destinations":
+                        this.selected = 'गन्तब्य';
+                        break;
+                    case "news":
+                        this.selected = 'समाचार'
+                        break;
+                    case "radio":
+                        this.selected = 'रेडियो ';
+                        break;
+                    case "user":
+                        this.selected = 'प्रयोगकर्ता';
+                        break;
+                    case "":
+                        this.selected = 'गृह';
+                        break;
 
-      _pageChanged: function(page) {
-        // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('shuvayatra-' + page + '.html');
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
-      },
+                    default:
+                        this.selected = 'गृह';
+                }
 
-      _showPage404: function() {
-        this.page = 'notfound';
-      },
-      onLayoutChange: function(wide) {
-        var drawer = this.$.drawer;
-        if (wide && drawer.opened) {
-          drawer.opened = false;
-        }
-      }
-    });
-  </script>
+            },
+
+            _search: function(){
+                this.set('routeData.page', 'search');
+            },
+
+            _routePageChanged: function (page) {
+                if (this.headerPages.indexOf(page) === -1) {
+                    this.myPage = "main";
+                }else{
+                    this.myPage = page;
+                }
+                this.page = page || 'home';
+            },
+
+            _subrouteIdChanged: function (id) {
+                this.id = id;
+                this.$.drawer.opened = false;
+            },
+
+
+            _pageChanged: function (page) {
+                this.loadPage(page);
+            },
+
+            loadPage: function (pageTitle) {
+                // Load page import on demand. Show 404 page if fails
+                var resolvedPageUrl = this.resolveUrl('shuvayatra-' + pageTitle + '.html');
+
+                this.importHref(resolvedPageUrl, null, this._showPage404, true);
+                this.$.drawer.opened = false;
+            },
+
+            _showPage404: function () {
+                this.page = 'notfound';
+            },
+
+            onLayoutChange: function (wide) {
+                var drawer = this.$.drawer;
+                if (wide && drawer.opened) {
+                    drawer.opened = false;
+                }
+            }
+        });
+    </script>
 </dom-module>

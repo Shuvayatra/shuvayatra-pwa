@@ -1,0 +1,499 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-date-picker/paper-date-picker.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="behaviors/global-behavior.html">
+<link rel="import" href="shuvayatra-snackbar.html">
+<dom-module id="shuvayatra-onboard">
+    <template>
+        <style>
+            :host {
+                --app-primary-color: #00BBD5;
+                --app-secondary-color: black;
+                display: block;
+                background: #fff;
+                height: calc(100% - 64px);
+                min-height: inherit;
+            }
+
+            app-header {
+                padding: 0 10px;
+                background: #1695f7;
+                /* fallback for old browsers */
+                background: -webkit-linear-gradient(to left, #64c064, #1695f7);
+                /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to left, #64c064, #1695f7);
+                /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                --app-header-background-front-layer: {
+                    background-image: url('../images/image-default.png');
+                };
+                --app-header-background-rear-layer: {
+                    background-color: var(--app-primary-color);
+                };
+            }
+
+            app-toolbar {
+                padding: 0;
+                text-align: center;
+                color: #fff;
+                /*display: block;*/
+                display: flex;
+                justify-content: center;
+            }
+
+            app-toolbar span {
+                /*display: block;*/
+                padding: 15px 32px;
+            }
+
+            app-toolbar span:nth-child(2) {
+                font-size: 14px;
+                cursor: pointer;
+            }
+
+            app-drawer app-toolbar {
+                padding: 20px;
+                font-size: 18px;
+            }
+
+            app-header paper-icon-button {
+                color: #616161;
+            }
+
+            paper-button {
+                background: #64c064;
+                color: white;
+            }
+
+            paper-button:hover,
+            paper-button:focus {
+                background: #39c03a;
+            }
+
+            .header-onboard {
+                text-align: center;
+                color: #bdbdbd;
+                font-size: 12px;
+            }
+
+            .header-onboard iron-icon + label {
+                font-size: 24px;
+                color: #9a9a9a;
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .header-onboard p {
+                line-height: 30px;
+                margin: 20px 0;
+            }
+
+            iron-icon {
+                width: 60px;
+                height: 60px;
+                margin-right: 10px;
+                display: inline-block;
+            }
+
+            iron-pages > div {
+                text-align: center;
+            }
+
+            iron-pages > div p {
+                color: #9a9a9a;
+                font-size: 16px;
+            }
+
+            .button-control {
+                text-align: center;
+                padding-top: 80px;
+            }
+
+            .on-board-wrap {
+                max-width: 560px;
+                margin: 50px auto;
+                padding: 0 10px;
+            }
+
+            .on-board-inner {
+                box-shadow: 0 2px 5px 1px #cecece;
+                padding: 50px 10px;
+            }
+
+            paper-input {
+                max-width: 250px;
+                margin: 0 auto;
+                text-align: left;
+            }
+
+            paper-dropdown-menu::content paper-menu-button::content iron-dropdown {
+                position: absolute !important;
+                top: 46px !important;
+                left: 0 !important;
+                right: 0 !important;
+            }
+
+            paper-dropdown-menu::content iron-dropdown .dropdown-content {
+                max-width: 191px;
+                max-height: 627px;
+            }
+
+            .flatpickr,
+            .flatpickr-input {
+                cursor: pointer;
+                z-index: 1;
+                font-size: 14px;
+                margin: 0 auto;
+                padding: 0 .5rem;
+                height: 40px;
+                background: #fff;
+                text-align: center;
+                border: 0;
+                border-bottom: 1px solid #ccc;
+                width: 100%;
+                max-width: 150px;
+                display: block;
+                transition: all .2s ease-out;
+            }
+
+            paper-radio-group {
+                display: block;
+                text-align: left;
+                max-width: 290px;
+                margin: 0 auto;
+            }
+
+            paper-radio-button {
+                display: block;
+                max-width: 170px;
+                text-align: left;
+                margin: 0 auto;
+            }
+
+            .work paper-radio-button {
+                max-width: 100%;
+            }
+
+            .dob paper-dropdown-menu {
+                width: 75px;
+            }
+
+            .dob paper-item {
+                width: 75px;
+            }
+
+            .dob .dropdown-content {
+                max-height: 200px;
+            }
+
+            .skip-text{
+                text-align: center;
+            }
+
+            @media screen and (min-width: 768px){
+                app-toolbar span {
+                    padding: 15px 60px;
+                }
+            }
+
+        </style>
+        <iron-localstorage name="onboard" value="{{onboard}}">
+        </iron-localstorage>
+        <iron-ajax auto url="{{ baseUrl }}api/destinations" handle-as="json" last-response="{{destinations}}"
+                   on-response="handleResponse" debounce-duration="300"></iron-ajax>
+
+        <iron-ajax
+                id="AjaxPost"
+                url="{{ baseUrl }}api/onboarding/save"
+                method="POST"
+                content-type="application/json"
+                handle-as="json"
+                on-response="_handleAjaxPostResponse"
+                on-error="_handleAjaxPostError"></iron-ajax>
+
+        <app-header condenses effects="waterfall" fixed>
+            <app-toolbar>
+                <span>स्वागतम्</span>
+                <span on-tap="_skipOnboard">पछी भर्नुस  </span>
+            </app-toolbar>
+        </app-header>
+
+        <div class="on-board-wrap">
+            <div class="on-board-inner">
+                <header class="header-onboard">
+                    <iron-icon src="../images/app-icon-144.png"></iron-icon>
+                    <label>Shuvayatra</label>
+                    <p>निम्न प्रश्न का जवाफ दिएर तपाईं हामीलाई सन्दर्भिक जान्कारी दिना मद्दत गर्दै हुनुहुन्छ </p>
+                </header>
+                <iron-pages selected="{{selected}}" role="main">
+                    <div class="name">
+                        <p>तपाईंको नाम के हो</p>
+                        <paper-input is="iron-input" value="{{onboard.name}}"></paper-input>
+                    </div>
+                    <div class="dob">
+                        <p>तपाईंको जन्म मिती चयन गर्नुहोस्</p>
+
+
+                        <paper-dropdown-menu class="dob">
+                            <iron-selector attr-for-selected="value" selected={{onboard.dob.year}}
+                                           class="dropdown-content">
+                                <template is="dom-repeat" items="{{ years }}">
+                                    <paper-item value="{{ item }}">{{ item }}</paper-item>
+                                </template>
+                            </iron-selector>
+                        </paper-dropdown-menu>
+                        <span>/</span>
+                        <paper-dropdown-menu>
+                            <iron-selector attr-for-selected="value" selected={{onboard.dob.month}}
+                                           class="dropdown-content">
+                                <template is="dom-repeat" items="{{ months }}">
+                                    <paper-item value="{{ item }}">{{ item }}</paper-item>
+                                </template>
+                            </iron-selector>
+                        </paper-dropdown-menu>
+                        /
+                        <paper-dropdown-menu>
+                            <iron-selector attr-for-selected="value" selected={{onboard.dob.day}}
+                                           class="dropdown-content">
+                                <template is="dom-repeat" items="{{ days }}">
+                                    <paper-item value="{{ item }}">{{ item }}</paper-item>
+                                </template>
+                            </iron-selector>
+                        </paper-dropdown-menu>
+                    </div>
+                    <div class="gender">
+                        <p>तपाईंको लिङ्ग चयन गर्नुहोस्</p>
+                        <paper-radio-group selected="{{onboard.gender}}">
+                            <paper-radio-button name="m">पुरुष</paper-radio-button>
+                            <paper-radio-button name="f">महिला</paper-radio-button>
+                            <paper-radio-button name="o">अरु  </paper-radio-button>
+                        </paper-radio-group>
+                    </div>
+                    <div class="region">
+                        <paper-dropdown-menu label="कृपया क्षेत्र चयन गर्नुहोस्">
+                            <!-- <paper-listbox class="dropdown-content"> -->
+                            <iron-selector attr-for-selected="name" selected={{onboard.location}}
+                                           class="dropdown-content">
+                                <paper-item name="मेची">मेची</paper-item>
+                                <paper-item name="कोशी">कोशी</paper-item>
+                                <paper-item name="सगरमाथा">सगरमाथा</paper-item>
+                                <paper-item name="जनकपुर्">जनकपुर्</paper-item>
+                                <paper-item name="बागमती">बागमती</paper-item>
+                                <paper-item name="नारायनि">नारायनि</paper-item>
+                                <paper-item name="गण्डकी">गण्डकी</paper-item>
+                                <paper-item name="लुम्बिनि">लुम्बिनि</paper-item>
+                                <paper-item name="धौलागिरि">धौलागिरि</paper-item>
+                                <paper-item name="राप्ती">राप्ती</paper-item>
+                                <paper-item name="कर्णाली">कर्णाली</paper-item>
+                                <paper-item name="भेरी">भेरी</paper-item>
+                                <paper-item name="सेती">सेती</paper-item>
+                                <paper-item name="माहाकाली">माहाकाली</paper-item>
+                            </iron-selector>
+                            <!-- </paper-listbox> -->
+                        </paper-dropdown-menu>
+                    </div>
+                    <div class="work">
+                        <p>तपाईंले एस अघि बिदेश मा काम गर्नुभएको छ ?</p>
+                        <paper-radio-group selected="{{onboard.work_status}}">
+                            <paper-radio-button name="work_status_working_abroad">छ, म अझै काम गर्छु
+                            </paper-radio-button>
+                            <paper-radio-button name="work_status_back_from_abroad">छ, तर म नेपाल फर्किसकेँ
+                            </paper-radio-button>
+                            <paper-radio-button name="work_status_planning">छैन, जाने सोचाइ मा छु</paper-radio-button>
+                            <paper-radio-button name="work_status_not_going">छैन, जाने सोचाइ छैन</paper-radio-button>
+                        </paper-radio-group>
+                    </div>
+                    <div class="country">
+                        <paper-dropdown-menu label="मनपरेको गन्तव्य">
+                            <iron-selector selected={{onboard.country}} attr-for-selected="name" on-iron-select="_itemSelected"
+                                           class="dropdown-content">
+                                <template is="dom-repeat" items="[[destinations]]">
+                                    <paper-item value="{{ item.id }}" name="{{ item.title }}">{{item.title}}
+                                    </paper-item>
+                                </template>
+                            </iron-selector>
+                        </paper-dropdown-menu>
+                    </div>
+                </iron-pages>
+                <div class="button-control">
+                    <template is="dom-if" if="{{ !_isFirst(selected) }}">
+                        <paper-button on-tap="_prev" raised>Previous</paper-button>
+                    </template>
+                    <template is="dom-if" if="{{ _isLast(selected) }}">
+                        <paper-button on-tap="_finish" raised>Finish</paper-button>
+                    </template>
+                    <template is="dom-if" if="{{ !_isLast(selected) }}">
+                        <paper-button on-tap="_next" raised>Next</paper-button>
+                    </template>
+
+                    <!--<template is="dom-if" if="{{ _isFirst(selected) }}">-->
+                        <!--<paper-button on-tap="_skipOnboard" raised>Skip</paper-button>-->
+                    <!--</template>-->
+
+
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-onboard',
+            behaviors: [GlobalBehavior],
+
+            ready: function () {
+                var date = new Date();
+                this.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                this.days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+                var yearsTemp = [];
+                for (var i = 1; i <= date.getYear(); i++) {
+                    yearsTemp.push(1900 + i);
+                }
+                this.years = yearsTemp;
+            },
+
+            properties: {
+                selected: {
+                    type: Number,
+                    value: 0
+                }
+            },
+
+            _getDOB: function (onboard) {
+                if (this.onboard && this.onboard.dob) {
+                    return this.onboard.dob;
+                } else {
+                    return;
+                }
+            },
+
+            _skipOnboard: function(){
+
+                this.set('onboard.status',true);
+
+                location.reload();
+
+            },
+
+            handleResponse: function (e) {
+                this.push("destinations", {"id": "", "title": "मलाई थाहा छैन "})
+            },
+
+            _itemSelected: function (e) {
+                this.set('onboard.country_id', e.target.selectedItem.value);
+            },
+
+            _isLast: function (selected) {
+                return (selected === 5);
+            },
+
+            _isFirst: function (selected) {
+                return (selected == 0);
+            },
+
+            _prev: function () {
+                this.selected -= 1;
+                if (this.selected < 0) this.selected = 0;
+            },
+
+            _next: function () {
+                var flag = true;
+                var message = "";
+                switch (this.selected) {
+                    case 4:
+                        if (!this.onboard.work_status) flag = false;
+                        message = "कृपया एक विकल्प चयन गर्नुहोस्";
+                        break;
+                    case 3:
+                        if (!this.onboard.location) flag = false;
+                        message = "कृपया एक विकल्प चयन गर्नुहोस्";
+                        break;
+                    case 2:
+                        if (!this.onboard.gender) flag = false;
+                        message = "कृपया एक विकल्प चयन गर्नुहोस्";
+                        break;
+                    case 1:
+                        if (!this.onboard.dob.year || !this.onboard.dob.month || !this.onboard.dob.day){
+                            message = "कृपया आफ्नो जन्म मिती उपलब्ब्ध गराउनुहोस्";
+                            flag = false;
+                        } else if(this.onboard.dob.year > 2002){
+                            message = "तपाईं कम्तिमा १५ वर्ष हुनुपर्छ अगाडि बढ्न";
+                            flag = false;
+                        }
+                        break;
+                    case 0:
+                        if (!this.onboard.name) flag = false;
+                        message = "कृपया आफ्नो नाम उपलब्ब्ध गराउनुहोस्";
+                        break;
+                }
+                if (flag) {
+                    this.selected += 1;
+                    if (this.selected > 5) this.selected = 5;
+                } else {
+                    this._showSnackbar(message);
+                }
+            },
+
+            _finish: function () {
+                if ((this.onboard && this.onboard.country && this.onboard.dob && this.onboard.name && this.onboard.gender && this.onboard.location && this.onboard.work_status)) {
+                    this.submitOnboardData();
+
+                } else {
+                    this._showSnackbar("कृपया एक विकल्प चयन गर्नुहोस्");
+                }
+            },
+
+            submitOnboardData: function(){
+                var onboardDob = this.onboard.dob.year + "-" + this.onboard.dob.month + "-" + this.onboard.dob.day;
+
+                var userDetail = {
+                    name: this.onboard.name,
+                    gender: this.onboard.gender,
+                    location: this.onboard.location,
+                    work_status: this.onboard.work_status,
+                    country: this.onboard.country,
+                    dob: onboardDob
+
+                }
+
+                this.$.AjaxPost.body = this.onboard;
+                this.$.AjaxPost.generateRequest();
+
+
+            },
+
+            _handleAjaxPostResponse: function(){
+
+
+                this.set('onboard.status',true);
+
+                location.reload();
+            },
+
+            _handleAjaxPostError: function(){
+                this._showSnackbar("server error");
+            },
+
+            _showSnackbar: function (message) {
+                if (!this._snackbar) {
+                    this._snackbar = document.createElement('shuvayatra-snackbar');
+                    Polymer.dom(this.root).appendChild(this._snackbar);
+                }
+                Polymer.dom(this._snackbar).innerHTML = message;
+                this._snackbar.open();
+            },
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,157 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/nebula-storage/nebula-storage.html">
+<!--<link rel="import" href="shuvayatra-feed.html">-->
+<link rel="import" href="shuvayatra-header.html">
+
+<link rel="import" href="shuvayatra-audio-detail.html">
+<link rel="import" href="shuvayatra-video-detail.html">
+<link rel="import" href="shuvayatra-text-detail.html">
+
+
+<dom-module id="shuvayatra-post">
+
+    <template>
+
+        <style is="custom-style">
+            :host{
+                display: block;
+            }
+
+            shuvayatra-video-detail.content {
+                padding: 0;
+            }
+
+            .content {
+                padding: 20px 15px;
+                text-rendering: optimizeLegibility !important;
+                -webkit-font-smoothing: antialiased !important;
+            }
+            shuvayatra-video-detail{
+                background: #fff;
+            }
+
+            shuvayatra-text-detail, shuvayatra-audio-detail{
+                margin-top: 200px !important;
+                padding-top: 64px !important;
+                background: #fff !important;
+            }
+
+            @media only screen and (min-width: 1024px) {
+                shuvayatra-text-detail, shuvayatra-audio-detail {
+                    margin-top: 300px !important;
+                }
+            }
+
+            @media only screen and (min-width: 1600px) {
+                shuvayatra-text-detail, shuvayatra-audio-detail {
+                    margin-top: 400px !important;
+                }
+            }
+
+            @media only screen  and (min-width : 900px) {
+                .content{
+                    max-width: 800px;
+                    margin: 0 auto;
+                }
+            }
+        </style>
+
+
+
+        <nebula-storage id="caches" key="{{postId}}" data="{{data}}" auto-save auto-load> </nebula-storage>
+        <iron-ajax id="ajax" auto
+               url="{{ postUrl }}"
+               method="GET"
+               params="{{ queryParams }}"
+               last-response="{{ data }}"
+               loading="{{ isLoading }}">
+    </iron-ajax>
+
+
+
+        <template id="audioIf" is="dom-if" if="{{ _checkIfTypeAudio(data.type) }}">
+            <shuvayatra-header post data="{{ data }}" has-feature-image audio download change-flag="{{ changeFlag }}"></shuvayatra-header>
+            <shuvayatra-audio-detail id="detail" post="{{ data }}"></shuvayatra-audio-detail>
+        </template>
+
+        <template id="videoIf" is="dom-if" if="{{ _checkIfTypeVideo(data.type) }}">
+            <shuvayatra-header post data="{{ data }}" video change-flag="{{ changeFlag }}"></shuvayatra-header>
+            <shuvayatra-video-detail id="detail" post="{{ data }}"></shuvayatra-video-detail>
+        </template>
+
+
+        <template id="textIf" is="dom-if" if="{{ _checkIfTypeText(data.type) }}">
+            <shuvayatra-header post text has-feature-image data="{{ data }}" change-flag="{{ changeFlag }}"></shuvayatra-header>
+            <shuvayatra-text-detail id="detail" post="{{ data }}"></shuvayatra-text-detail>
+        </template>
+
+
+        <div style="text-align:center;">
+            <paper-spinner active="{{ isLoading }}"></paper-spinner>
+        </div>
+
+    </template>
+
+<script>
+    Polymer({
+        is: 'shuvayatra-post',
+        behaviors: [GlobalBehavior],
+
+        properties: {
+            postId:{
+                type: Number,
+                observer: '_onIdChanged'
+            },
+
+            postUrl:{
+                type: String
+            },
+
+            changeFlag:{
+                type: Boolean,
+                observer: '_onCountsUpdated'
+            }
+        },
+
+        _onCountsUpdated: function(){
+            if(this._checkIfTypeText(this.data.type)){
+                this.$.textIf.render();
+            }else if(this._checkIfTypeVideo(this.data.type)){
+                this.$.videoIf.render();
+            } else if(this._checkIfTypeAudio(this.data.type)){
+                this.$.audioIf.render();
+            }
+//            this.$$("#detail")._updateCountData(this.data);
+        },
+
+        ready: function(){
+            this.postId = window.location.pathname.split("post/")[1];
+        },
+
+        _onIdChanged: function(id){
+            this.data = {};
+            this.postUrl = this.baseUrl + "api/posts/" + this.postId;
+        },
+
+        _checkIfTypeAudio: function(type){
+            return (type === "audio");
+        },
+
+        _checkIfTypeVideo: function(type){
+            return (type === "video");
+        },
+
+        _checkIfTypeText: function(type){
+            return (type === "text");
+        },
+
+        _stopVideoPlayback: function(){
+            if(this._checkIfTypeVideo(this.data.type)){
+                this.$.videoIf.render();
+                this.$$("#detail")._stopPlayback();
+            }
+        }
+    });
+</script>
+</dom-module>
