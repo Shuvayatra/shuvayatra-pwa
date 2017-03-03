@@ -1,6 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-
+<link rel="import" href="../bower_components/nebula-storage/nebula-storage.html">
 <!--<link rel="import" href="shuvayatra-feed.html">-->
 <link rel="import" href="shuvayatra-header.html">
 
@@ -59,7 +59,7 @@
 
 
 
-
+        <nebula-storage id="caches" key="{{postId}}" data="{{data}}" auto-save auto-load> </nebula-storage>
         <iron-ajax id="ajax" auto
                url="{{ postUrl }}"
                method="GET"
