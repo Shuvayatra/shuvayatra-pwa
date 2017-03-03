@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
@@ -27,7 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
-
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <dom-module id="shuvayatra-app">
     <template>
         <style>
@@ -74,9 +75,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             paper-tabs {
-                max-width: 640px;
                 margin: 0 auto;
-                --paper-tabs-selection-bar-color: black;
+                --paper-tabs-selection-bar-color: #FFF;
                 height: 30px;
             }
 
@@ -112,7 +112,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             paper-item iron-icon {
                 margin-right: 20px;
-                color: #888888;
+                color: #000;
             }
 
             paper-item a {
@@ -161,8 +161,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 cursor: pointer;
             }
 
-
-
             #menu-button {
                 margin-left: -1em;
             }
@@ -203,10 +201,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
         <iron-pages selected="[[myPage]]" attr-for-selected="name" fallback-selection="notfound" role="main">
             <shuvayatra-channel name="channel" channel-id={{id}}></shuvayatra-channel>
-            <shuvayatra-feed name="feed" params="{{queryParams}}" title="{{queryParams.title}}"></shuvayatra-feed>
+            <shuvayatra-feed name="feed" params="{{queryParams}}" title="{{queryParams.title}}" category="{{queryParams.category_id}}"></shuvayatra-feed>
             <shuvayatra-post name="post" post-id="{{id}}"></shuvayatra-post>
             <shuvayatra-destination name="destination" destination-id="{{id}}"></shuvayatra-destination>
             <shuvayatra-search name="search"></shuvayatra-search>
+        </iron-pages>
             <div name="main">
                 <!-- start tab on wide layout -->
                 <app-drawer-layout force-narrow fullbleed>
@@ -223,13 +222,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                                 <a href="[[item.route]]">
                                     <paper-item name="[[item.label]]">
-
                                         <iron-icon icon="[[item.icon]]"></iron-icon>
-                                        <!--<a href="[[item.route]]">[[item.label]]</a>-->
                                         <span>[[item.label]]</span>
                                     </paper-item>
-                                <!--</a>-->
-
+                                </a>
+                            </template>
+                            <template is="dom-repeat" items="[[screens]]">
+                                <a href="/screen/[[item.url_slug]]">
+                                        <paper-item name="[[item.title]]">
+                                            <iron-icon src="[[item.icon]]"></iron-icon>
+                                            <span>[[item.title]]</span>
+                                        </paper-item>
+                                </a>
                             </template>
                         </paper-menu>
                     </app-drawer>
@@ -242,17 +246,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
                                 </paper-input>
                             </app-toolbar>
+                            <iron-ajax
+                                auto
+                                url="https://api.shuvayatra.org/v1/api/screens"
+                                handle-as="json"
+                                last-response="{{screens}}"
+                                debounce-duration="300"></iron-ajax>
                             <app-toolbar class="tabs-bar" hidden$="{{!wideLayout}}">
                                 <!-- Nav on desktop: tabs -->
                                 <paper-tabs selected="{{selected}}" attr-for-selected="name" bottom-item>
+
                                     <template is="dom-repeat" items="[[items]]">
                                         <paper-tab name="[[item.label]]"><a href="[[item.route]]">[[item.label]]</a></paper-tab>
+                                    </template>
+                                    <template is="dom-repeat" items="[[screens]]">
+                                        <paper-tab name="[[item.title]]"><a href="/screen/[[item.url_slug]]">[[item.title]]</a></paper-tab>
                                     </template>
                                 </paper-tabs>
                             </app-toolbar>
                         </app-header>
                         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="notfound" role="main">
                             <shuvayatra-home name="home"></shuvayatra-home>
+                            <shuvayatra-screen name="screen"></shuvayatra-screen>
                             <shuvayatra-journey name="journey"></shuvayatra-journey>
                             <shuvayatra-destinations name="destinations"></shuvayatra-destinations>
                             <shuvayatra-news name="news" params="{{queryParams}}"
@@ -336,7 +351,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 switch (activeRoute) {
                     case "home":
-                        console.log("home");
                         this.selected = 'गृह';
                         break;
                     case "journey":
@@ -379,6 +393,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             _subrouteIdChanged: function (id) {
                 this.id = id;
+                this.$.drawer.opened = false;
             },
 
 

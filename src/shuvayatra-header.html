@@ -331,7 +331,8 @@
                 data: {
                     type: Object,
                     value: {},
-                    notify: true
+                    notify: true,
+                    observer:'_postLoaded'
                 },
 
                 main: {
@@ -408,7 +409,7 @@
                 }
             },
 
-            ready: function () {
+            _postLoaded: function (newVal,oldVal) {
 
 
                 if (this.hasFeatureImage && this.audio) {
@@ -416,11 +417,11 @@
                     this.$$("#playerIf").render();
                     this.player = this.$$("#player");
 
-                    this.featureImages = this.data.data.thumbnail;
+                    this.featureImages = newVal.data.thumbnail;
 
 
                 } else if(this.hasFeatureImage && !this.audio & !this.video){
-                    this.featureImages = this.data.featured_image;
+                    this.featureImages = newVal.featured_image;
                 }
 
 

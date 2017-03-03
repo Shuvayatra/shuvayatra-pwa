@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/nebula-storage/nebula-storage.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="behaviors/global-behavior.html">
 <link rel="import" href="shuvayatra-audio-card.html">
@@ -29,7 +30,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display: block;
             padding: 10px;
         }
-        
+        iron-list {
+            height: 100vh;
+            width: 100%;
+            padding-top:75px;
+        }
         app-header {
             @apply(--layout-fixed-top);
             z-index: 2;
@@ -41,10 +46,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 bottom: -10px;
             }
             ;
-        }
-        
-        .feed-container {
-            margin-top: 75px;
         }
 
         .col{
@@ -63,9 +64,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 32%;
             }
 
-            .feed-container{
+            iron-list{
                 max-width: 1024px;
-                margin: 75px auto 0 auto;
+                margin: 0 auto;
             }
 
         }
@@ -75,17 +76,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
                 <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
-                <label>{{title}}</label>
+                <label>[[title]]</label>
             </app-toolbar>
         </app-header>
 
 
+        <nebula-storage id="caches" key="feed-cat-{{category}}" data="{{feeds}}" default-value="[]" auto-save auto-load> </nebula-storage>
 
-        <div class="feed-container">
-
-            <iron-scroll-threshold id="scrollTheshold" lower-threshold="500" scroll-target="document" on-lower-threshold="_loadMoreData">
-            <template id="list" is="dom-repeat" items="[]" as="item">
-
+        <iron-scroll-threshold id="scrollTheshold" lower-threshold="500" scroll-target="document" on-lower-threshold="_loadMoreData">
+            <iron-list id="list" items="[[feeds]]" as="item" scroll-target="document">
+                <template>
                 <div class="col">
                     <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
                         <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
@@ -97,13 +97,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <shuvayatra-text-card class="post-card" post="{{ item }}"></shuvayatra-text-card>
                     </template>
                 </div>
-            </template>
-            </iron-scroll-threshold>
-            <div class="loadingIndicator">
-                <paper-spinner active="{{loading}}"></paper-spinner>
-            </div>
+                </template>
+             </iron-list>
+        </iron-scroll-threshold>
 
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loading}}"></paper-spinner>
         </div>
+
     </template>
     <script>
     Polymer({
@@ -112,7 +113,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         properties: {
             title:{
-                type: String
+                type: String,
+            },
+
+            feeds:{
+                type:Array,
+                value:[],
+            },
+
+            category:{
+                type:Number
             },
 
             params: {
@@ -123,6 +133,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             page: {
                 type: Number,
                 value: 0
+            },
+            loadFromCache:{
+                type:Boolean,
+                value:true
             }
         },
 
@@ -141,18 +155,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var response = e.detail.response;
             this.page = response.current_page;
             this.isLastPage = this.page === response.last_page;
-            var feeds = response.data;
-            var parent = this.$;
-
-            feeds.forEach(function(feed) {
-                parent.list.push('items', feed);
-            });
-
-            parent.scrollTheshold.clearTriggers();
+            if(this.loadFromCache){
+                this.feeds=response.data;
+                this.loadFromCache=false;
+            } else {
+                this.feeds=this.feeds.concat(response.data);
+            }
+            console.log(this.feeds);
+            this.$.scrollTheshold.clearTriggers();
         },
 
         _checkPostType: function(type, value) {
-            console.log('test');
             return (type === value);
         },
 
