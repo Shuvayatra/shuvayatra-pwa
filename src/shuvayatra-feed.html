@@ -84,7 +84,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <nebula-storage id="caches" key="feed-cat-{{category}}" data="{{feeds}}" default-value="[]" auto-save auto-load> </nebula-storage>
 
         <iron-scroll-threshold id="scrollTheshold" lower-threshold="500" scroll-target="document" on-lower-threshold="_loadMoreData">
-            <iron-list id="list" items="[[feeds]]" as="item" scroll-target="document">
+            <iron-list id="list" items="[[feeds]]" as="item" scroll-target="contentContainer">
                 <template>
                 <div class="col">
                     <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
