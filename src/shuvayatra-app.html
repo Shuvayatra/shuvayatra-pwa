@@ -271,8 +271,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <shuvayatra-screen name="screen"></shuvayatra-screen>
                             <shuvayatra-journey name="journey"></shuvayatra-journey>
                             <shuvayatra-destinations name="destinations"></shuvayatra-destinations>
-                            <shuvayatra-news name="news" params="{{queryParams}}"
-                                             title="{{queryParams.title}}"></shuvayatra-news>
+                            <shuvayatra-news name="news" params="{{queryParams}}" title="{{queryParams.title}}"></shuvayatra-news>
                             <shuvayatra-radio name="radio"></shuvayatra-radio>
                             <shuvayatra-user name="user"></shuvayatra-user>
                             <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
@@ -388,6 +387,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.myPage = "main";
                 }else{
                     this.myPage = page;
+                }
+                if(page!=='notfound'){
+                    this.$$('shuvayatra-notfound').className='';
                 }
                 this.page = page || 'home';
             },
