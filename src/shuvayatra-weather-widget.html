@@ -105,7 +105,7 @@
                 this.weather = {
                     temperature: response.main.temp + " \xB0C",
                     info: response.weather[0].description,
-                    icon: "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png"
+                    icon: "//openweathermap.org/img/w/" + response.weather[0].icon + ".png"
                 }
 
 
@@ -113,7 +113,7 @@
             },
 
             getCurrencyData: function () {
-                this.$.currencyAjax.url = "http://hamropatro-android.appspot.com/fetchForex";
+                this.$.currencyAjax.url = this.forexUrl;
                 this.$.currencyAjax.generateRequest();
             },
 

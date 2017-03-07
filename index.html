@@ -39,6 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="msapplication-TileImage" content="/images/manifest/icon-144x144.png">
     <meta name="msapplication-TileColor" content="#3f51b5">
     <meta name="msapplication-tap-highlight" content="no">
+    <link rel="import" href="/src/shuvayatra-init.html" async>
     <script>
     // Setup Polymer options
     window.Polymer = {
@@ -93,9 +94,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
     }
     </script>
-    <link rel="import" href="bower_components/iron-localstorage/iron-localstorage.html">
-    <link rel="import" href="/src/shuvayatra-app.html">
-    <link rel="import" href="/src/shuvayatra-onboard.html">
+    
     <style>
     body {
         margin: 0;
@@ -106,61 +105,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
 </head>
-
 <body>
-    <template is="dom-bind" id="app">
-        <iron-localstorage name="onboard" value="{{onboard}}" on-iron-localstorage-load-empty="_initializeDefaultOnboard">
-        </iron-localstorage>
-        <template is="dom-if" if="{{ _showOnboard(onboard) }}">
-            <shuvayatra-onboard></shuvayatra-onboard>
-        </template>
-        <template is="dom-if" if="{{ !_showOnboard(onboard) }}">
-            <shuvayatra-app></shuvayatra-app>
-        </template>
-    </template>
-    <!-- Built with love using Polymer Starter Kit -->
-    <script>
-
-    (function(scope) {
-
-
-        scope._showOnboard = function(onboard) {
-
-
-            var domainUrl = window.location.href == "https://app.shuvayatra.org/" || window.location.href == "https://app.shuvayatra.org/user";
-
-            return (!(onboard.status) && domainUrl);
-
-        };
-
-        scope.getDomainUrl =  function(url){
-
-
-            var domain;
-            //find & remove protocol (http, ftp, etc.) and get domain
-            if (url.indexOf("://") > -1) {
-                domain = url.split('/')[2];
-            }
-            else {
-                domain = url.split('/')[0];
-            }
-
-            //find & remove port number
-            domain = domain.split(':')[0];
-
-            return domain;
-
-
-        },
-
-        scope._initializeDefaultOnboard = function(){
-            scope.onboard = {
-                dob:{},
-                status: false
-            };
-        }
-    })(document.querySelector('#app'));
-    </script>
+    <shuvayatra-init></shuvayatra-init>
 </body>
 
 </html>
