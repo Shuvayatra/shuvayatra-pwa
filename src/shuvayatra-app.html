@@ -400,6 +400,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             _pageChanged: function (page) {
                 this.loadPage(page);
+                
+                if(typeof(ga)!=='undefined'){
+                    console.log('track page');
+                    ga('set', 'page', page);
+                    ga('send', 'pageview');
+                }
+                
             },
 
             loadPage: function (pageTitle) {
