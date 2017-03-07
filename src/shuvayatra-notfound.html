@@ -9,16 +9,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
-
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
 <dom-module id="shuvayatra-notfound">
     <template>
-        <style>
+        <style include="shared-styles">
             :host {
                 display: block;
+
+                padding:20px;
             }
         </style>
-
-        Oops you hit a 404. <a href="/">Head back to home.</a>
+        <paper-card heading="Not Found" class="card" elevation="1" animated-shadow="false">
+          <div class="card-content">
+          Oops you hit a 404. <a href="/">Head back to home.</a>
+          </div>
+        </paper-card>
+        
     </template>
 
     <script>

@@ -3,7 +3,6 @@
 <link rel="import" href="../bower_components/nebula-storage/nebula-storage.html">
 <!--<link rel="import" href="shuvayatra-feed.html">-->
 <link rel="import" href="shuvayatra-header.html">
-
 <link rel="import" href="shuvayatra-audio-detail.html">
 <link rel="import" href="shuvayatra-video-detail.html">
 <link rel="import" href="shuvayatra-text-detail.html">
@@ -65,7 +64,8 @@
                method="GET"
                params="{{ queryParams }}"
                last-response="{{ data }}"
-               loading="{{ isLoading }}">
+               loading="{{ isLoading }}"
+               on-error="handleError">
     </iron-ajax>
 
 
@@ -90,7 +90,7 @@
         <div style="text-align:center;">
             <paper-spinner active="{{ isLoading }}"></paper-spinner>
         </div>
-
+        
     </template>
 
 <script>
@@ -124,7 +124,11 @@
             }
 //            this.$$("#detail")._updateCountData(this.data);
         },
-
+        handleError:function(e){
+            if(e.detail.error.message.indexOf('404')!==-1){
+                window.location.href='/notfound';
+            }
+        },
         ready: function(){
             this.postId = window.location.pathname.split("post/")[1];
         },
