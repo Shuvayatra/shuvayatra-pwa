@@ -1,7 +1,7 @@
 {
   "name": "Shuvayatra",
   "short_name": "Shuvayatra",
-  "start_url": "/?homescreen=1",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#27a8d8",
   "background_color": "#27a8d8",

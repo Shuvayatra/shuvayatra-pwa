@@ -11,23 +11,35 @@
                 display: block;
             }
         </style>
-        <iron-localstorage name="onboard" value="{{onboard}}" on-iron-localstorage-load-empty="_initializeDefaultOnboard">
+        <iron-localstorage name="onboard" value="{{onboard}}">
         </iron-localstorage>
-        <template is="dom-if" if="{{ _showOnboard(onboard) }}">
+        <template is="dom-if" if="{{ !onboard.status }}">
             <shuvayatra-onboard></shuvayatra-onboard>
         </template>
-        <template is="dom-if" if="{{ !_showOnboard(onboard) }}">
+        <template is="dom-if" if="{{ onboard.status }}">
             <shuvayatra-app></shuvayatra-app>
         </template>
     </template>
     <script>
     	Polymer({
             is: 'shuvayatra-init',
-            _showOnboard : function(onboard) {
-	            var domainUrl = window.location.href == "https://app.shuvayatra.org/" || window.location.href == "https://app.shuvayatra.org/user";
-
-	            return (!(onboard.status) && domainUrl);
-
+            properties:{
+            	onboard:{
+            		type:Object,
+            		value:{
+			                dob:{},
+			                status: false
+			            }
+            	}
+            },
+            ready:function(){
+            	console.log(this.onboard.status);
+            }, 
+            _showOnboard : function() {
+	            //var domainUrl = window.location.href == "https://app.shuvayatra.org/" || window.location.href == "https://app.shuvayatra.org/user";
+	            //return (!(onboard.status) && domainUrl);
+	            console.log(this.onboard);
+	            return !(this.onboard.status);
 	        },
 
 	        getDomainUrl :  function(url){
@@ -46,13 +58,6 @@
 	            return domain;
 
 
-	        },
-
-	        _initializeDefaultOnboard : function(){
-	            scope.onboard = {
-	                dob:{},
-	                status: false
-	            };
 	        }
         });
     </script>
