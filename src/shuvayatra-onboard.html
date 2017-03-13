@@ -210,7 +210,7 @@
             }
 
         </style>
-        <iron-localstorage name="onboard" value="{{onboard}}">
+        <iron-localstorage name="onboard" value="{{onboard}}" on-iron-localstorage-load-empty="initOnboard">
         </iron-localstorage>
         <iron-ajax auto url="{{ baseUrl }}api/destinations" handle-as="json" last-response="{{destinations}}"
                    on-response="handleResponse" debounce-duration="300"></iron-ajax>
@@ -370,14 +370,20 @@
                     value: 0
                 },
                 onboard:{
-                    type:Object,
-                    value:{
-                            dob:{},
-                            status: false
-                        }
+                    type:Object
                 }
             },
-
+            initOnboard:function(){
+                this.onboard={
+                            name:null,
+                            gender:null,
+                            location:null,
+                            work_status:null,
+                            country:null,
+                            dob:{},
+                            status: false
+                        };
+            },
             _getDOB: function (onboard) {
                 if (this.onboard && this.onboard.dob) {
                     return this.onboard.dob;
