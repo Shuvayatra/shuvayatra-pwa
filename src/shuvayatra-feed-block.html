@@ -1,0 +1,117 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/nebula-storage/nebula-storage.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="behaviors/global-behavior.html">
+<link rel="import" href="shuvayatra-audio-card.html">
+<link rel="import" href="shuvayatra-video-card.html">
+<link rel="import" href="shuvayatra-text-card.html">
+<dom-module id="shuvayatra-feed-block">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                margin-bottom: 20px;
+            }
+
+            paper-card {
+                width: 100%;
+            }
+        </style>
+        <iron-ajax id="ajax" url="{{ nextUrl }}" handle-as="json" debounce-duration="300" loading="{{loading}}" on-response="_didRespond" auto></iron-ajax>
+
+        <iron-scroll-threshold id="scrollTheshold" on-lower-threshold="_loadMoreData" lower-threshold="500" scroll-target="document">
+            <iron-list id="feeds" items="[[feeds]]" as="item" scroll-target="scrollTheshold">
+                <template>
+                <div class="col">
+                    <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
+                        <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
+                    </template>
+                    <template is="dom-if" if="{{ _checkPostType(item.type, 'audio') }}">
+                        <shuvayatra-audio-card class="post-card" post="{{ item }}"></shuvayatra-audio-card>
+                    </template>
+                    <template is="dom-if" if="{{ _checkPostType(item.type, 'text') }}">
+                        <shuvayatra-text-card class="post-card" post="{{ item }}"></shuvayatra-text-card>
+                    </template>
+                </div>
+                </template>
+             </iron-list>
+        </iron-scroll-threshold>
+
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loading}}"></paper-spinner>
+        </div>
+    </template>
+    <script>
+
+        Polymer({
+            is: 'shuvayatra-feed-block',
+            behaviors: [GlobalBehavior],
+            properties: {
+            title:{
+                type: String,
+            },
+            data:Object,
+            feeds:{
+                type:Array,
+                value:[]
+            },
+
+            category:{
+                type:Number
+            },
+
+            params: {
+                type: Object,
+                notify: true
+            },
+
+            page: {
+                type: Number,
+                value: 0
+            },
+            loadFromCache:{
+                type:Boolean,
+                value:true
+            },
+            nextUrl:String
+        },
+        ready:function(){
+            this.feeds=this.data.data;
+        },
+        _loadMoreData: function() {
+
+            if (this.data.current_page!==this.data.last_page) {
+                this.nextUrl = this.data.next_page_url;
+            }
+        },
+
+        _didRespond: function(e) {
+            var response = e.detail.response;
+            this.page = response.feeds.current_page;
+            this.data=response.feeds;
+            this.feeds=this.feeds.concat(response.feeds.data);
+            this.$.scrollTheshold.clearTriggers();
+        },
+
+        _checkPostType: function(type, value) {
+            return (type === value);
+        },
+
+        _generateUrl: function(item) {
+            return "#";
+            if (item != null) {
+                return "/post/" + item.id;
+            }
+        },
+
+        });
+    </script>
+</dom-module>

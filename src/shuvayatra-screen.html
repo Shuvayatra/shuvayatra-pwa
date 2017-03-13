@@ -19,6 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shuvayatra-notice.html">
 <link rel="import" href="shuvayatra-list-block.html">
 <link rel="import" href="shuvayatra-slider-block.html">
+<link rel="import" href="shuvayatra-feed-block.html">
 <link rel="import" href="behaviors/global-behavior.html">
 
 <dom-module id="shuvayatra-screen">
@@ -78,26 +79,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         
         <div class="feed-container">
-            <template is="dom-repeat" items="[[homefeeds.blocks]]" filter="{{ _isNotDismissedId(dismissId) }}">
-                <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
-                    <shuvayatra-notice notice="{{item.notice}}" dismiss-id="{{ dismissId }}">
-                    </shuvayatra-notice>
-                </template>
-                <template is="dom-if" if="{{showCountryWidget(index)}}">
-                    <shuvayatra-weather-widget country="{{onboard.country}}" country_id="{{onboard.country_id}}">
-                    </shuvayatra-weather-widget>
-                </template>
-                <template is="dom-if" if="{{checkLayout(item.layout,'radio_widget')}}">
-                    <shuvayatra-radio-widget title="{{item.title}}" description="{{item.description}}">
-                    </shuvayatra-radio-widget>
-                </template>
-                <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
-                    <shuvayatra-list-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
-                    </shuvayatra-list-block>
-                </template>
-                <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
-                    <shuvayatra-slider-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
-                    </shuvayatra-slider-block>
+            <template is="dom-if" if="{{checkLayout(homefeeds.type,'feed')}}">
+                    <shuvayatra-feed-block data="{{ homefeeds.feeds }}">
+                    </shuvayatra-feed-block>
+            </template>
+            <template is="dom-if" if="{{!checkLayout(item.type,'feed')}}">
+                <template is="dom-repeat" items="[[homefeeds.blocks]]" filter="{{ _isNotDismissedId(dismissId) }}">
+                    <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
+                        <shuvayatra-notice notice="{{item.notice}}" dismiss-id="{{ dismissId }}">
+                        </shuvayatra-notice>
+                    </template>
+                    <template is="dom-if" if="{{showCountryWidget(index)}}">
+                        <shuvayatra-weather-widget country="{{onboard.country}}" country_id="{{onboard.country_id}}">
+                        </shuvayatra-weather-widget>
+                    </template>
+                    <template is="dom-if" if="{{checkLayout(item.layout,'radio_widget')}}">
+                        <shuvayatra-radio-widget title="{{item.title}}" description="{{item.description}}">
+                        </shuvayatra-radio-widget>
+                    </template>
+                    <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
+                        <shuvayatra-list-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
+                        </shuvayatra-list-block>
+                    </template>
+                    <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
+                        <shuvayatra-slider-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
+                        </shuvayatra-slider-block>
+                    </template>
                 </template>
             </template>
         </div>
