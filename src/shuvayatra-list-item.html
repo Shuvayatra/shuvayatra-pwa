@@ -49,7 +49,7 @@
             },
 
             getImage: function (data) {
-                if (this.data.type === 'text') {
+                if (this.data.type === 'text' || this.data.type==='place') {
                     return this.data.featured_image;
                 } else {
                     return this.data.data.thumbnail;

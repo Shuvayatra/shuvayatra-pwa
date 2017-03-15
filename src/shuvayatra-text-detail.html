@@ -4,7 +4,7 @@
 <link rel="import" href="shuvayatra-favourite-section.html">
 <link rel="import" href="shuvayatra-html-placeholder.html">
 <link rel="import" href="shuvayatra-text-card.html">
-
+<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
 <dom-module id="shuvayatra-text-detail">
     <template>
         <style is="custom-style">
@@ -53,7 +53,13 @@
                 }
             }
 
-
+            #place-info{
+                color: #868686;
+                font-size: 0.9em;
+            }
+            #place-info iron-icon{
+                margin-right: 2em;
+            }
         </style>
 
 
@@ -69,6 +75,12 @@
                                           shares="{{ post.share_count }}"></shuvayatra-favourite-section>
 
             <shuvayatra-html-placeholder html="{{ post.description }}"></shuvayatra-html-placeholder>
+            <template is="dom-if" if={{post.data.address}}>
+                <div id="place-info">
+                    <p><iron-icon icon="communication:business"></iron-icon>{{ post.data.address }}</p>
+                    <p><iron-icon icon="communication:phone"></iron-icon>{{ post.data.phone }}</p>
+                </div>
+            </template>
 
         </div>
 

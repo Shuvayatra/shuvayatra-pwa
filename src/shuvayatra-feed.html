@@ -22,7 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shuvayatra-audio-card.html">
 <link rel="import" href="shuvayatra-video-card.html">
 <link rel="import" href="shuvayatra-text-card.html">
-
+<link rel="import" href="shuvayatra-place-card.html">
 <dom-module id="shuvayatra-feed">
     <template>
         <style include="shared-styles">
@@ -95,6 +95,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </template>
                     <template is="dom-if" if="{{ _checkPostType(item.type, 'text') }}">
                         <shuvayatra-text-card class="post-card" post="{{ item }}"></shuvayatra-text-card>
+                    </template>
+                    <template is="dom-if" if="{{ _checkPostType(item.type, 'place') }}">
+                        <shuvayatra-place-card class="post-card" post="{{ item }}"></shuvayatra-place-card>
                     </template>
                 </div>
                 </template>

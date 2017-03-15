@@ -83,7 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <shuvayatra-feed-block data="{{ homefeeds.feeds }}">
                     </shuvayatra-feed-block>
             </template>
-            <template is="dom-if" if="{{!checkLayout(item.type,'feed')}}">
+            <template is="dom-if" if="{{!checkLayout(homefeeds.type,'feed')}}">
                 <template is="dom-repeat" items="[[homefeeds.blocks]]" filter="{{ _isNotDismissedId(dismissId) }}">
                     <template is="dom-if" if="{{checkLayout(item.layout,'notice')}}">
                         <shuvayatra-notice notice="{{item.notice}}" dismiss-id="{{ dismissId }}">
@@ -129,6 +129,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             checkLayout: function (value, layout) {
+                console.log(value);
                 if (value === 'notice') {
                     this.hasNotice = true;
                 }
