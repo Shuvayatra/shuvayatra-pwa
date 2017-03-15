@@ -72,7 +72,12 @@
                                           likes="{{ post.like_count }}"
                                           shares="{{ post.share_count }}"></shuvayatra-favourite-section>
             <shuvayatra-html-placeholder html="{{ post.description }}"></shuvayatra-html-placeholder>
-
+            <template is="dom-if" if="{{post.source}}">
+                <p><label>Source :</label> <a href="{{post.source_url">{{post.source}}</a></p>
+            </template>
+            <template is="dom-if" if="{{post.photo_credit}}">
+                <p><label>Photo :</label> {{post.photo_credit}}</p>
+            </template>
         </div>
 
         <div class="wrapper">

@@ -81,7 +81,12 @@
                     <p><iron-icon icon="communication:phone"></iron-icon>{{ post.data.phone }}</p>
                 </div>
             </template>
-
+            <template is="dom-if" if="{{post.source}}">
+                <p><label>Source :</label> <a href="{{post.source_url">{{post.source}}</a></p>
+            </template>
+            <template is="dom-if" if="{{post.photo_credit}}">
+                <p><label>Photo :</label> {{post.photo_credit}}</p>
+            </template>
         </div>
 
 
