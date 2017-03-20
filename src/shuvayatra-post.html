@@ -132,8 +132,10 @@
         },
 
         _onIdChanged: function(id){
-            this.data = {};
-            this.postUrl = this.baseUrl + "api/posts/" + this.postId;
+            if(Number.isInteger(id)){
+                this.data = {};
+                this.postUrl = this.baseUrl + "api/posts/" + this.postId;
+            }
         },
 
         _checkIfTypeAudio: function(type){

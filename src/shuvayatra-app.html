@@ -338,7 +338,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 headerPages: {
                     type: Array,
                     value: function () {
-                        return ["channel", "feed", "search", "post", "destination"];
+                        return ["channel", "feed", "search", "post", "destination","screen"];
                     }
                 }
             },
@@ -406,7 +406,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _pageChanged: function (page) {
                 this.loadPage(page);
                 
-                if(typeof(ga)!=='undefined'){
+                if(typeof(ga)!=='undefined' && window.location.hostname!=='localhost'){
                     console.log('track page');
                     ga('set', 'page', page);
                     ga('send', 'pageview');

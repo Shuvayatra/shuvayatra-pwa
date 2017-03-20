@@ -410,13 +410,10 @@
             },
 
             _postLoaded: function (newVal,oldVal) {
-
-
                 if (this.hasFeatureImage && this.audio) {
                     this.$.postIf.render();
                     this.$$("#playerIf").render();
                     this.player = this.$$("#player");
-
                     this.featureImages = newVal.data.thumbnail;
 
 
@@ -437,7 +434,10 @@
 
             _goBack: function () {
                 this._stopPlayback();
-                window.history.back();
+                if(window.history.length<=2)
+                    window.location='/';
+                else
+                    window.history.back();
             },
 
             _stopPlayback: function(){
