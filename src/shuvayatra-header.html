@@ -416,17 +416,14 @@
                     this.player = this.$$("#player");
                     this.featureImages = newVal.data.thumbnail;
 
-
                 } else if(this.hasFeatureImage && !this.audio & !this.video){
                     this.featureImages = newVal.featured_image;
+
                 }
 
-
                 if(this.video){
-                    console.log('video ready');
                     this.$.postIf.render();
                     this.$$("#videoIf").render();
-                    console.log(this.$$("#video"));
                     this.videoPlayer = this.$$("#video");
                 }
             },

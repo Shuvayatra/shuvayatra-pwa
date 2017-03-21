@@ -11,12 +11,12 @@
                 display: block;
             }
         </style>
-        <iron-localstorage name="onboard" value="{{onboard}}">
+        <iron-localstorage name="onboard" value="{{onboard}}" on-iron-localstorage-load-empty="_handleEmptyOnboard">
         </iron-localstorage>
-        <template is="dom-if" if="{{ !onboard.status }}">
+        <template is="dom-if" if="{{ _showOnboard() }}">
             <shuvayatra-onboard></shuvayatra-onboard>
         </template>
-        <template is="dom-if" if="{{ onboard.status }}">
+        <template is="dom-if" if="{{ !_showOnboard() }}">
             <shuvayatra-app></shuvayatra-app>
         </template>
     </template>
@@ -33,11 +33,26 @@
             	}
             },
             _showOnboard : function() {
-	            //var domainUrl = window.location.href == "https://app.shuvayatra.org/" || window.location.href == "https://app.shuvayatra.org/user";
-	            //return (!(onboard.status) && domainUrl);
-	            return !(this.onboard.status);
+                if(window.location.pathname.indexOf('post')>=0){
+                    return false;
+                } else {
+                    if(typeof(this.onboard)==='undefined'){
+                    this.onboard={
+                            dob:{},
+                            status: false
+                        };
+                    }
+                    return this.onboard.status;
+                }
+      
+	            
 	        },
-
+            _handleEmptyOnboard:function(){
+                this.onboard={
+                            dob:{},
+                            status: false
+                        };
+            },
 	        getDomainUrl :  function(url){
 	            var domain;
 	            //find & remove protocol (http, ftp, etc.) and get domain

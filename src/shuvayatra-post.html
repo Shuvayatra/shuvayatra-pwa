@@ -66,7 +66,7 @@
                last-response="{{ data }}"
                loading="{{ isLoading }}"
                on-error="handleError">
-    </iron-ajax>
+        </iron-ajax>
 
 
 
@@ -111,7 +111,6 @@
                 observer: '_onCountsUpdated'
             }
         },
-
         _onCountsUpdated: function(){
             if(this._checkIfTypeText(this.data.type)){
                 this.$.textIf.render();
@@ -128,11 +127,14 @@
             }
         },
         ready: function(){
+            console.log('id:'+this.id);
+            console.log(this.id);
             this.postId = window.location.pathname.split("post/")[1];
         },
 
         _onIdChanged: function(id){
-            if(Number.isInteger(id)){
+
+            if(/^\d+$/.test(id)){
                 this.data = {};
                 this.postUrl = this.baseUrl + "api/posts/" + this.postId;
             }
