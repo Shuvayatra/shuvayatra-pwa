@@ -116,8 +116,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'shuvayatra-screen',
             behaviors: [GlobalBehavior],
-
-
             _isNotDismissedId: function(id){
                 if(!id){
                     return null;
@@ -129,7 +127,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             checkLayout: function (value, layout) {
-                console.log(value);
                 if (value === 'notice') {
                     this.hasNotice = true;
                 }

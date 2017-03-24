@@ -1,9 +1,10 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/shuvayatra-app.html",
+  "shell": "src/shuvayatra-init.html",
   "fragments": [
     "src/shuvayatra-home.html",
-    "src/shuvayatra-onboard.html",
+    "src/shuvayatra-screen.html",
+    "src/shuvayatra-search.html",
     "src/shuvayatra-destination.html",
     "src/shuvayatra-journey.html",
     "src/shuvayatra-user.html",
@@ -17,6 +18,8 @@
     "src/shared-styles.html"
   ],
   "sources": [
+    "about/*",
+    "about/**/*",
    "src/**/*",
    "src/*",
    "images/**/*",

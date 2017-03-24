@@ -119,11 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: #333;
             }
 
-            .logo {
-                width: 48px;
-                height: 48px;
-                margin-right: 1em;
-            }
+            
 
             #drawer app-toolbar {
                 background: url('/images/nepal.jpg') 0 0/cover;
@@ -168,13 +164,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             #search-button {
                 margin-right: -1em;
             }
-            paper-icon-button#burger{
-                position: absolute;
-                z-index: 1000;
+            
+
+            #bottom-menu{
+                margin-top:1em;
+                border-top:1px solid #CCC;
+            }
+
+            .logo img{
+                width: 48px;
+                height: 48px;
+                margin-left: 16px;
+                vertical-align: bottom;
+            }
+
+            #burger{
+                color:#FFF;
+                margin-right: 2em;
+                --paper-icon-button:{
+                    height: 48px;
+                    width: 48px;    
+                };
+               
             }
             @media (max-width: 600px) {
                 #search{
                     padding-left: 48px;
+                }
+                paper-icon-button#burger{
+                    position: absolute;
+                    z-index: 1000;
+
                 }
             }
             
@@ -199,7 +219,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-location route="{{route}}"></app-location>
         <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
-        
+        <iron-ajax auto url="https://api.shuvayatra.org/v1/api/screens" handle-as="json" last-response="{{screens}}" debounce-duration="300"></iron-ajax>
             <div name="main">
                 <!-- start tab on wide layout -->
                 <app-drawer-layout force-narrow fullbleed>
@@ -229,10 +249,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                         </paper-item>
                                 </a>
                             </template>
+                        </paper-menu>
+                        <paper-menu id="bottom-menu" selected="{{selected}}" attr-for-selected="name">
                                 <a href="/user">
                                         <paper-item name="प्रयोगकर्ता">
                                             <iron-icon icon="social:person"></iron-icon>
                                             <span>प्रयोगकर्ता</span>
+                                        </paper-item>
+                                </a>
+                                <a href="//shuvayatra.org/about/">
+                                        <paper-item name="प्रयोगकर्ता">
+                                            <iron-icon icon="icons:info"></iron-icon>
+                                            <span>विषय</span>
+                                        </paper-item>
+                                </a>
+                                <a href="//shuvayatra.org/about/#contact">
+                                        <paper-item name="प्रयोगकर्ता">
+                                            <iron-icon icon="icons:mail"></iron-icon>
+                                            <span>सम्पर्क</span>
                                         </paper-item>
                                 </a>
                         </paper-menu>
@@ -245,32 +279,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <shuvayatra-search name="search"></shuvayatra-search>
                     </iron-pages>
                     <app-header-layout>
-                        <app-header>
+                        <app-header reveals effects="waterfall">
                             <app-toolbar>
-                                <img class="logo" src="/images/nav_logo.png" hidden$="{{!wideLayout}}"/>
-                                <paper-icon-button id="burger" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
+                                <paper-icon-button id="burger" icon="menu" drawer-toggle></paper-icon-button>
+                                
                                 <paper-input on-tap="_search" id="search" label="Search" type="search" no-label-float="false">
                                     <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
                                 </paper-input>
-                            </app-toolbar>
-                            <iron-ajax
-                                auto
-                                url="https://api.shuvayatra.org/v1/api/screens"
-                                handle-as="json"
-                                last-response="{{screens}}"
-                                debounce-duration="300"></iron-ajax>
-                            <app-toolbar class="tabs-bar" hidden$="{{!wideLayout}}">
-                                <!-- Nav on desktop: tabs -->
-                                <paper-tabs selected="{{selected}}" attr-for-selected="name" bottom-item>
-
-                                    <template is="dom-repeat" items="[[items]]">
-                                        <paper-tab name="[[item.label]]"><a href="[[item.route]]">[[item.label]]</a></paper-tab>
-                                    </template>
-                                    <template is="dom-repeat" items="[[screens]]">
-                                        <paper-tab name="[[item.title]]"><a href="/screen/[[item.url_slug]]">[[item.title]]</a></paper-tab>
-                                    </template>
-                                    <paper-tab name="[[item.title]]"><a href="/user">प्रयोगकर्ता</a></paper-tab>
-                                </paper-tabs>
+                                <a class="logo" href="//shuvayatra.org/about/" hidden$="{{!wideLayout}}"><img src="/images/nav_logo.png" /></a>
                             </app-toolbar>
                         </app-header>
                         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="notfound" role="main">
