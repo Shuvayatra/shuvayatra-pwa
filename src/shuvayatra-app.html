@@ -178,16 +178,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 vertical-align: bottom;
             }
 
-            #burger{
-                color:#FFF;
-                margin-right: 2em;
-                --paper-icon-button:{
-                    height: 48px;
-                    width: 48px;    
-                };
-               
+            @media (min-width:801px){
+                #burger{
+                    color:#FFF;
+                    --paper-icon-button:{
+                        height: 48px;
+                        width: 48px;    
+                    };
+                   
+                }
             }
-            @media (max-width: 600px) {
+            
+            @media (min-width: 320px ) and (max-width: 800px) {
                 #search{
                     padding-left: 48px;
                 }

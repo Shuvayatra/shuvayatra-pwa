@@ -17,6 +17,12 @@ module.exports = {
     urlPattern: /^https:\/\/api\.shuvayatra\.org\/v1\/api\/posts\//,
     handler: 'networkFirst'
   }  , {
+    urlPattern: /^https:\/\/api\.shuvayatra\.org\/v1\/api\/screens\//,
+    handler: 'fastest'
+  } , {
+    urlPattern: /^https:\/\/api\.shuvayatra\.org\/v1\/api\/screen\//,
+    handler: 'fastest'
+  } , {
     urlPattern: /^https:\/\/fonts\.googleapis\.com\/css/,
     handler: 'fastest'
   }, {
