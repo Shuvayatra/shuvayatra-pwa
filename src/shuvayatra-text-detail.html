@@ -66,7 +66,7 @@
         <div class="content">
 
 
-            <h3>{{ post.title }}</h3>
+            <h1>{{ post.title }}</h1>
 
 
             <shuvayatra-favourite-section id="favSection" category="{{ post.category }}"
@@ -82,7 +82,7 @@
                 </div>
             </template>
             <template is="dom-if" if="{{post.source}}">
-                <p><label>Source :</label> <a href="{{post.source_url">{{post.source}}</a></p>
+                <p><label>Source :</label> <a href="{{post.source_url}}">{{post.source}}</a></p>
             </template>
             <template is="dom-if" if="{{post.photo_credit}}">
                 <p><label>Photo :</label> {{post.photo_credit}}</p>
