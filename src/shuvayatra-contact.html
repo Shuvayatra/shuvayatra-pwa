@@ -1,0 +1,73 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/social-media-icons/social-media-icons.html">
+<style include="iron-flex iron-flex-alignment"></style>
+<dom-module id="shuvayatra-contact">
+    <!-- Defines the element's style and local DOM -->
+    <template>
+      
+    <style>
+        .container {
+          @apply(--layout-horizontal);
+          @apply(--layout-wrap);
+          padding:0px 20px 20px 20px;
+         }
+        .contentLeft {
+          @apply(--layout-flex-8)
+        }
+        .contentImage {
+          @apply(--layout-flex-4)
+        }
+      :host {
+        display: block;
+        padding: 100px;
+      }
+    paper-card {
+    --paper-card-header-text: {
+        text-align: center;
+        color:#2DA7D4;
+        }
+    }
+    .email {
+       text-align: center;
+        color:#afafaf;        
+    }
+        
+    </style>  
+      
+      <div align="center">
+      <paper-card heading="संपर्क गर्नुहोस्">
+       <div class="card-content" align="left">
+            <p>दैशुभयात्राास द एशिया फाउण्डेसन, गैर आवासिय नेपाली संघ र विभिन्न नेपाली नविनकर्ता र सामाजिक उद्धमीहरुको समर्थनको प्रतिफल हो । सन् २०१६ मा शुभयात्रामा अझ धेरै विषयवस्तु समेटेर धेरै भन्दा धेरै नेपाली कामदारको जीवनमा सकारात्मक प्रभाव पार्ने उदेश्य राखेका छौ । हाम्रा प्रगति बारे जानकारी लिन, हामीलाई शुभयात्रा एप्प को सामाजिक सन्जालमा फेसबुक, ट्वीटर र यु-टिउबमा फलो गर्नुहोस् वा निम्न लिन्क क्लिक गरी हामीलाई सम्पर्क गर्नुहोला ।</p>
+            
+            <p>हामी तपाईंसँग हरेक क्षणमा सहकार्य र सहयात्रा गर्न तत्पर छौंं । यदी तपाईंं पनि हामी जस्तै विश्व भरीका नेपाली कामदारको दिगोे विकासमा सङ्लग्न हुन चाहनु हुन्छ भने, तपाईंलाई स्वागत छ । हामीलाई देश र विदेशका कामदारलाई सहयोग गर्न साथ दिनुहोस् ।</p>
+           <p><a class="email" href="mailto:shuvayatra.go@gmail.com">shuvayatra.go@gmail.com</a></p>
+            <p> 
+                <a href="https://twitter.com/shuvayatra">
+                <social-media-icons icon="twitter" color="#1da1f2" size="30"></social-media-icons></a>
+                <a href="https://www.facebook.com/ShuvaGO"><social-media-icons icon="facebook" color="#4867aa" size="30"></social-media-icons>
+                </a>  
+            </p>
+            <p></p>
+        
+</div>
+</paper-card>
+</div>
+          
+    
+  </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-contact',
+            behaviors: [GlobalBehavior]
+        });
+
+    </script>
+</dom-module>

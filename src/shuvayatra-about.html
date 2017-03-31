@@ -1,0 +1,69 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<style include="iron-flex iron-flex-alignment"></style>
+<dom-module id="shuvayatra-about">
+    <!-- Defines the element's style and local DOM -->
+    <template>
+      
+    <style>
+    .container {
+      @apply(--layout-horizontal);
+      @apply(--layout-wrap);
+        padding:20px;
+     }
+    .contentLeft {
+      @apply(--layout-flex-8)
+    }
+    .contentImage {
+      @apply(--layout-flex-4)
+    }
+      :host {
+        display: block;
+        padding: 100px;
+      }
+    paper-card {
+    --paper-card-header-text: {
+        text-align: center;
+        color:#2DA7D4;
+        }
+    }
+        
+    </style>  
+      
+      <div align="center">
+      <paper-card heading="सुरक्षित वैदेशिक रोजगारको लागि आवश्यक जानकारीहरु">
+        
+       <div class="card-content" align="left">
+    <div class="container">
+        <div class="contentLeft">
+            <p>दैनिक २,००० नेपाली युवाहरु अस्थायीे रोजगारीको खोजीमा नेपालबाट खाडी र पुर्वी एशियाली मुलुकहरु जाने गर्दछन् । ती मध्ये धेरै युवा कामदारहरु वैदेशिक रोजगारका प्रक्रिया र त्यससँग सम्बन्धित कठिनाईहरुबारे अनभिज्ञ भई शोषण, मानव बेचबिखन र आर्थिक प्रलोभनको शिकार बन्दछन् ।</p>
+            <p>नेपालमा झन्डै सत प्रतिसत मोबाईल फोनको प्रयोगकर्ताहरु छन् । मोबाईल फोनको माध्यमबाट वैदेशिक रोजगारलाई सुरक्षित बनाउन सकिन्छ भन्ने कुरामा हामी विश्वस्त छौ । शुभयात्रा मोबाईल एप्प मा वैदेशिक रोजगार सम्बन्धित विज्ञ, कानुनी विशेषज्ञ र वैदेशिक कामदारको अनुभवबाट निर्मित यी श्रव्य, दृश्य तथा लिखित जानकारी प्रदान गर्न सकिन्छ । यस शुभयात्राको माध्यमबाट निम्न विषयमा जानकारी प्राप्त गर्न सकिन्छ ।</p>
+            <ul>
+                <li> कामदारको अधिकार र कामका अवस्था र वातवरण</li>
+                <li> श्रम स्वीकृति र निवेदन प्रक्रिया</li>
+                <li> साउदी अरब, मलेशिया र कतारमा गर्न हुने र नहुने कार्यहरु</li>
+                <li> महिला : वैदेशिक कामदारको लागि</li>
+            </ul> शुभयात्राास द एशिया फाउण्डेसन <a href="http://asiafoudation.org" target="_blank">(asiafoundation.org)</a>, गैर आवासिय नेपाली संघ <a href="http://nrna.org.np" target="_blank">(nrna.org.np)</a> र विभिन्न नेपाली नविनकर्ता र सामाजिक उद्धमीहरुको समर्थनको प्रतिफल हो ।</div>
+        <div class="contentImage" align="right"><img src="/images/screenshot2.png" /></div>
+    </div>
+</div>
+</paper-card>
+</div>
+          
+    
+  </template>
+    <script>
+        Polymer({
+            is: 'shuvayatra-about',
+            behaviors: [GlobalBehavior]
+        });
+
+    </script>
+</dom-module>

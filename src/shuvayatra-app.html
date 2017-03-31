@@ -29,6 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <dom-module id="shuvayatra-app">
     <template>
         <style>
@@ -254,22 +255,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </paper-menu>
                         <paper-menu id="bottom-menu" selected="{{selected}}" attr-for-selected="name">
                                 <a href="/user">
-                                        <paper-item name="प्रयोगकर्ता">
-                                            <iron-icon icon="social:person"></iron-icon>
-                                            <span>प्रयोगकर्ता</span>
-                                        </paper-item>
+                                    <paper-item name="प्रयोगकर्ता">
+                                        <iron-icon icon="social:person"></iron-icon>
+                                        <span>प्रयोगकर्ता</span>
+                                    </paper-item>
                                 </a>
-                                <a href="//shuvayatra.org/about/">
-                                        <paper-item name="प्रयोगकर्ता">
-                                            <iron-icon icon="icons:info"></iron-icon>
-                                            <span>विषय</span>
-                                        </paper-item>
+                                <a href="/about">
+                                    <paper-item name="प्रयोगकर्ता">
+                                        <iron-icon icon="icons:info"></iron-icon>
+                                        <span>विषय</span>
+                                    </paper-item>
                                 </a>
-                                <a href="//shuvayatra.org/about/#contact">
-                                        <paper-item name="प्रयोगकर्ता">
-                                            <iron-icon icon="icons:mail"></iron-icon>
-                                            <span>सम्पर्क</span>
-                                        </paper-item>
+                                <a href="/contact">
+                                    <paper-item name="प्रयोगकर्ता">
+                                        <iron-icon icon="icons:mail"></iron-icon>
+                                        <span>सम्पर्क</span>
+                                    </paper-item>
                                 </a>
                         </paper-menu>
                     </app-drawer>
@@ -279,6 +280,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <shuvayatra-post name="post" post-id="{{id}}"></shuvayatra-post>
                         <shuvayatra-destination name="destination" destination-id="{{id}}"></shuvayatra-destination>
                         <shuvayatra-search name="search"></shuvayatra-search>
+                        <shuvayatra-about name="about"></shuvayatra-about>
+                        <shuvayatra-contact name="contact"></shuvayatra-contact>    
                     </iron-pages>
                     <app-header-layout>
                         <app-header reveals effects="waterfall">
@@ -299,6 +302,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <shuvayatra-news name="news" params="{{queryParams}}" title="{{queryParams.title}}"></shuvayatra-news>
                             <shuvayatra-radio name="radio"></shuvayatra-radio>
                             <shuvayatra-user name="user"></shuvayatra-user>
+                            <shuvayatra-about name="about"></shuvayatra-about>
+                             <shuvayatra-contact name="contact"></shuvayatra-contact>
                             <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
                         </iron-pages>
                     </app-header-layout>
@@ -436,7 +441,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             loadPage: function (pageTitle) {
                 // Load page import on demand. Show 404 page if fails
                 var resolvedPageUrl = this.resolveUrl('shuvayatra-' + pageTitle + '.html');
-
+                
                 this.importHref(resolvedPageUrl, null, this._showPage404, true);
                 this.$.drawer.opened = false;
             },
