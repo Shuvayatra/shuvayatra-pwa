@@ -24,7 +24,8 @@
    "src/*",
    "images/**/*",
    "images/*",
-   "bower.json"
+   "bower.json",
+   "sw.html"
   ],
   "includeDependencies": [
     "manifest.json",
