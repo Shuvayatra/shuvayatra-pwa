@@ -7,6 +7,8 @@
     "src/shuvayatra-search.html",
     "src/shuvayatra-destination.html",
     "src/shuvayatra-journey.html",
+    "src/shuvayatra-about.html",
+    "src/shuvayatra-contact.html",
     "src/shuvayatra-user.html",
     "src/shuvayatra-news.html",
     "src/shuvayatra-notfound.html",
@@ -18,8 +20,8 @@
     "src/shared-styles.html"
   ],
   "sources": [
-    "about/*",
-    "about/**/*",
+   "about/*",
+   "about/**/*",
    "src/**/*",
    "src/*",
    "images/**/*",
