@@ -221,7 +221,7 @@
             <app-header class$="{{ _generateClass(hasFeatureImage) }}" condenses fixed
                             effects="waterfall resize-snapped-title fade-background"
                             effects-config='{"resize-snapped-title": {"startsAt": 0.3, "duration": "100ms"}, "fade-background": {"startsAt": 0.3, "endsAt": 0.9}}'
-                            style="background-image: url({{ featureImages}} );">
+                            style="background-image: url({{ featureimages}} );">
 
                 <app-toolbar>
                     <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
@@ -328,11 +328,18 @@
                     notify: true
                 },
 
+                featureimages: {
+                    type: String,
+                    value:"",
+                    notify: true,
+                    reflectToAttribute:true
+                },
+
                 data: {
                     type: Object,
                     value: {},
                     notify: true,
-                    observer:'_postLoaded'
+                    reflectToAttribute:true
                 },
 
                 main: {
@@ -345,19 +352,17 @@
                     value: false
                 },
 
+
                 post:{
                     type: Boolean,
-                    value: false
+                    value: false,
+                    reflectToAttribute:true
                 },
 
                 hasFeatureImage: {
                     type: Boolean,
-                    value: false
-                },
-
-                featureImages: {
-                    type: String,
-                    notify: true
+                    value: false,
+                    reflectToAttribute:true
                 },
 
                 audio: {
@@ -409,16 +414,17 @@
                 }
             },
 
-            _postLoaded: function (newVal,oldVal) {
+            ready: function () {
+                console.log('post loaded');
+                console.log(this.hasFeatureImage);
                 if (this.hasFeatureImage && this.audio) {
                     this.$.postIf.render();
                     this.$$("#playerIf").render();
                     this.player = this.$$("#player");
-                    this.featureImages = newVal.data.thumbnail;
-
+                    this.featureimages = this.data.thumbnail;
                 } else if(this.hasFeatureImage && !this.audio & !this.video){
-                    this.featureImages = newVal.featured_image;
-
+                    this.featureimages = this.data.featured_image;
+                    console.log('text post');
                 }
 
                 if(this.video){
@@ -426,6 +432,7 @@
                     this.$$("#videoIf").render();
                     this.videoPlayer = this.$$("#video");
                 }
+                console.log(this.featureimages);
             },
 
 
