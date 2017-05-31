@@ -330,14 +330,14 @@
 
                 featureimages: {
                     type: String,
-                    value:"",
-                    notify: true,
-                    reflectToAttribute:true
+                    computed: '_computeFeaturedImage(hasFeatureImage,data.featured_image, audio,video)'
                 },
 
                 data: {
                     type: Object,
-                    value: {},
+                    value: function(){
+                      return {};
+                    },
                     notify: true,
                     reflectToAttribute:true
                 },
@@ -399,6 +399,21 @@
                 },
             },
 
+            observers: [
+              '_isVideo(video,videoPlayer)'
+            ],
+
+            _computeFeaturedImage(featured_image,audio,video){
+              console.log(this.data);
+              if (this.hasFeatureImage && this.audio) {
+                  this.$.postIf.render();
+                  this.$$("#playerIf").render();
+                  this.player = this.$$("#player");
+                  return this.data.thumbnail;
+              } else if(this.hasFeatureImage && !this.audio & !this.video){
+                  return this.data.featured_image;
+              }
+            },
             _hasIcon: function(data){
                 return (data.parent_alias === "journey");
             },
@@ -414,22 +429,7 @@
                 }
             },
 
-            ready: function () {
-                if (this.hasFeatureImage && this.audio) {
-                    this.$.postIf.render();
-                    this.$$("#playerIf").render();
-                    this.player = this.$$("#player");
-                    this.featureimages = this.data.thumbnail;
-                } else if(this.hasFeatureImage && !this.audio & !this.video){
-                    this.featureimages = this.data.featured_image;
-                }
 
-                if(this.video){
-                    this.$.postIf.render();
-                    this.$$("#videoIf").render();
-                    this.videoPlayer = this.$$("#video");
-                }
-            },
 
 
             _goBack: function () {
@@ -462,7 +462,12 @@
                 }
             },
 
-            _isVideo: function (value) {
+            _isVideo: function (video,videoPlayer) {
+              if(this.video){
+                  this.$.postIf.render();
+                  this.$$("#videoIf").render();
+                  this.videoPlayer = this.$$("#video");
+              }
             },
 
 
