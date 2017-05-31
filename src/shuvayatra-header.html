@@ -404,7 +404,6 @@
             ],
 
             _computeFeaturedImage(featured_image,audio,video){
-              console.log(this.data);
               if (this.hasFeatureImage && this.audio) {
                   this.$.postIf.render();
                   this.$$("#playerIf").render();
@@ -428,10 +427,6 @@
                     window.location = "/search/query/" + this.searchTerm;
                 }
             },
-
-
-
-
             _goBack: function () {
                 this._stopPlayback();
                 if(window.history.length<=2)
