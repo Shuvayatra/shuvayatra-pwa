@@ -120,7 +120,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: #333;
             }
 
-            
+
 
             #drawer app-toolbar {
                 background: url('/images/nepal.jpg') 0 0/cover;
@@ -165,7 +165,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             #search-button {
                 margin-right: -1em;
             }
-            
+
 
             #bottom-menu{
                 margin-top:1em;
@@ -184,12 +184,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     color:#FFF;
                     --paper-icon-button:{
                         height: 48px;
-                        width: 48px;    
+                        width: 48px;
                     };
-                   
+
                 }
             }
-            
+
             @media (min-width: 320px ) and (max-width: 800px) {
                 #search{
                     padding-left: 48px;
@@ -200,7 +200,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 }
             }
-            
+
         </style>
         <style is="custom-style">
             paper-input#search {
@@ -281,13 +281,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <shuvayatra-destination name="destination" destination-id="{{id}}"></shuvayatra-destination>
                         <shuvayatra-search name="search"></shuvayatra-search>
                         <shuvayatra-about name="about"></shuvayatra-about>
-                        <shuvayatra-contact name="contact"></shuvayatra-contact>    
+                        <shuvayatra-contact name="contact"></shuvayatra-contact>
                     </iron-pages>
                     <app-header-layout>
                         <app-header reveals effects="waterfall">
                             <app-toolbar>
                                 <paper-icon-button id="burger" icon="menu" drawer-toggle></paper-icon-button>
-                                
+
                                 <paper-input on-tap="_search" id="search" label="Search" type="search" no-label-float="false">
                                     <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
                                 </paper-input>
@@ -350,7 +350,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             route: '/radio',
                             icon: 'av:library-music'
                         }]
-                            
+
                     }
                 },
                 wideLayout: {
@@ -429,19 +429,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _pageChanged: function (page) {
 
                 this.loadPage(page);
-                
+
                 if(typeof(ga)!=='undefined' && window.location.hostname!=='localhost'){
                     console.log('track page');
                     ga('set', 'page', page);
                     ga('send', 'pageview');
                 }
-                
+
             },
 
             loadPage: function (pageTitle) {
                 // Load page import on demand. Show 404 page if fails
                 var resolvedPageUrl = this.resolveUrl('shuvayatra-' + pageTitle + '.html');
-                
+
                 this.importHref(resolvedPageUrl, null, this._showPage404, true);
                 this.$.drawer.opened = false;
             },

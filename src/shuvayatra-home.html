@@ -46,7 +46,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             name="onboard"
             value="{{onboard}}">
         </iron-localstorage>
-        
+
         <iron-localstorage
             name="dismiss_notice_id"
             value="{{ dismissId }}">
@@ -65,7 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <template is="dom-if" if="{{onboard.country_id}}">
         <iron-ajax auto url="{{ baseUrl }}api/screen/home?country_id={{onboard.country_id}}&gender={{onboard.gender}}" handle-as="json" on-response="handleFeed" debounce-duration="300" loading="{{loading}}"></iron-ajax>
-        
+
         </template>
 
         <template is="dom-if" if="{{!onboard.country_id}}">
@@ -112,7 +112,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
 
-            
+
             _isNotDismissedId: function(id){
                 if(!id){
                     return null;
@@ -134,9 +134,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         if(typeof(feeds[i].content)==='object'){
                             for (var k = feeds[i].content.length - 1; k >= 0; k--) {
                                 var item=feeds[i].content[k];
-  
-                                this.$.caches.database.setItem(item.id,item).then(function(val){
-                                    console.log(item.id+' cached');
+
+                                this.$.caches.database.setItem('post-'+item.id,item).then(function(val){
+                                    //console.log(item.id+' cached');
                                 })
                             }
                         }

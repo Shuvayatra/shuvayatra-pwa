@@ -42,6 +42,14 @@
                 }
             }
         },
+        _hasValue:function(val){
+            console.log(val);
+            if(typeof(val) === 'undefined')
+                return false;
+            else {
+                return true;
+            }
+        },
 
         _handleDeeplink: function(title, deeplink, params, country_id,gender){
 

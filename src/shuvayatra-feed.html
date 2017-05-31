@@ -52,12 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             width: 100%;
         }
 
-        #scrollTheshold{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
 
-        }
 
         @media only screen  and (min-width: 768px) {
             .col{
@@ -72,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
 
         </style>
-        <iron-ajax id="ajax" url="{{ baseUrl }}api/posts" params="{{params}}" handle-as="json" debounce-duration="300" loading="{{loading}}" on-response="_didRespond"></iron-ajax>
+        <iron-ajax id="ajax" url="{{ baseUrl }}api/posts" params="{{params}}" handle-as="json" debounce-duration="300" loading="{{loading}}" on-response="_didRespond" auto></iron-ajax>
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
                 <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
@@ -82,27 +77,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
         <nebula-storage id="caches" key="feed-cat-{{category}}" data="{{feeds}}" default-value="[]" auto-save auto-load> </nebula-storage>
-
-        <iron-scroll-threshold id="scrollTheshold" lower-threshold="500" scroll-target="document" on-lower-threshold="_loadMoreData">
-            <iron-list id="list" items="[[feeds]]" as="item" scroll-target="contentContainer">
-                <template>
-                <div class="col">
-                    <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
-                        <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
-                    </template>
-                    <template is="dom-if" if="{{ _checkPostType(item.type, 'audio') }}">
-                        <shuvayatra-audio-card class="post-card" post="{{ item }}"></shuvayatra-audio-card>
-                    </template>
-                    <template is="dom-if" if="{{ _checkPostType(item.type, 'text') }}">
-                        <shuvayatra-text-card class="post-card" post="{{ item }}"></shuvayatra-text-card>
-                    </template>
-                    <template is="dom-if" if="{{ _checkPostType(item.type, 'place') }}">
-                        <shuvayatra-place-card class="post-card" post="{{ item }}"></shuvayatra-place-card>
-                    </template>
-                </div>
+        <iron-list id="list" items="[[feeds]]" as="item" scroll-target="list">
+            <template>
+            <div class="col">
+                <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
+                    <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
                 </template>
-             </iron-list>
-        </iron-scroll-threshold>
+                <template is="dom-if" if="{{ _checkPostType(item.type, 'audio') }}">
+                    <shuvayatra-audio-card class="post-card" post="{{ item }}"></shuvayatra-audio-card>
+                </template>
+                <template is="dom-if" if="{{ _checkPostType(item.type, 'text') }}">
+                    <shuvayatra-text-card class="post-card" post="{{ item }}"></shuvayatra-text-card>
+                </template>
+                <template is="dom-if" if="{{ _checkPostType(item.type, 'place') }}">
+                    <shuvayatra-place-card class="post-card" post="{{ item }}"></shuvayatra-place-card>
+                </template>
+            </div>
+            </template>
+         </iron-list>
+         <iron-scroll-threshold id="scrollTheshold" scroll-target="list" lower-threshold="500" on-lower-threshold="_loadMoreData"></iron-scroll-threshold>
 
         <div class="loadingIndicator">
             <paper-spinner active="{{loading}}"></paper-spinner>
@@ -148,9 +141,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _loadMoreData: function() {
+            console.log('loading next page');
             if (!this.isLastPage) {
+
                 this.params.page = (this.page + 1);
                 this.$.ajax.generateRequest();
+            } else {
+                console.log('reach last page');
             }
         },
 
@@ -164,7 +161,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             } else {
                 this.feeds=this.feeds.concat(response.data);
             }
-            console.log(this.feeds);
             this.$.scrollTheshold.clearTriggers();
         },
 

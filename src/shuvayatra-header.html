@@ -415,8 +415,6 @@
             },
 
             ready: function () {
-                console.log('post loaded');
-                console.log(this.hasFeatureImage);
                 if (this.hasFeatureImage && this.audio) {
                     this.$.postIf.render();
                     this.$$("#playerIf").render();
@@ -424,7 +422,6 @@
                     this.featureimages = this.data.thumbnail;
                 } else if(this.hasFeatureImage && !this.audio & !this.video){
                     this.featureimages = this.data.featured_image;
-                    console.log('text post');
                 }
 
                 if(this.video){
@@ -432,7 +429,6 @@
                     this.$$("#videoIf").render();
                     this.videoPlayer = this.$$("#video");
                 }
-                console.log(this.featureimages);
             },
 
 
