@@ -29,7 +29,7 @@
                     </div>
                     <template is="dom-if" if="{{data.view_more}}">
                         <template is="dom-if" if="{{data.country_id}}">
-                            <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter,country_id,gender) }}">
+                            <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter,countryid,gender) }}">
                                 <p>[[data.view_more_title]]</p>
                             </a>
                         </template>

@@ -34,7 +34,6 @@
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ],
     "builds": [{
-      "preset": "es5-bundled",
-      "addServiceWorker": false
+      "preset": "es5-bundled"
   }]
 }

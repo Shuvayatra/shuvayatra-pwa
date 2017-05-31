@@ -46,7 +46,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             name="onboard"
             value="{{onboard}}">
         </iron-localstorage>
-        
+
         <iron-localstorage
             name="dismiss_notice_id"
             value="{{ dismissId }}">
@@ -77,7 +77,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <iron-ajax auto url="{{ baseUrl }}api/screens/{{subrouteData.screen}}" handle-as="json" last-response="{{homefeeds}}" debounce-duration="300" loading="{{loading}}"></iron-ajax>
 
-        
+
         <div class="feed-container">
             <template is="dom-if" if="{{checkLayout(homefeeds.type,'feed')}}">
                     <shuvayatra-feed-block data="{{ homefeeds.feeds }}">
@@ -90,7 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </shuvayatra-notice>
                     </template>
                     <template is="dom-if" if="{{showCountryWidget(index)}}">
-                        <shuvayatra-weather-widget country="{{onboard.country}}" country_id="{{onboard.country_id}}">
+                        <shuvayatra-weather-widget country="{{onboard.country}}" countryid="{{onboard.country_id}}">
                         </shuvayatra-weather-widget>
                     </template>
                     <template is="dom-if" if="{{checkLayout(item.layout,'radio_widget')}}">
@@ -98,11 +98,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </shuvayatra-radio-widget>
                     </template>
                     <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
-                        <shuvayatra-list-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
+                        <shuvayatra-list-block data="{{ item }}" country="{{onboard.country}}" countryiid="{{onboard.country_id}}" gender="{{onboard.gender}}">
                         </shuvayatra-list-block>
                     </template>
                     <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
-                        <shuvayatra-slider-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
+                        <shuvayatra-slider-block data="{{ item }}" country="{{onboard.country}}" countryid="{{onboard.country_id}}" gender="{{onboard.gender}}">
                         </shuvayatra-slider-block>
                     </template>
                 </template>

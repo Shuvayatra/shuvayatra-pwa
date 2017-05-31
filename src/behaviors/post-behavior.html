@@ -1,3 +1,9 @@
+/**
+ * Behavior for post element
+ *
+ * @polymerBehavior PostBehavior
+ */
+
 <script>
     PostBehavior = {
 
@@ -22,17 +28,17 @@
 		    var elapsed = current - (timestamp*1000);
 
 		    if (elapsed < msPerMinute) {
-		         return Math.round(elapsed/1000) + 'सेकेन्ड्स  अगाडि ';   
+		         return Math.round(elapsed/1000) + 'सेकेन्ड्स  अगाडि ';
 		    } else if (elapsed < msPerHour) {
-		         return Math.round(elapsed/msPerMinute) + ' मिनेट अगाडि';   
+		         return Math.round(elapsed/msPerMinute) + ' मिनेट अगाडि';
 		    } else if (elapsed < msPerDay ) {
-		         return Math.round(elapsed/msPerHour ) + ' घण्टा अगाडि ';   
+		         return Math.round(elapsed/msPerHour ) + ' घण्टा अगाडि ';
 		    } else if (elapsed < msPerMonth) {
-		        return Math.round(elapsed/msPerDay) + ' दिन अगाडि ';   
+		        return Math.round(elapsed/msPerDay) + ' दिन अगाडि ';
 		    } else if (elapsed < msPerYear) {
-		        return Math.round(elapsed/msPerMonth) + ' महिना अगाडि ';   
+		        return Math.round(elapsed/msPerMonth) + ' महिना अगाडि ';
 		    } else {
-		        return Math.round(elapsed/msPerYear ) + ' बर्ष अगाडि ';   
+		        return Math.round(elapsed/msPerYear ) + ' बर्ष अगाडि ';
 		    }
         },
 

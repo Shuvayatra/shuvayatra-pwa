@@ -5,14 +5,12 @@
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
-
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="shuvayatra-radio-widget.html">
 <link rel="import" href="shuvayatra-notice.html">
 <link rel="import" href="shuvayatra-list-block.html">
 <link rel="import" href="shuvayatra-slider-block.html">
 <link rel="import" href="behaviors/global-behavior.html">
-
 <dom-module id="shuvayatra-destination">
     <template>
         <style include="shared-styles">
@@ -31,7 +29,6 @@
 	                height: 10px;
 	                bottom: -10px;
 	            }
-	            ;
 	        }
 
 	        .feed-container{
@@ -50,15 +47,9 @@
             }
         </style>
 
-        <iron-localstorage
-                name="onboard"
-                value="{{onboard}}"
-        </iron-localstorage>
+        <iron-localstorage name="onboard" value="{{onboard}}"> </iron-localstorage>
 
-        <iron-localstorage
-            name="dismiss_notice_id"
-            value="{{ dismissId }}">
-        </iron-localstorage>
+        <iron-localstorage name="dismiss_notice_id" value="{{ dismissId }}"></iron-localstorage>
 
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
@@ -79,11 +70,11 @@
                     </shuvayatra-radio-widget>
                 </template>
                 <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
-                    <shuvayatra-list-block data="{{ item }}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
+                    <shuvayatra-list-block data="{{ item }}" countryid="{{onboard.country_id}}" gender="{{onboard.gender}}">
                     </shuvayatra-list-block>
                 </template>
                 <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
-                    <shuvayatra-slider-block data="{{ item }}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
+                    <shuvayatra-slider-block data="{{ item }}" countryid="{{onboard.country_id}}" gender="{{onboard.gender}}">
                     </shuvayatra-slider-block>
                 </template>
             </template>
@@ -96,13 +87,11 @@
         Polymer({
             is: 'shuvayatra-destination',
             behaviors: [GlobalBehavior],
-
             properties:{
                 destinationId: {
                     type: Number
                 }
             },
-
             _isNotDismissedId: function(id){
                 if(!id){
                     return null;
@@ -112,11 +101,9 @@
                     }
                 }
             },
-
             checkLayout: function (value, layout) {
                 return (value === layout);
             },
-
             _goBack: function() {
             	window.history.back();
         	}
