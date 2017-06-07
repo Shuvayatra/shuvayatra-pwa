@@ -1,6 +1,6 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/shuvayatra-init.html",
+  "shell": "src/shuvayatra-app.html",
   "fragments": [
     "src/shuvayatra-home.html",
     "src/shuvayatra-screen.html",
