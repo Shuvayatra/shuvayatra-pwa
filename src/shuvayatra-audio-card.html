@@ -140,7 +140,7 @@
         <a class="link" href="{{ _generateUrl(post) }}">
             <paper-card class="mycard" elevation="1" animated="true">
                 <paper-ripple></paper-ripple>
-                <iron-image placeholder="../images/image-default.png" preload src="{{ post.data.thumbnail }}" fade="true" sizing="cover"></iron-image>
+                <iron-image placeholder="../images/image-default.png" preload src="{{ post.data.thumbnail }}?width=480" fade="true" sizing="cover"></iron-image>
                 <div class="mytitle__wrap">
                     <paper-fab mini icon="av:volume-up" no-ink></paper-fab>
                     <label>{{ post.title }}</label>

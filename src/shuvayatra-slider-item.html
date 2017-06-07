@@ -56,9 +56,9 @@
 
             getImage: function (data) {
                 if (this.data.type === 'text') {
-                    return this.data.featured_image;
+                    return this.data.featured_image+'?width=140';
                 } else {
-                    return this.data.data.thumbnail;
+                    return this.data.data.thumbnail+'?width=140';
                 }
             }
 

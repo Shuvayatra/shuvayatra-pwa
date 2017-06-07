@@ -129,7 +129,7 @@
         <a class="link" href="{{ _generateUrl(post) }}">
             <paper-card elevation="1" animated="true">
                 <paper-ripple></paper-ripple>
-                <iron-image placeholder="../images/image-default.png" preload src="{{ post.featured_image }}" fade="true" sizing="cover"></iron-image>
+                <iron-image placeholder="../images/image-default.png" preload src="{{ post.featured_image }}?width=480" fade="true" sizing="cover"></iron-image>
                 <div class="mytitle__wrap">
                     <label>{{ post.title }}</label>
                     <label><iron-icon icon="communication:business"></iron-icon>{{ post.data.address }}</label>
