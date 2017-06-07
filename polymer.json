@@ -4,6 +4,7 @@
   "fragments": [
     "src/shuvayatra-home.html",
     "src/shuvayatra-screen.html",
+    "src/shuvayatra-onboard.html",
     "src/shuvayatra-search.html",
     "src/shuvayatra-destination.html",
     "src/shuvayatra-journey.html",
@@ -33,7 +34,7 @@
     "manifest.json",
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ],
-    "builds": [{
+  "builds": [{
           "preset": "es6-bundled"
         },
         {
