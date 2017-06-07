@@ -12,15 +12,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
-<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html" async>
-<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html" async>
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html" async>
-<link rel="import" href="../bower_components/iron-image/iron-image.html" async>
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html" >
+<link rel="import" href="../bower_components/iron-image/iron-image.html" >
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html" async>
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html" >
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html" async>
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html" async>
 <link rel="import" href="../bower_components/paper-item/paper-item.html" async>
@@ -29,9 +29,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html" async>
 <link rel="import" href="../bower_components/iron-icons/social-icons.html" async>
 <link rel="import" href="../bower_components/iron-icons/av-icons.html" async>
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html" async>
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
-<!-- <link rel="import" href="shuvayatra-onboard.html"> -->
 <dom-module id="shuvayatra-app">
     <template>
         <style>
@@ -345,7 +344,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     value:function(){
                       return {
                                   dob:{},
-                                  status: true
+                                  status: false
                               };
                     }
                 },
@@ -494,7 +493,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
             _checkOnboard(status){
-                if(!status && window.location.pathname.indexOf('post')<0) {
+                if(status===false && window.location.pathname.indexOf('post')<0) {
                   console.log(status);
                   this.showOnboard=true;
                   this.importHref(this.resolveUrl('shuvayatra-onboard.html'), null, this._showPage404, true);
@@ -506,7 +505,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _handleEmptyOnboard:function(){
                 this.onboard={
                             dob:{},
-                            status: true
+                            status: false
                         };
             },
 	        getDomainUrl :  function(url){
