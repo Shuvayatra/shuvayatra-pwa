@@ -62,7 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <a class="link" href="{{ _generateUrl(item) }}">
                     <paper-card class="card" elevation="1" animated-shadow="false">
                         <div class="radio-block card-content">
-                            <iron-image src="{{ item.image_url }}" sizing="cover"></iron-image>
+                            <iron-image src="{{ item.image_url }}?width=480" sizing="cover"></iron-image>
                             <p>{{ item.title }}</p>
                         </div>
                     </paper-card>

@@ -65,7 +65,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <template is="dom-if" if="{{onboard.country_id}}">
         <iron-ajax auto url="{{ baseUrl }}api/screen/home?country_id={{onboard.country_id}}&gender={{onboard.gender}}" handle-as="json" on-response="handleFeed" debounce-duration="300" loading="{{loading}}"></iron-ajax>
-
         </template>
 
         <template is="dom-if" if="{{!onboard.country_id}}">

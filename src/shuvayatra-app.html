@@ -12,24 +12,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
-<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
-<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html" async>
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html" async>
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html" async>
+<link rel="import" href="../bower_components/iron-image/iron-image.html" async>
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../bower_components/iron-icons/social-icons.html">
-<link rel="import" href="../bower_components/iron-icons/av-icons.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html" async>
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html" async>
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html" async>
+<link rel="import" href="../bower_components/paper-item/paper-item.html" async>
+<link rel="import" href="../bower_components/paper-input/paper-input.html" async>
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html" async>
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html" async>
+<link rel="import" href="../bower_components/iron-icons/social-icons.html" async>
+<link rel="import" href="../bower_components/iron-icons/av-icons.html" async>
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html" async>
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<!-- <link rel="import" href="shuvayatra-onboard.html"> -->
 <dom-module id="shuvayatra-app">
     <template>
         <style>
@@ -37,6 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 --app-primary-color: #27a8d8;
                 --app-secondary-color: black;
                 display: block;
+                position: relative;
             }
 
 
@@ -179,6 +182,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 vertical-align: bottom;
             }
 
+            shuvayatra-onboard{
+              position: absolute;
+              top:0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              height: 100vh;
+            }
+
             @media (min-width:801px){
                 #burger{
                     color:#FFF;
@@ -219,10 +231,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 100%;
             }
         </style>
-        <app-location route="{{route}}"></app-location>
-        <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
-        <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
-        <iron-ajax auto url="https://api.shuvayatra.org/v1/api/screens" handle-as="json" last-response="{{screens}}" debounce-duration="300"></iron-ajax>
+        <iron-localstorage name="onboard" value="{{onboard}}" on-iron-localstorage-load-empty="_handleEmptyOnboard"></iron-localstorage>
+        <template is="dom-if" if="{{ !showOnboard }}">
+            <app-location route="{{route}}"></app-location>
+            <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
+            <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
+            <iron-ajax auto url="https://api.shuvayatra.org/v1/api/screens" handle-as="json" last-response="{{screens}}" debounce-duration="300"></iron-ajax>
+        </template>
+
             <div name="main">
                 <!-- start tab on wide layout -->
                 <app-drawer-layout force-narrow fullbleed>
@@ -311,12 +327,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
             <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
             <!-- end tab on wide layout -->
+
+            <!-- start onboarding section -->
+
+            <template is="dom-if" if="{{ showOnboard }}">
+                <shuvayatra-onboard></shuvayatra-onboard>
+            </template>
+            <!-- end onboarding section -->
     </template>
     <script>
         Polymer({
             is: 'shuvayatra-app',
 
             properties: {
+                onboard:{
+                    type:Object,
+                    value:function(){
+                      return {
+                                  dob:{},
+                                  status: true
+                              };
+                    }
+                },
+                showOnboard:{
+                  type:Boolean,
+                  value:false,
+                },
                 page: {
                     type: String,
                     reflectToAttribute: true,
@@ -368,7 +404,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             observers: [
                 '_routePageChanged(routeData.page)',
-                '_subrouteIdChanged(subrouteData.id)'
+                '_subrouteIdChanged(subrouteData.id)',
+                '_checkOnboard(onboard.status)'
             ],
 
             ready: function () {
@@ -455,7 +492,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 if (wide && drawer.opened) {
                     drawer.opened = false;
                 }
-            }
+            },
+            _checkOnboard(status){
+                if(!status && window.location.pathname.indexOf('post')<0) {
+                  console.log(status);
+                  this.showOnboard=true;
+                  this.importHref(this.resolveUrl('shuvayatra-onboard.html'), null, this._showPage404, true);
+                } else {
+                  this.showOnboard=false;
+                }
+
+            },
+            _handleEmptyOnboard:function(){
+                this.onboard={
+                            dob:{},
+                            status: true
+                        };
+            },
+	        getDomainUrl :  function(url){
+	            var domain;
+	            //find & remove protocol (http, ftp, etc.) and get domain
+	            if (url.indexOf("://") > -1) {
+	                domain = url.split('/')[2];
+	            }
+	            else {
+	                domain = url.split('/')[0];
+	            }
+
+	            //find & remove port number
+	            domain = domain.split(':')[0];
+
+	            return domain;
+
+
+	        }
         });
     </script>
 </dom-module>
