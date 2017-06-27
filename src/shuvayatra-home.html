@@ -10,17 +10,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html" >
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
-<link rel="import" href="../bower_components/app-route/app-route.html" >
-<link rel="import" href="../bower_components/nebula-storage/nebula-storage.html" >
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/nebula-storage/nebula-storage.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="shuvayatra-radio-widget.html">
 <link rel="import" href="shuvayatra-weather-widget.html">
 <link rel="import" href="shuvayatra-notice.html">
-<link rel="import" href="shuvayatra-list-block.html" >
-<link rel="import" href="shuvayatra-slider-block.html" >
-<link rel="import" href="behaviors/global-behavior.html" >
+<link rel="import" href="shuvayatra-list-block.html">
+<link rel="import" href="shuvayatra-slider-block.html">
+<link rel="import" href="behaviors/global-behavior.html">
 
 <dom-module id="shuvayatra-home">
     <template>
@@ -41,12 +41,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
         </style>
-
+        <!-- disable onboarding
         <iron-localstorage
             name="onboard"
             value="{{onboard}}">
         </iron-localstorage>
-
+        -->
         <iron-localstorage
             name="dismiss_notice_id"
             value="{{ dismissId }}">
@@ -62,79 +62,80 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 last-response="{{response}}">
         </iron-ajax>
 
-
+        <!-- disable onboarding
         <template is="dom-if" if="{{onboard.country_id}}">
         <iron-ajax auto url="{{ baseUrl }}api/screen/home?country_id={{onboard.country_id}}&gender={{onboard.gender}}" handle-as="json" on-response="handleFeed" debounce-duration="300" loading="{{loading}}"></iron-ajax>
         </template>
-
-        <template is="dom-if" if="{{!onboard.country_id}}">
+    <template is="dom-if" if="{{!onboard.country_id}}">-->
             <iron-ajax auto url="{{ baseUrl }}api/screen/home" handle-as="json" on-response="handleFeed" debounce-duration="300" loading="{{loading}}"></iron-ajax>
-        </template>
-        <nebula-storage id="caches" key="homefeeds" data="{{homefeeds}}" auto-save auto-load> </nebula-storage>
+    <!--</template> -->
+    <nebula-storage id="caches" key="homefeeds" data="{{homefeeds}}" auto-save auto-load> </nebula-storage>
 
-        <div class="feed-container">
-            <template is="dom-repeat" items="[[homefeeds]]" filter="{{ _isNotDismissedId(dismissId) }}">
+    <div class="feed-container">
+        <template is="dom-repeat" items="[[homefeeds]]" filter="{{ _isNotDismissedId(dismissId) }}">
                 <template is="dom-if" if="{{checkLayout(item.layout,'notice',item.link)}}">
                     <shuvayatra-notice notice="{{item}}" dismiss-id="{{ dismissId }}">
                     </shuvayatra-notice>
                 </template>
-                <template is="dom-if" if="{{showCountryWidget(index)}}">
+        <!--
+        <template is="dom-if" if="{{showCountryWidget(index)}}">
                     <shuvayatra-weather-widget country="{{onboard.country}}" country_id="{{onboard.country_id}}">
                     </shuvayatra-weather-widget>
                 </template>
-                <template is="dom-if" if="{{checkLayout(item.layout,'radio_widget')}}">
+        -->
+        <template is="dom-if" if="{{checkLayout(item.layout,'radio_widget')}}">
                     <shuvayatra-radio-widget title="{{item.title}}" description="{{item.description}}">
                     </shuvayatra-radio-widget>
                 </template>
-                <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
+        <template is="dom-if" if="{{checkLayout(item.layout,'list')}}">
                     <shuvayatra-list-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
                     </shuvayatra-list-block>
                 </template>
-                <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
+        <template is="dom-if" if="{{checkLayout(item.layout,'slider')}}">
                     <shuvayatra-slider-block data="{{ item }}" country="{{onboard.country}}" country_id="{{onboard.country_id}}" gender="{{onboard.gender}}">
                     </shuvayatra-slider-block>
                 </template>
-            </template>
-        </div>
-        <div class="loadingIndicator">
-            <paper-spinner active="{{loading}}"></paper-spinner>
-        </div>
+        </template>
+    </div>
+    <div class="loadingIndicator">
+        <paper-spinner active="{{loading}}"></paper-spinner>
+    </div>
     </template>
     <script>
         Polymer({
             is: 'shuvayatra-home',
             behaviors: [GlobalBehavior],
-            properties:{
-                homefeeds:{
-                    type:Array,
-                    value:[]
+            properties: {
+                homefeeds: {
+                    type: Array,
+                    value: []
                 }
             },
 
 
-            _isNotDismissedId: function(id){
-                if(!id){
+            _isNotDismissedId: function(id) {
+                if (!id) {
                     return null;
-                }else{
-                    return function(item){
+                } else {
+                    return function(item) {
                         return !(item.notice && (id === item.notice.id));
                     }
                 }
             },
-            handleFeed:function(data){
-                if(typeof(data.detail.response)==='object'){
-                    var feeds=data.detail.response;
-                    feeds.sort(function(a,b){
-                        return a.position-b.position;
+            handleFeed: function(data) {
+                if (typeof(data.detail.response) === 'object') {
+                    var feeds = data.detail.response;
+                    feeds.sort(function(a, b) {
+                        return a.position - b.position;
                     });
 
-                    this.homefeeds=feeds;
+                    this.homefeeds = feeds;
                     for (var i = feeds.length - 1; i >= 0; i--) {
-                        if(typeof(feeds[i].content)==='object'){
+                        if (typeof(feeds[i].content) === 'object') {
                             for (var k = feeds[i].content.length - 1; k >= 0; k--) {
-                                var item=feeds[i].content[k];
+                                var item = feeds[i].content[k];
 
-                                this.$.caches.database.setItem('post-'+item.id,item).then(function(val){
+                                this.$.caches.database.setItem('post-' + item.id, item).then(function(val) {
                                     //console.log(item.id+' cached');
                                 })
                             }
@@ -142,25 +143,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                 }
             },
-            checkLayout: function (value, layout,link) {
+            checkLayout: function(value, layout, link) {
                 // if(typeof(link)==='undefined' || typeof(link)==='null' || link===''){
                 //     return false;
                 // } else {
-                    if (value === 'notice') {
-                        this.hasNotice = true;
-                    }
-                    return (value === layout);
+                if (value === 'notice') {
+                    this.hasNotice = true;
+                }
+                return (value === layout);
                 // }
             },
+            /*
+            showCountryWidget: function(index) {
 
-            showCountryWidget: function (index) {
-
-                if(this.onboard.country_id === ""){
+                if (typeof(this.onboard.country_id) !== 'undefined' && this.onboard.country_id === "") {
                     this.onboard.country_id = false;
                 }
 
                 return (this.onboard.country_id && ((index === 1 && this.hasNotice) || (index === 0 && !this.hasNotice)));
             },
+            */
         });
     </script>
 </dom-module>

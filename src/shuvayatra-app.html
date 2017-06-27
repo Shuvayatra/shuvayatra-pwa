@@ -30,7 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<!-- <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">-->
 <dom-module id="shuvayatra-app">
     <template>
         <style>
@@ -235,7 +235,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 100%;
             }
         </style>
+        <!-- disable onboarding
         <iron-localstorage name="onboard" value="{{onboard}}" on-iron-localstorage-load-empty="_handleEmptyOnboard"></iron-localstorage>
+        -->
         <template is="dom-if" if="{{ !showOnboard }}">
             <app-location route="{{route}}"></app-location>
             <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
@@ -351,7 +353,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     value: function() {
                         return {
                             dob: {},
-                            status: false
+                            status: true //change to false to enable onboarding
                         };
                     }
                 },
