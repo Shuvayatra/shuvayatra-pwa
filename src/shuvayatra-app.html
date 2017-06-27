@@ -17,11 +17,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html" >
-<link rel="import" href="../bower_components/iron-image/iron-image.html" >
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html" >
-<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html" >
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
@@ -208,6 +208,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 paper-icon-button#burger{
                     position: absolute;
                     z-index: 1000;
+                    top:8px;
+                    --paper-icon-button:{
+                        height: 48px;
+                        width: 48px;
+                    };
 
                 }
             }
@@ -238,19 +243,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-ajax auto url="https://api.shuvayatra.org/v1/api/screens" handle-as="json" last-response="{{screens}}" debounce-duration="300"></iron-ajax>
         </template>
 
-            <div name="main">
-                <!-- start tab on wide layout -->
-                <app-drawer-layout force-narrow fullbleed>
-                    <app-drawer id="drawer">
-                        <app-toolbar>
-                            <div>
-                                <img class="logo" src="/images/nav_logo.png"/>
-                                <span>शुभयात्रा</span>
-                            </div>
-                        </app-toolbar>
-                        <!-- Nav on mobile: side nav menu -->
-                        <paper-menu selected="{{selected}}" attr-for-selected="name">
-                            <template is="dom-repeat" items="[[items]]">
+    <div name="main">
+        <!-- start tab on wide layout -->
+        <app-drawer-layout force-narrow fullbleed>
+            <app-drawer id="drawer">
+                <app-toolbar>
+                    <div>
+                        <img class="logo" src="/images/nav_logo.png" />
+                        <span>शुभयात्रा</span>
+                    </div>
+                </app-toolbar>
+                <!-- Nav on mobile: side nav menu -->
+                <paper-menu selected="{{selected}}" attr-for-selected="name">
+                    <template is="dom-repeat" items="[[items]]">
 
                                 <a href="[[item.route]]">
                                     <paper-item name="[[item.label]]">
@@ -259,7 +264,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     </paper-item>
                                 </a>
                             </template>
-                            <template is="dom-repeat" items="[[screens]]">
+                    <template is="dom-repeat" items="[[screens]]">
                                 <a href="/screen/[[item.url_slug]]">
                                         <paper-item name="[[item.title]]">
                                             <iron-icon src="[[item.icon]]"></iron-icon>
@@ -267,90 +272,92 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                         </paper-item>
                                 </a>
                             </template>
-                        </paper-menu>
-                        <paper-menu id="bottom-menu" selected="{{selected}}" attr-for-selected="name">
-                                <a href="/user">
-                                    <paper-item name="प्रयोगकर्ता">
-                                        <iron-icon icon="social:person"></iron-icon>
-                                        <span>प्रयोगकर्ता</span>
-                                    </paper-item>
-                                </a>
-                                <a href="/about">
-                                    <paper-item name="प्रयोगकर्ता">
-                                        <iron-icon icon="icons:info"></iron-icon>
-                                        <span>विषय</span>
-                                    </paper-item>
-                                </a>
-                                <a href="/contact">
-                                    <paper-item name="प्रयोगकर्ता">
-                                        <iron-icon icon="icons:mail"></iron-icon>
-                                        <span>सम्पर्क</span>
-                                    </paper-item>
-                                </a>
-                        </paper-menu>
-                    </app-drawer>
-                    <iron-pages selected="[[myPage]]" attr-for-selected="name" fallback-selection="notfound" role="main">
-                        <shuvayatra-channel name="channel" channel-id={{id}}></shuvayatra-channel>
-                        <shuvayatra-feed name="feed" params="{{queryParams}}" title="{{queryParams.title}}" category="{{queryParams.category_id}}"></shuvayatra-feed>
-                        <shuvayatra-post name="post" post-id="{{id}}"></shuvayatra-post>
-                        <shuvayatra-destination name="destination" destination-id="{{id}}"></shuvayatra-destination>
-                        <shuvayatra-search name="search"></shuvayatra-search>
-                        <shuvayatra-about name="about"></shuvayatra-about>
-                        <shuvayatra-contact name="contact"></shuvayatra-contact>
-                    </iron-pages>
-                    <app-header-layout>
-                        <app-header reveals effects="waterfall">
-                            <app-toolbar>
-                                <paper-icon-button id="burger" icon="menu" drawer-toggle></paper-icon-button>
+                </paper-menu>
+                <paper-menu id="bottom-menu" selected="{{selected}}" attr-for-selected="name">
+                    <!--
+                    <a href="/user">
+                        <paper-item name="प्रयोगकर्ता">
+                            <iron-icon icon="social:person"></iron-icon>
+                            <span>प्रयोगकर्ता</span>
+                        </paper-item>
+                    </a> -->
+                    <a href="/about">
+                        <paper-item name="प्रयोगकर्ता">
+                            <iron-icon icon="icons:info"></iron-icon>
+                            <span>विषय</span>
+                        </paper-item>
+                    </a>
+                    <a href="/contact">
+                        <paper-item name="प्रयोगकर्ता">
+                            <iron-icon icon="icons:mail"></iron-icon>
+                            <span>सम्पर्क</span>
+                        </paper-item>
+                    </a>
+                </paper-menu>
+            </app-drawer>
+            <iron-pages selected="[[myPage]]" attr-for-selected="name" fallback-selection="notfound" role="main">
+                <shuvayatra-channel name="channel" channel-id={{id}}></shuvayatra-channel>
+                <shuvayatra-feed name="feed" params="{{queryParams}}" title="{{queryParams.title}}" category="{{queryParams.category_id}}"></shuvayatra-feed>
+                <shuvayatra-post name="post" post-id="{{id}}"></shuvayatra-post>
+                <shuvayatra-destination name="destination" destination-id="{{id}}"></shuvayatra-destination>
+                <shuvayatra-search name="search"></shuvayatra-search>
+                <shuvayatra-about name="about"></shuvayatra-about>
+                <shuvayatra-contact name="contact"></shuvayatra-contact>
+            </iron-pages>
+            <app-header-layout>
+                <app-header reveals effects="waterfall">
+                    <app-toolbar>
+                        <paper-icon-button id="burger" icon="menu" drawer-toggle></paper-icon-button>
 
-                                <paper-input on-tap="_search" id="search" label="Search" type="search" no-label-float="false">
-                                    <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
-                                </paper-input>
-                                <a class="logo" href="/" hidden$="{{!wideLayout}}"><img src="/images/nav_logo.png" /></a>
-                            </app-toolbar>
-                        </app-header>
-                        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="notfound" role="main">
-                            <shuvayatra-home name="home"></shuvayatra-home>
-                            <shuvayatra-screen name="screen"></shuvayatra-screen>
-                            <shuvayatra-journey name="journey"></shuvayatra-journey>
-                            <shuvayatra-destinations name="destinations"></shuvayatra-destinations>
-                            <shuvayatra-news name="news" params="{{queryParams}}" title="{{queryParams.title}}"></shuvayatra-news>
-                            <shuvayatra-radio name="radio"></shuvayatra-radio>
-                            <shuvayatra-user name="user"></shuvayatra-user>
-                            <shuvayatra-about name="about"></shuvayatra-about>
-                             <shuvayatra-contact name="contact"></shuvayatra-contact>
-                            <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
-                        </iron-pages>
-                    </app-header-layout>
-                </app-drawer-layout>
-            </div>
-            <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
-            <!-- end tab on wide layout -->
+                        <paper-input on-tap="_search" id="search" label="Search" type="search" no-label-float="false">
+                            <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
+                        </paper-input>
+                        <a class="logo" href="/" hidden$="{{!wideLayout}}"><img src="/images/nav_logo.png" /></a>
+                    </app-toolbar>
+                </app-header>
+                <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="notfound" role="main">
+                    <shuvayatra-home name="home"></shuvayatra-home>
+                    <shuvayatra-screen name="screen"></shuvayatra-screen>
+                    <shuvayatra-journey name="journey"></shuvayatra-journey>
+                    <shuvayatra-destinations name="destinations"></shuvayatra-destinations>
+                    <shuvayatra-news name="news" params="{{queryParams}}" title="{{queryParams.title}}"></shuvayatra-news>
+                    <shuvayatra-radio name="radio"></shuvayatra-radio>
+                    <shuvayatra-user name="user"></shuvayatra-user>
+                    <shuvayatra-about name="about"></shuvayatra-about>
+                    <shuvayatra-contact name="contact"></shuvayatra-contact>
+                    <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
+                </iron-pages>
+            </app-header-layout>
+        </app-drawer-layout>
+    </div>
+    <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
+    <!-- end tab on wide layout -->
 
-            <!-- start onboarding section -->
-
-            <template is="dom-if" if="{{ showOnboard }}">
+    /* -- disabling onboarding section for now @tyohan
+    <!-- start onboarding section -->
+    <template is="dom-if" if="{{ showOnboard }}">
                 <shuvayatra-onboard></shuvayatra-onboard>
             </template>
-            <!-- end onboarding section -->
+    <!-- end onboarding section -->
+    */
     </template>
     <script>
         Polymer({
             is: 'shuvayatra-app',
 
             properties: {
-                onboard:{
-                    type:Object,
-                    value:function(){
-                      return {
-                                  dob:{},
-                                  status: false
-                              };
+                onboard: {
+                    type: Object,
+                    value: function() {
+                        return {
+                            dob: {},
+                            status: false
+                        };
                     }
                 },
-                showOnboard:{
-                  type:Boolean,
-                  value:false,
+                showOnboard: {
+                    type: Boolean,
+                    value: false,
                 },
                 page: {
                     type: String,
@@ -359,32 +366,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 items: {
                     type: Array,
-                    value: function () {
+                    value: function() {
                         return [{
-                            label: 'गृह',
-                            route: '/',
-                            icon: 'home'
-                        },
-//                            {
-//                            label: 'यात्रा ',
-//                            route: '/journey',
-//                            icon: 'flight-takeoff',
-//                        },
+                                label: 'गृह',
+                                route: '/',
+                                icon: 'home'
+                            },
+                            //                            {
+                            //                            label: 'यात्रा ',
+                            //                            route: '/journey',
+                            //                            icon: 'flight-takeoff',
+                            //                        },
                             {
-                            label: 'गन्तब्य',
-                            route: '/destinations',
-                            icon: 'explore'
-                        },
-//                            {
-//                            label: 'समाचार',
-//                            route: '/news',
-//                            icon: 'speaker-notes'
-//                        },
+                                label: 'गन्तब्य',
+                                route: '/destinations',
+                                icon: 'explore'
+                            },
+                            //                            {
+                            //                            label: 'समाचार',
+                            //                            route: '/news',
+                            //                            icon: 'speaker-notes'
+                            //                        },
                             {
-                            label: 'रेडियो ',
-                            route: '/radio',
-                            icon: 'av:library-music'
-                        }]
+                                label: 'रेडियो ',
+                                route: '/radio',
+                                icon: 'av:library-music'
+                            }
+                        ]
 
                     }
                 },
@@ -395,8 +403,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 headerPages: {
                     type: Array,
-                    value: function () {
-                        return ["channel", "feed", "search", "post", "destination","screen"];
+                    value: function() {
+                        return ["channel", "feed", "search", "post", "destination", "screen"];
                     }
                 }
             },
@@ -407,7 +415,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 '_checkOnboard(onboard.status)'
             ],
 
-            ready: function () {
+            ready: function() {
 
                 var activeRoute = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
 
@@ -440,33 +448,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             },
 
-            _search: function(){
+            _search: function() {
                 this.set('routeData.page', 'search');
             },
 
-            _routePageChanged: function (page) {
+            _routePageChanged: function(page) {
                 if (this.headerPages.indexOf(page) === -1) {
                     this.myPage = "main";
-                }else{
+                } else {
                     this.myPage = page;
                 }
-                if(page!=='notfound'){
-                    this.$$('shuvayatra-notfound').className='';
+                if (page !== 'notfound') {
+                    this.$$('shuvayatra-notfound').className = '';
                 }
                 this.page = page || 'home';
             },
 
-            _subrouteIdChanged: function (id) {
+            _subrouteIdChanged: function(id) {
                 this.id = id;
                 this.$.drawer.opened = false;
             },
 
 
-            _pageChanged: function (page) {
+            _pageChanged: function(page) {
 
                 this.loadPage(page);
 
-                if(typeof(ga)!=='undefined' && window.location.hostname!=='localhost'){
+                if (typeof(ga) !== 'undefined' && window.location.hostname !== 'localhost') {
                     console.log('track page');
                     ga('set', 'page', page);
                     ga('send', 'pageview');
@@ -474,7 +482,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             },
 
-            loadPage: function (pageTitle) {
+            loadPage: function(pageTitle) {
                 // Load page import on demand. Show 404 page if fails
                 var resolvedPageUrl = this.resolveUrl('shuvayatra-' + pageTitle + '.html');
 
@@ -482,49 +490,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.drawer.opened = false;
             },
 
-            _showPage404: function () {
+            _showPage404: function() {
                 this.page = 'notfound';
             },
 
-            onLayoutChange: function (wide) {
+            onLayoutChange: function(wide) {
                 var drawer = this.$.drawer;
                 if (wide && drawer.opened) {
                     drawer.opened = false;
                 }
             },
-            _checkOnboard(status){
-                if(status===false && window.location.pathname.indexOf('post')<0) {
-                  console.log(status);
-                  this.showOnboard=true;
-                  this.importHref(this.resolveUrl('shuvayatra-onboard.html'), null, this._showPage404, true);
+            _checkOnboard(status) {
+                if (status === false && window.location.pathname.indexOf('post') < 0) {
+                    console.log(status);
+                    this.showOnboard = true;
+                    this.importHref(this.resolveUrl('shuvayatra-onboard.html'), null, this._showPage404, true);
                 } else {
-                  this.showOnboard=false;
+                    this.showOnboard = false;
                 }
 
             },
-            _handleEmptyOnboard:function(){
-                this.onboard={
-                            dob:{},
-                            status: false
-                        };
+            _handleEmptyOnboard: function() {
+                this.onboard = {
+                    dob: {},
+                    status: true //disable onboarding
+                };
             },
-	        getDomainUrl :  function(url){
-	            var domain;
-	            //find & remove protocol (http, ftp, etc.) and get domain
-	            if (url.indexOf("://") > -1) {
-	                domain = url.split('/')[2];
-	            }
-	            else {
-	                domain = url.split('/')[0];
-	            }
+            getDomainUrl: function(url) {
+                var domain;
+                //find & remove protocol (http, ftp, etc.) and get domain
+                if (url.indexOf("://") > -1) {
+                    domain = url.split('/')[2];
+                } else {
+                    domain = url.split('/')[0];
+                }
 
-	            //find & remove port number
-	            domain = domain.split(':')[0];
+                //find & remove port number
+                domain = domain.split(':')[0];
 
-	            return domain;
+                return domain;
 
 
-	        }
+            }
         });
     </script>
 </dom-module>
