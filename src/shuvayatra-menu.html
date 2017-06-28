@@ -1,0 +1,147 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<dom-module id="shuvayatra-menu">
+    <template>
+    <style>
+      :host {
+        display: block;
+      }
+    
+       paper-listbox {
+            padding: 0;
+        }
+
+        paper-item {
+            text-transform: capitalize;
+        }
+
+        paper-item iron-icon {
+            margin-right: 20px;
+            color: #000;
+        }
+
+        paper-item a {
+            color: #333;
+        }
+         a{
+                text-decoration: none;
+                color: #333;
+                cursor: pointer;
+            }
+
+    </style>
+    <iron-ajax auto url="https://api.shuvayatra.org/v1/api/screens" handle-as="json" last-response="{{screens}}" debounce-duration="300"></iron-ajax>
+     <!-- Nav on mobile: side nav menu -->
+    <paper-listbox selected="{{selected}}" attr-for-selected="name">
+        <template is="dom-repeat" items="[[items]]">
+                    <a href="[[item.route]]">
+                        <paper-item name="[[item.label]]">
+                            <iron-icon icon="[[item.icon]]"></iron-icon>
+                            <span>[[item.label]]</span>
+                        </paper-item>
+                    </a>
+        </template>
+    <template is="dom-repeat" items="[[screens]]">
+                    <a href="/screen/[[item.url_slug]]">
+                            <paper-item name="[[item.title]]">
+                                <iron-icon src="[[item.icon]]"></iron-icon>
+                                <span>[[item.title]]</span>
+                            </paper-item>
+                    </a>
+                </template>
+    </paper-listbox>
+    <paper-listbox id="bottom-menu" selected="{{selected}}" attr-for-selected="name">
+        <!--
+                    <a href="/user">
+                        <paper-item name="प्रयोगकर्ता">
+                            <iron-icon icon="social:person"></iron-icon>
+                            <span>प्रयोगकर्ता</span>
+                        </paper-item>
+                    </a> -->
+        <a href="/about">
+            <paper-item name="प्रयोगकर्ता">
+                <iron-icon icon="info"></iron-icon>
+                <span>विषय</span>
+            </paper-item>
+        </a>
+        <a href="/contact">
+            <paper-item name="प्रयोगकर्ता">
+                <iron-icon icon="mail"></iron-icon>
+                <span>सम्पर्क</span>
+            </paper-item>
+        </a>
+    </paper-listbox>
+
+
+    </template>
+
+    <script>
+        class ShuvayatraMenu extends Polymer.Element {
+            static get is() {
+                return 'shuvayatra-menu';
+            }
+
+            static get properties() {
+                return {
+                    selected: {
+                        type: String,
+                        reflectToAttribute: true
+                    },
+
+                    items: {
+                        type: Array,
+                        value: function() {
+                            return [{
+                                    label: 'गृह',
+                                    route: '/',
+                                    icon: 'icons:home'
+                                },
+                                //                            {
+                                //                            label: 'यात्रा ',
+                                //                            route: '/journey',
+                                //                            icon: 'flight-takeoff',
+                                //                        },
+                                {
+                                    label: 'गन्तब्य',
+                                    route: '/destinations',
+                                    icon: 'icons:explore'
+                                },
+                                //                            {
+                                //                            label: 'समाचार',
+                                //                            route: '/news',
+                                //                            icon: 'speaker-notes'
+                                //                        },
+                                {
+                                    label: 'रेडियो ',
+                                    route: '/radio',
+                                    icon: 'av:library-music'
+                                }
+                            ]
+
+                        }
+                    },
+                }
+            }
+
+        }
+
+        window.customElements.define(ShuvayatraMenu.is, ShuvayatraMenu);
+    </script>
+</dom-module>

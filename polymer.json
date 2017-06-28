@@ -1,43 +1,46 @@
 {
-  "entrypoint": "index.html",
-  "shell": "src/shuvayatra-app.html",
-  "fragments": [
-    "src/shuvayatra-home.html",
-    "src/shuvayatra-screen.html",
-    "src/shuvayatra-onboard.html",
-    "src/shuvayatra-search.html",
-    "src/shuvayatra-destination.html",
-    "src/shuvayatra-journey.html",
-    "src/shuvayatra-about.html",
-    "src/shuvayatra-contact.html",
-    "src/shuvayatra-user.html",
-    "src/shuvayatra-news.html",
-    "src/shuvayatra-notfound.html",
-    "src/shuvayatra-radio.html",
-    "src/shuvayatra-feed.html",
-    "src/shuvayatra-channel.html",
-    "src/shuvayatra-post.html",
-    "src/shuvayatra-destinations.html",
-    "src/shared-styles.html"
-  ],
-  "sources": [
-   "about/*",
-   "about/**/*",
-   "src/**/*",
-   "src/*",
-   "images/**/*",
-   "images/*",
-   "bower.json",
-   "sw.html"
-  ],
-  "extraDependencies": [
-    "manifest.json",
-    "bower_components/webcomponentsjs/webcomponents-lite.js"
-  ],
-  "builds": [{
-          "preset": "es6-bundled"
+    "entrypoint": "index.html",
+    "shell": "src/shuvayatra-app.html",
+    "fragments": [
+        "src/shuvayatra-home.html",
+        "src/shuvayatra-screen.html",
+        "src/shuvayatra-search.html",
+        "src/shuvayatra-destination.html",
+        "src/shuvayatra-journey.html",
+        "src/shuvayatra-about.html",
+        "src/shuvayatra-contact.html",
+        "src/shuvayatra-user.html",
+        "src/shuvayatra-news.html",
+        "src/shuvayatra-notfound.html",
+        "src/shuvayatra-radio.html",
+        "src/shuvayatra-feed.html",
+        "src/shuvayatra-channel.html",
+        "src/shuvayatra-post.html",
+        "src/shuvayatra-destinations.html",
+        "src/shared-styles.html"
+    ],
+    "sources": [
+        "about/*",
+        "about/**/*",
+        "src/**/*",
+        "src/*",
+        "images/**/*",
+        "images/*",
+        "bower.json",
+        "sw.html"
+    ],
+    "lint": {
+        "rules": ["polymer-2-hybrid"]
+    },
+    "extraDependencies": [
+        "manifest.json",
+        "bower_components/webcomponentsjs/*.js"
+    ],
+    "builds": [{
+            "preset": "es6-bundled"
         },
         {
-          "preset": "es6-unbundled"
-      }]
+            "preset": "es6-unbundled"
+        }
+    ]
 }

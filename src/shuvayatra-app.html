@@ -7,7 +7,7 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
@@ -17,20 +17,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../bower_components/iron-icons/social-icons.html">
-<link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<!-- <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">-->
+<link rel="import" href="shuvayatra-menu.html">
+
 <dom-module id="shuvayatra-app">
     <template>
         <style>
@@ -60,6 +55,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: #616161;
             }
 
+            paper-input#search {
+                background-color: #FFF;
+                border-radius: 4px;
+                box-shadow: 0 0 5px 2px rgba(144, 144, 144, 0.45);
+                --paper-input-container: {
+                    padding: 0 1em;
+                } 
+                --paper-input-container-underline: {
+                    display: none;
+                } 
+                --paper-input-container-underline-focus: {
+                    display: none;
+                } 
+                --paper-input-container-label: {
+                    line-height: 32px;
+                } 
+                display: block;
+                width: 100%;
+            }
+            
             .drawer-list {
                 margin: 0 20px;
             }
@@ -76,53 +91,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: black;
                 font-weight: bold;
             }
-
-            paper-tabs {
-                margin: 0 auto;
-                --paper-tabs-selection-bar-color: #FFF;
-                height: 30px;
-            }
-
-            paper-tab {
-                --paper-tab-ink: #aaa;
-                text-transform: uppercase;
-            }
-
-            [hidden] {
-                display: none !important;
-            }
-
-            paper-tab a,
-            paper-item a {
-                text-decoration: none;
-                text-align: center;
-                vertical-align: middle;
-            }
-
-            paper-tab a {
-                font-size: 18px;
-                padding-bottom: 5px;
-                color: #FFF;
-            }
-
-            paper-menu {
-                padding: 0;
-            }
-
-            paper-item {
-                text-transform: capitalize;
-            }
-
-            paper-item iron-icon {
-                margin-right: 20px;
-                color: #000;
-            }
-
-            paper-item a {
-                color: #333;
-            }
-
-
 
             #drawer app-toolbar {
                 background: url('/images/nepal.jpg') 0 0/cover;
@@ -149,17 +117,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 bottom: 8px;
             }
 
-            #drawer app-toolbar > div > img,#drawer app-toolbar > div >span{
+            #drawer app-toolbar > div > img,#drawer app-toolbar > div {
                 display: inline-block;
                 vertical-align: middle;
             }
 
-            #drawer a{
-                text-decoration: none;
-                color: #333;
-                cursor: pointer;
-            }
-
+           
             #menu-button {
                 margin-left: -1em;
             }
@@ -181,14 +144,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 vertical-align: bottom;
             }
 
-            shuvayatra-onboard{
-              position: absolute;
-              top:0;
-              left: 0;
-              right: 0;
-              bottom: 0;
-              height: 100vh;
-            }
 
             @media (min-width:801px){
                 #burger{
@@ -218,84 +173,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
         </style>
-        <style is="custom-style">
-            paper-input#search {
-                background-color: #FFF;
-                border-radius: 4px;
-                box-shadow: 0 0 5px 2px rgba(144, 144, 144, 0.45);
-                --paper-input-container: {
-                    padding: 0 1em;
-                } --paper-input-container-underline: {
-                display: none;
-            } --paper-input-container-underline-focus: {
-                display: none;
-            } --paper-input-container-label: {
-                line-height: 32px;
-            } display: block;
-                width: 100%;
-            }
-        </style>
-        <!-- disable onboarding
-        <iron-localstorage name="onboard" value="{{onboard}}" on-iron-localstorage-load-empty="_handleEmptyOnboard"></iron-localstorage>
-        -->
-        <template is="dom-if" if="{{ !showOnboard }}">
-            <app-location route="{{route}}"></app-location>
-            <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
-            <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
-            <iron-ajax auto url="https://api.shuvayatra.org/v1/api/screens" handle-as="json" last-response="{{screens}}" debounce-duration="300"></iron-ajax>
-        </template>
-
+        
+        
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
+    <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
+            
+        
     <div name="main">
         <!-- start tab on wide layout -->
         <app-drawer-layout force-narrow fullbleed>
-            <app-drawer id="drawer">
+            <app-drawer id="drawer" slot="drawer">
                 <app-toolbar>
-                    <div>
                         <img class="logo" src="/images/nav_logo.png" />
-                        <span>शुभयात्रा</span>
-                    </div>
+                        <div main-title>शुभयात्रा</div>
                 </app-toolbar>
-                <!-- Nav on mobile: side nav menu -->
-                <paper-menu selected="{{selected}}" attr-for-selected="name">
-                    <template is="dom-repeat" items="[[items]]">
-
-                                <a href="[[item.route]]">
-                                    <paper-item name="[[item.label]]">
-                                        <iron-icon icon="[[item.icon]]"></iron-icon>
-                                        <span>[[item.label]]</span>
-                                    </paper-item>
-                                </a>
-                            </template>
-                    <template is="dom-repeat" items="[[screens]]">
-                                <a href="/screen/[[item.url_slug]]">
-                                        <paper-item name="[[item.title]]">
-                                            <iron-icon src="[[item.icon]]"></iron-icon>
-                                            <span>[[item.title]]</span>
-                                        </paper-item>
-                                </a>
-                            </template>
-                </paper-menu>
-                <paper-menu id="bottom-menu" selected="{{selected}}" attr-for-selected="name">
-                    <!--
-                    <a href="/user">
-                        <paper-item name="प्रयोगकर्ता">
-                            <iron-icon icon="social:person"></iron-icon>
-                            <span>प्रयोगकर्ता</span>
-                        </paper-item>
-                    </a> -->
-                    <a href="/about">
-                        <paper-item name="प्रयोगकर्ता">
-                            <iron-icon icon="icons:info"></iron-icon>
-                            <span>विषय</span>
-                        </paper-item>
-                    </a>
-                    <a href="/contact">
-                        <paper-item name="प्रयोगकर्ता">
-                            <iron-icon icon="icons:mail"></iron-icon>
-                            <span>सम्पर्क</span>
-                        </paper-item>
-                    </a>
-                </paper-menu>
+               <shuvayatra-menu selected="{{selected}}"></shuvayatra-menu>
             </app-drawer>
             <iron-pages selected="[[myPage]]" attr-for-selected="name" fallback-selection="notfound" role="main">
                 <shuvayatra-channel name="channel" channel-id={{id}}></shuvayatra-channel>
@@ -307,12 +200,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <shuvayatra-contact name="contact"></shuvayatra-contact>
             </iron-pages>
             <app-header-layout>
-                <app-header reveals effects="waterfall">
+                <app-header slot="header" reveals effects="waterfall">
                     <app-toolbar>
                         <paper-icon-button id="burger" icon="menu" drawer-toggle></paper-icon-button>
-
-                        <paper-input on-tap="_search" id="search" label="Search" type="search" no-label-float="false">
-                            <paper-icon-button id="search-button" icon="search" suffix></paper-icon-button>
+                        <paper-input on-focused-changed="_search" id="search" label="Search" type="search" no-label-float="false">
+                            <paper-icon-button id="search-button" icon="search" slot="suffix"></paper-icon-button>
                         </paper-input>
                         <a class="logo" href="/" hidden$="{{!wideLayout}}"><img src="/images/nav_logo.png" /></a>
                     </app-toolbar>
@@ -330,149 +222,125 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <shuvayatra-notfound name="notfound"></shuvayatra-notfound>
                 </iron-pages>
             </app-header-layout>
-        </app-drawer-layout>
+    </app-drawer-layout>
     </div>
     <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
     <!-- end tab on wide layout -->
 
-    /* -- disabling onboarding section for now @tyohan
-    <!-- start onboarding section -->
-    <template is="dom-if" if="{{ showOnboard }}">
-                <shuvayatra-onboard></shuvayatra-onboard>
-            </template>
-    <!-- end onboarding section -->
-    */
+
     </template>
     <script>
-        Polymer({
-            is: 'shuvayatra-app',
+        class ShuvayatraApp extends Polymer.Element {
+            static get is() {
+                return 'shuvayatra-app';
+            }
 
-            properties: {
-                onboard: {
-                    type: Object,
-                    value: function() {
-                        return {
-                            dob: {},
-                            status: true //change to false to enable onboarding
-                        };
+            static get properties() {
+                return {
+                    page: {
+                        type: String,
+                        reflectToAttribute: true,
+                        observer: '_pageChanged'
+                    },
+                    wideLayout: {
+                        type: Boolean,
+                        value: false,
+                        observer: 'onLayoutChange',
+                    },
+                    headerPages: {
+                        type: Array,
+                        value: function() {
+                            return ["channel ", "feed ", "search ", "post ", "destination ", "screen "];
+                        }
                     }
-                },
-                showOnboard: {
-                    type: Boolean,
-                    value: false,
-                },
-                page: {
-                    type: String,
-                    reflectToAttribute: true,
-                    observer: '_pageChanged'
-                },
-                items: {
-                    type: Array,
-                    value: function() {
-                        return [{
-                                label: 'गृह',
-                                route: '/',
-                                icon: 'home'
-                            },
-                            //                            {
-                            //                            label: 'यात्रा ',
-                            //                            route: '/journey',
-                            //                            icon: 'flight-takeoff',
-                            //                        },
-                            {
-                                label: 'गन्तब्य',
-                                route: '/destinations',
-                                icon: 'explore'
-                            },
-                            //                            {
-                            //                            label: 'समाचार',
-                            //                            route: '/news',
-                            //                            icon: 'speaker-notes'
-                            //                        },
-                            {
-                                label: 'रेडियो ',
-                                route: '/radio',
-                                icon: 'av:library-music'
-                            }
-                        ]
+                };
+            }
 
-                    }
-                },
-                wideLayout: {
-                    type: Boolean,
-                    value: false,
-                    observer: 'onLayoutChange',
-                },
-                headerPages: {
-                    type: Array,
-                    value: function() {
-                        return ["channel", "feed", "search", "post", "destination", "screen"];
-                    }
-                }
-            },
+            static get observers() {
+                return [
+                    '_routePageChanged(routeData.page)',
+                    '_subrouteIdChanged(subrouteData.id)',
+                ];
+            }
 
-            observers: [
-                '_routePageChanged(routeData.page)',
-                '_subrouteIdChanged(subrouteData.id)',
-                '_checkOnboard(onboard.status)'
-            ],
+            constructor() {
+                super();
 
-            ready: function() {
+                // Get root pattern for app-route, for more info about `rootPath` see:
+                // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
+                this.rootPattern = (new URL(this.rootPath)).pathname;
+            }
 
+            ready() {
+                super.ready();
                 var activeRoute = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
 
                 switch (activeRoute) {
-                    case "home":
+                    case "home ":
                         this.selected = 'गृह';
                         break;
-                    case "journey":
+                    case "journey ":
                         this.selected = 'यात्रा ';
                         break;
-                    case "destinations":
+                    case "destinations ":
                         this.selected = 'गन्तब्य';
                         break;
-                    case "news":
+                    case "news ":
                         this.selected = 'समाचार'
                         break;
-                    case "radio":
+                    case "radio ":
                         this.selected = 'रेडियो ';
                         break;
-                    case "user":
+                    case "user ":
                         this.selected = 'प्रयोगकर्ता';
                         break;
-                    case "":
+                    case " ":
                         this.selected = 'गृह';
                         break;
 
                     default:
                         this.selected = 'गृह';
                 }
+            }
 
-            },
-
-            _search: function() {
+            _search() {
                 this.set('routeData.page', 'search');
-            },
+            }
 
-            _routePageChanged: function(page) {
+            _routePageChanged(page) {
+                // Polymer 2.0 will call with `undefined` on initialization.
+                // Ignore until we are properly called with a string.
+                if (page === undefined) {
+                    return;
+                }
+
+                // If no page was found in the route data, page will be an empty string.
+                // Deault to 'view1' in that case.
+                this.page = page || 'home';
+
+                // Close a non-persistent drawer when the page & route are changed.
+                if (!this.$.drawer.persistent) {
+                    this.$.drawer.close();
+                }
+
                 if (this.headerPages.indexOf(page) === -1) {
-                    this.myPage = "main";
+                    this.myPage = "main ";
                 } else {
                     this.myPage = page;
                 }
-                if (page !== 'notfound') {
-                    this.$$('shuvayatra-notfound').className = '';
-                }
-                this.page = page || 'home';
-            },
 
-            _subrouteIdChanged: function(id) {
+                if (page !== 'notfound') {
+                    this.shadowRoot.querySelector('shuvayatra-notfound').className = '';
+                }
+            }
+
+            _subrouteIdChanged(id) {
                 this.id = id;
                 this.$.drawer.opened = false;
-            },
+            }
 
 
-            _pageChanged: function(page) {
+            _pageChanged(page) {
 
                 this.loadPage(page);
 
@@ -482,46 +350,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     ga('send', 'pageview');
                 }
 
-            },
+            }
 
-            loadPage: function(pageTitle) {
+            loadPage(pageTitle) {
                 // Load page import on demand. Show 404 page if fails
                 var resolvedPageUrl = this.resolveUrl('shuvayatra-' + pageTitle + '.html');
-
-                this.importHref(resolvedPageUrl, null, this._showPage404, true);
+                Polymer.importHref(resolvedPageUrl, null, this._showPage404, true);
                 this.$.drawer.opened = false;
-            },
+            }
 
-            _showPage404: function() {
+            _showPage404() {
                 this.page = 'notfound';
-            },
+            }
 
-            onLayoutChange: function(wide) {
+            onLayoutChange(wide) {
                 var drawer = this.$.drawer;
                 if (wide && drawer.opened) {
                     drawer.opened = false;
                 }
-            },
-            _checkOnboard(status) {
-                if (status === false && window.location.pathname.indexOf('post') < 0) {
-                    console.log(status);
-                    this.showOnboard = true;
-                    this.importHref(this.resolveUrl('shuvayatra-onboard.html'), null, this._showPage404, true);
-                } else {
-                    this.showOnboard = false;
-                }
+            }
 
-            },
-            _handleEmptyOnboard: function() {
-                this.onboard = {
-                    dob: {},
-                    status: true //disable onboarding
-                };
-            },
-            getDomainUrl: function(url) {
+            getDomainUrl(url) {
                 var domain;
                 //find & remove protocol (http, ftp, etc.) and get domain
-                if (url.indexOf("://") > -1) {
+                if (url.indexOf(":// ") > -1) {
                     domain = url.split('/')[2];
                 } else {
                     domain = url.split('/')[0];
@@ -532,8 +384,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 return domain;
 
-
             }
-        });
+        }
+        window.customElements.define(ShuvayatraApp.is, ShuvayatraApp);
     </script>
 </dom-module>
