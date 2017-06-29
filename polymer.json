@@ -40,6 +40,9 @@
             "preset": "es5-bundled"
         },
         {
+            "preset": "es5-unbundled"
+        },
+        {
             "preset": "es6-unbundled"
         }
     ]
