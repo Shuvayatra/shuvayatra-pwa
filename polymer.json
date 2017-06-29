@@ -40,7 +40,13 @@
             "preset": "es5-bundled"
         },
         {
-            "preset": "es5-unbundled"
+            "name": "es5-unbundled",
+            "js": { "minify": true, "compile": true },
+            "css": { "minify": true },
+            "html": { "minify": true },
+            "addServiceWorker": true,
+            "addPushManifest": true,
+            "insertPrefetchLinks": true
         },
         {
             "preset": "es6-unbundled"
