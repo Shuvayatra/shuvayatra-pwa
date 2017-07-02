@@ -134,9 +134,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             showCountryWidget: function (index) {
+                
+                if(this.onboard===null || this.onboard.country_id === ""){
 
-                if(this.onboard.country_id === ""){
-                    this.onboard.country_id = false;
+                    this.onboard={country_id : false};
                 }
 
                 return (this.onboard.country_id && ((index === 1 && this.hasNotice) || (index === 0 && !this.hasNotice)));

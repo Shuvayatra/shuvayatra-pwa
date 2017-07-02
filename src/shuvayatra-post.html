@@ -1,15 +1,14 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="behaviors/global-behavior.html">
 <link rel="import" href="shuvayatra-header.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="shuvayatra-audio-detail.html">
 <link rel="import" href="shuvayatra-video-detail.html">
 <link rel="import" href="shuvayatra-text-detail.html">
-<link rel="import" href="behaviors/global-behavior.html">
+
 <dom-module id="shuvayatra-post">
-
     <template>
-
-        <style is="custom-style">
+        <style>
             :host{
                 display: block;
             }
@@ -53,9 +52,6 @@
             }
         </style>
 
-
-
-
         <iron-ajax id="ajax" auto
                url="{{ postUrl }}"
                method="GET"
@@ -64,8 +60,6 @@
                loading="{{ isLoading }}"
                on-error="handleError">
         </iron-ajax>
-
-
 
         <template id="audioIf" is="dom-if" if="{{ _checkIfTypeAudio(data.type) }}">
             <shuvayatra-header post data="{{ data }}" has-feature-image audio download change-flag="{{ changeFlag }}"></shuvayatra-header>
@@ -89,26 +83,30 @@
     </template>
 
 <script>
-    Polymer({
-        is: 'shuvayatra-post',
-        behaviors: [GlobalBehavior],
+    class ShuvayatraPost extends Polymer.mixinBehaviors([GlobalBehavior], Polymer.Element){
+        static get properties(){
+            return {
+                postId:{
+                    type: Number,
+                    observer: '_onIdChanged'
+                },
 
-        properties: {
-            postId:{
-                type: Number,
-                observer: '_onIdChanged'
-            },
+                postUrl:{
+                    type: String
+                },
 
-            postUrl:{
-                type: String
-            },
-
-            changeFlag:{
-                type: Boolean,
-                observer: '_onCountsUpdated'
+                changeFlag:{
+                    type: Boolean,
+                    observer: '_onCountsUpdated'
+                }
             }
-        },
-        _onCountsUpdated: function(){
+        }
+    
+    static get is(){
+        return 'shuvayatra-post';
+    }
+  
+    _onCountsUpdated(){
             if(this._checkIfTypeText(this.data.type)){
                 this.$.textIf.render();
             }else if(this._checkIfTypeVideo(this.data.type)){
@@ -117,42 +115,47 @@
                 this.$.audioIf.render();
             }
 //            this.$$("#detail")._updateCountData(this.data);
-        },
-        handleError:function(e){
+        }
+        
+    handleError(e){
             if(e.detail.error.message.indexOf('404')!==-1){
                 window.location.href='/notfound';
             }
-        },
-        ready: function(){
+        }
+    
+    ready (){
+            super.ready();
             this.postId = window.location.pathname.split("post/")[1];
-        },
+    }
 
-        _onIdChanged: function(id){
+     _onIdChanged(id){
 
             if(/^\d+$/.test(id)){
                 this.data = {};
                 this.postUrl = this.baseUrl + "api/posts/" + this.postId;
             }
-        },
+    }
 
-        _checkIfTypeAudio: function(type){
+    _checkIfTypeAudio (type){
             return (type === "audio");
-        },
+        }
 
-        _checkIfTypeVideo: function(type){
+    _checkIfTypeVideo (type){
             return (type === "video");
-        },
+    }
 
-        _checkIfTypeText: function(type){
+    _checkIfTypeText(type){
             return (type === "text" || type === 'place');
-        },
+    }
 
-        _stopVideoPlayback: function(){
+    _stopVideoPlayback(){
             if(this._checkIfTypeVideo(this.data.type)){
                 this.$.videoIf.render();
                 this.$$("#detail")._stopPlayback();
             }
         }
-    });
+    }
+
+    window.customElements.define(ShuvayatraPost.is, ShuvayatraPost);
 </script>
 </dom-module>
