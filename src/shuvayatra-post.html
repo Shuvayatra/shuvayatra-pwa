@@ -5,7 +5,7 @@
 <link rel="import" href="shuvayatra-audio-detail.html">
 <link rel="import" href="shuvayatra-video-detail.html">
 <link rel="import" href="shuvayatra-text-detail.html">
-
+<link rel="import" href="shuvayatra-meta.html">
 <dom-module id="shuvayatra-post">
     <template>
         <style>
@@ -60,7 +60,7 @@
                loading="{{ isLoading }}"
                on-error="handleError">
         </iron-ajax>
-
+        <shuvayatra-meta title="[[_generateTitle(data.title)]]" description="[[data.description]]" keywords="[[data.tags]]"></shuvayatra-meta>
         <template id="audioIf" is="dom-if" if="{{ _checkIfTypeAudio(data.type) }}">
             <shuvayatra-header post data="{{ data }}" has-feature-image audio download change-flag="{{ changeFlag }}"></shuvayatra-header>
             <shuvayatra-audio-detail id="detail" post="{{ data }}"></shuvayatra-audio-detail>
@@ -105,7 +105,10 @@
     static get is(){
         return 'shuvayatra-post';
     }
-  
+    
+    _generateTitle(title){
+        return title +"|"+ "शुभयात्रा";
+    }
     _onCountsUpdated(){
             if(this._checkIfTypeText(this.data.type)){
                 this.$.textIf.render();

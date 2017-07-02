@@ -1,0 +1,67 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+  <script>
+    /**
+     * `shuvayatra-meta`
+     * To set meta tags that needed for SEO like title, description and keywords
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ShuvayatraMeta extends Polymer.Element {
+      static get is() { return 'shuvayatra-meta'; }
+      static get properties() {
+        return {
+          title: {
+            type: String,
+            reflectToAttribute:true
+          },
+          description:{
+            type:String,
+            reflectToAttribute:true
+          },
+          keywords:{
+            type:String,
+            reflectToAttribute:true
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+            'updateMetas(title, description, keywords)'
+        ]
+      }
+
+      updateMetas(title,description,keywords){
+        if (! (title === undefined || description === undefined || keywords === undefined)){
+          let head=document.documentElement.querySelector('head');
+          head.querySelector('title').innerText=title;
+          
+          let descEl=head.querySelector('meta[name="description"');
+          if(descEl==null){
+              descEl=document.createElement("meta");
+              descEl.setAttribute('name','description');
+              head.appendChild(descEl);
+          }
+          let divtemp=document.createElement("div");
+          divtemp.innerHTML=description;
+          descEl.setAttribute('content',divtemp.textContent.substring(0,160));
+          
+          let keywordsEl=head.querySelector('meta[name="keywords"');
+          if(keywordsEl==null){
+              keywordsEl=document.createElement("meta");
+              keywordsEl.setAttribute('name','keywords');
+              head.appendChild(keywordsEl);
+          }
+          if(Array.isArray(keywords)){
+            keywords=keywords.join(',');
+          }
+          keywordsEl.setAttribute('content',keywords);
+        }
+      }
+    }
+
+    window.customElements.define(ShuvayatraMeta.is, ShuvayatraMeta);
+  </script>
