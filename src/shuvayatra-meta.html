@@ -24,17 +24,21 @@
           keywords:{
             type:String,
             reflectToAttribute:true
+          },
+          ampUrl:{
+            type:String,
+            reflectToAttribute:true
           }
         };
       }
 
       static get observers() {
         return [
-            'updateMetas(title, description, keywords)'
+            'updateMetas(title, description, keywords,ampUrl)'
         ]
       }
 
-      updateMetas(title,description,keywords){
+      updateMetas(title,description,keywords,ampUrl){
         if (! (title === undefined || description === undefined || keywords === undefined)){
           let head=document.documentElement.querySelector('head');
           head.querySelector('title').innerText=title;
@@ -59,6 +63,13 @@
             keywords=keywords.join(',');
           }
           keywordsEl.setAttribute('content',keywords);
+
+          if(ampUrl!==null || ampUrl!==''){
+            let ampEl=document.createElement('link');
+            ampEl.setAttribute('rel','amphtml');
+            ampEl.setAttribute('href',ampUrl);
+            head.appendChild(ampEl);
+          }
         }
       }
     }
