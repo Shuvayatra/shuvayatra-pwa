@@ -1,4 +1,4 @@
-#How To Deploy The Shuvayatra Web App
+# How To Deploy The Shuvayatra Web App
 
 ### Requirements
 1. Install Polymer CLI with `npm install -g polymer-cli`
