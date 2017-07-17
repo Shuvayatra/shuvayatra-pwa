@@ -21,7 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-search/paper-search.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
@@ -205,9 +205,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <app-header slot="header" reveals effects="waterfall">
                         <app-toolbar>
                             <paper-icon-button id="burger" icon="menu" drawer-toggle></paper-icon-button>
-                            <paper-input on-focused-changed="_search" id="search" label="Search" type="search" no-label-float="false">
+                            <paper-search-panel id="search" label="Search" on-focused-changed="_search"></paper-search-panel>
+                            <!--<paper-input on-focused-changed="_search" id="search" label="Search" type="search" no-label-float="false">
                                 <paper-icon-button id="search-button" icon="search" slot="suffix"></paper-icon-button>
-                            </paper-input>
+                            </paper-input>-->
                             <a class="logo" href="/" hidden$="{{!wideLayout}}"><img src="/images/nav_logo.png" /></a>
                         </app-toolbar>
                     </app-header>
@@ -390,5 +391,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         }
         window.customElements.define(ShuvayatraApp.is, ShuvayatraApp);
+    </script>
+    <script id="jsonld" type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "url": "https://shuvayatra.org",
+            "logo": "https://shuvayatra.org/images/logo-amp.png",
+            "sameAs": [
+                "https://www.facebook.com/ShuvaGO",
+                "https://twitter.com/shuvayatra"
+            ]
+        }
+
     </script>
 </dom-module>
