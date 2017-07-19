@@ -58,14 +58,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </paper-item>
                     </a>
         </template>
-    <template is="dom-repeat" items="[[screens]]">
+        <template is="dom-repeat" items="[[screens]]">
                     <a href="/screen/[[item.url_slug]]">
                             <paper-item name="[[item.title]]">
                                 <iron-icon src="[[item.icon]]"></iron-icon>
                                 <span>[[item.title]]</span>
                             </paper-item>
                     </a>
-                </template>
+        </template>
     </paper-listbox>
     <paper-listbox id="bottom-menu" selected="{{selected}}" attr-for-selected="name">
         <!--

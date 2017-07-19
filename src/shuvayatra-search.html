@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="behaviors/global-behavior.html">
@@ -175,10 +176,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header-layout>
             <app-header condenses effects="waterfall" fixed>
                 <app-toolbar>
-                    <paper-input id="search" label="Search" no-label-float="false">
-                        <paper-icon-button id="back" icon="arrow-back" on-click="_goBack" prefix=""></paper-icon-button>
-                        <paper-icon-button id="search-button" icon="search" on-click="_onQueryChanged" suffix></paper-icon-button>
-                    </paper-input>
+                    <paper-input id="search" value="{{query}}"></paper-input>
                 </app-toolbar>
             </app-header>
             <div class="feed-container">
@@ -241,6 +239,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 query: {
                     type: String,
+                    reflectToAttribute:true,
                     observer: '_onQueryChanged'
                 },
 

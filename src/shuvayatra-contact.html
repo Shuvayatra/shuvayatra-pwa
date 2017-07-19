@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/social-media-icons/social-media-icons.html">
+<link rel="import" href="behaviors/global-behavior.html">
 <style include="iron-flex iron-flex-alignment"></style>
 <dom-module id="shuvayatra-contact">
     <!-- Defines the element's style and local DOM -->
@@ -27,7 +28,9 @@
         }
       :host {
         display: block;
-        padding: 100px;
+        padding: 72px 16px 16px 16px;
+        max-width: 800px;
+        margin: 0 auto;
       }
     paper-card {
     --paper-card-header-text: {
