@@ -1,72 +1,18 @@
 # Shuvayatra Progressive Web App
 
-### Layouting Feed
-
-Feed layout will using mansory layout using CSS column. To make sure all cards fill the column please make sure the card follow the example below
-
-```html
-<div class="feed-container">
-    <div class="card-container">
-		  <div class="card">
-		        ..content here..
-		   </div>
-	</div>
-	...
-	<div class="card-container">
-		  <div class="card">
-		        ..content here..
-		   </div>
-	</div>
-</div>
-```
+This web app is build with Polymer with hybrid elements that support of Polymer 1 and 2 elements. Some of the elements already ported to Polymer 2 but some of it still in Polymer 1. 
 
 ### Start the development server
 
-This command serves the app at `http://localhost:8080` and provides basic URL
-routing for the app:
+Follow the steps below to start with your own development server
+1. Clone the repo from https://github.com/Shuvayatra/shuvayatra-pwa 
+2. Run `bower install` to install all dependend packages
+3. Start the development server with `polymer serve --open`
 
-    polymer serve --open
 
+### Deployment
+Follow the deployment guide [here](https://github.com/Shuvayatra/shuvayatra-pwa/blob/master/DEPLOYMENT.md)
 
-### Build
+### Adding new page 
+To add new page on this PWA you can create a custom element under `src/` directory and add your page by edit the page routes in `src/shuvayatra-app.html` to link with the router. All new page must be in format `shuvayatra-*.html`. It must have shuvayatra prefix on custom element ID and filename.
 
-This command performs HTML, CSS, and JS minification on the application
-dependencies, and generates a service-worker.js file with code to pre-cache the
-dependencies based on the entrypoint and fragments specified in `polymer.json`.
-The minified files are output to the `build/unbundled` folder, and are suitable
-for serving from a HTTP/2+Push compatible server.
-
-In addition the command also creates a fallback `build/bundled` folder,
-generated using fragment bundling, suitable for serving from non
-H2/push-compatible servers or to clients that do not support H2/Push.
-
-    polymer build
-
-### Preview the build
-
-This command serves the minified version of the app at `http://localhost:8080`
-in an unbundled state, as it would be served by a push-compatible server:
-
-    polymer serve build/unbundled
-
-This command serves the minified version of the app at `http://localhost:8080`
-generated using fragment bundling:
-
-    polymer serve build/bundled
-
-### Run tests
-
-This command will run
-[Web Component Tester](https://github.com/Polymer/web-component-tester) against the
-browsers currently installed on your machine.
-
-    polymer test
-
-### Adding a new view
-
-You can extend the app by adding more views that will be demand-loaded
-e.g. based on the route, or to progressively render non-critical sections
-of the application.  Each new demand-loaded fragment should be added to the
-list of `fragments` in the included `polymer.json` file.  This will ensure
-those components and their dependencies are added to the list of pre-cached
-components (and will have bundles created in the fallback `bundled` build).
