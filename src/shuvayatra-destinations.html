@@ -128,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var response = e.detail.response;
             var destinations = [];
             for (var i = 0, len = response.length; i < len; i += 1) {
-                if (response[i].title_en === this.onboard.country) {
+                if (this.onboard!==null && response[i].title_en === this.onboard.country) {
                     this.hasSelectedCountry = true;
                     this.selectedCountry = response[i];
                 } else {

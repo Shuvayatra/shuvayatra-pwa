@@ -279,7 +279,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ready() {
                 super.ready();
                 var activeRoute = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
-
+                this._appendMicroData();
+                
                 switch (activeRoute) {
                     case "home ":
                         this.selected = 'गृह';
@@ -306,6 +307,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     default:
                         this.selected = 'गृह';
                 }
+            }
+
+            _appendMicroData(){
+            let body=document.documentElement.querySelector('body');
+            let script=document.createElement('script');
+            script.setAttribute('type','type="application/ld+json"');
+            let data={
+                    "@context": "http://schema.org",
+                    "@type": "Organization",
+                    "url": "https://shuvayatra.org",
+                    "logo": "https://shuvayatra.org/images/logo-amp.png",
+                    "sameAs": [
+                        "https://www.facebook.com/ShuvaGO",
+                        "https://twitter.com/shuvayatra"
+                    ]
+                };
+            script.innerHTML=JSON.stringify(data);
+            body.appendChild(script);
             }
 
             _search() {
@@ -393,18 +412,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         }
         window.customElements.define(ShuvayatraApp.is, ShuvayatraApp);
-    </script>
-    <script id="jsonld" type="application/ld+json">
-        {
-            "@context": "http://schema.org",
-            "@type": "Organization",
-            "url": "https://shuvayatra.org",
-            "logo": "https://shuvayatra.org/images/logo-amp.png",
-            "sameAs": [
-                "https://www.facebook.com/ShuvaGO",
-                "https://twitter.com/shuvayatra"
-            ]
-        }
-
     </script>
 </dom-module>

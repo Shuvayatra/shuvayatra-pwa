@@ -1,0 +1,79 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+  <script>
+    /**
+     * `shuvayatra-data`
+     * To set structure data 
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ShuvayatraData extends Polymer.Element {
+      static get is() { return 'shuvayatra-data'; }
+      static get properties() {
+        return {
+          post: {
+            type: Object,
+            reflectToAttribute:true
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+            'updateData(post)'
+        ]
+      }
+
+      updateData(post){
+        if (post !== undefined ){
+          let body=document.documentElement.querySelector('body');
+            let script=document.documentElement.querySelector('#postMicroData');
+            if(script===null){
+              script=document.createElement('script');
+              script.setAttribute('id','postMicroData');
+              script.setAttribute('type','type="application/ld+json"');
+            }
+            
+            
+            let data={
+                    "@context": "http://schema.org",
+                    "@type": "Article",
+                    "mainEntityOfPage": {
+                        "@type": "WebPage",
+                        "@id": "https://shuvayatra.org"
+                    },
+                    "headline": post.title,
+                    "image": {
+                        "@type": "ImageObject",
+                        "url": post.featured_image,
+                        "height": 800,
+                        "width": 800
+                    },
+                    "datePublished": new Date(post.created_at*1000).toDateString(),
+                    "dateModified": new Date(post.updated_at*1000).toDateString(),
+                    "author": {
+                        "@type": "Organization",
+                        "name": "Shuvayatra Team"
+                    },
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "Shuvayatra",
+                        "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://shuvayatra.org/images/amp_logo.jpg",
+                        "width": 600,
+                        "height": 60
+                        }
+                    }
+                  };
+            script.innerHTML=JSON.stringify(data);
+            body.appendChild(script);
+          }
+        }
+    }
+    
+
+    window.customElements.define(ShuvayatraData.is, ShuvayatraData);
+  </script>

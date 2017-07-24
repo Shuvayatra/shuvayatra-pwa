@@ -6,6 +6,7 @@
 <link rel="import" href="shuvayatra-video-detail.html">
 <link rel="import" href="shuvayatra-text-detail.html">
 <link rel="import" href="shuvayatra-meta.html">
+<link rel="import" href="shuvayatra-data.html">
 <dom-module id="shuvayatra-post">
     <template>
         <style>
@@ -61,6 +62,7 @@
                on-error="handleError">
         </iron-ajax>
         <shuvayatra-meta title="[[_generateTitle(data.title)]]" description="[[data.description]]" keywords="[[data.tags]]" amp-url="[[_generateAmpUrl(data.id)]]"></shuvayatra-meta>
+        <shuvayatra-data post="[[data]]"></shuvayatra-data>
         <template id="audioIf" is="dom-if" if="{{ _checkIfTypeAudio(data.type) }}">
             <shuvayatra-header post data="{{ data }}" has-feature-image audio download change-flag="{{ changeFlag }}"></shuvayatra-header>
             <shuvayatra-audio-detail id="detail" post="{{ data }}"></shuvayatra-audio-detail>
@@ -122,7 +124,7 @@
             } else if(this._checkIfTypeAudio(this.data.type)){
                 this.$.audioIf.render();
             }
-//            this.$$("#detail")._updateCountData(this.data);
+//          this.$$("#detail")._updateCountData(this.data);
         }
         
     handleError(e){
