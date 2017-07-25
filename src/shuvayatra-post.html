@@ -1,5 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="behaviors/global-behavior.html">
+<link rel="import" href="shuvayatra-global.html">
 <link rel="import" href="shuvayatra-header.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="shuvayatra-audio-detail.html">
@@ -52,12 +52,11 @@
                 }
             }
         </style>
-
         <iron-ajax id="ajax" auto
                url="{{ postUrl }}"
                method="GET"
                params="{{ queryParams }}"
-               last-response="{{ data }}"
+               last-response="{{data}}"
                loading="{{ isLoading }}"
                on-error="handleError">
         </iron-ajax>
@@ -76,7 +75,9 @@
 
         <template id="textIf" is="dom-if" if="{{ _checkIfTypeText(data.type) }}">
             <shuvayatra-header post text has-feature-image data="{{ data }}" change-flag="{{ changeFlag }}"></shuvayatra-header>
+            
             <shuvayatra-text-detail id="detail" post="{{ data }}"></shuvayatra-text-detail>
+            <h1>Yoha</h1>
         </template>
         <div style="text-align:center;">
             <paper-spinner active="{{ isLoading }}"></paper-spinner>
@@ -85,7 +86,7 @@
     </template>
 
 <script>
-    class ShuvayatraPost extends Polymer.mixinBehaviors([GlobalBehavior], Polymer.Element){
+    class ShuvayatraPost extends ShuvayatraGlobal{
         static get properties(){
             return {
                 postId:{
@@ -100,6 +101,9 @@
                 changeFlag:{
                     type: Boolean,
                     observer: '_onCountsUpdated'
+                },
+                data:{
+                    type:Object
                 }
             }
         }
@@ -126,7 +130,7 @@
             }
 //          this.$$("#detail")._updateCountData(this.data);
         }
-        
+
     handleError(e){
             if(e.detail.error.message.indexOf('404')!==-1){
                 window.location.href='/notfound';

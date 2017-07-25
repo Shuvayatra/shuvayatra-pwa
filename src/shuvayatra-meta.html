@@ -43,7 +43,7 @@
           let head=document.documentElement.querySelector('head');
           head.querySelector('title').innerText=title;
           
-          let descEl=head.querySelector('meta[name="description"');
+          let descEl=head.querySelector('meta[name="description"]');
           if(descEl==null){
               descEl=document.createElement("meta");
               descEl.setAttribute('name','description');
@@ -53,7 +53,7 @@
           divtemp.innerHTML=description;
           descEl.setAttribute('content',divtemp.textContent.substring(0,160));
           
-          let keywordsEl=head.querySelector('meta[name="keywords"');
+          let keywordsEl=head.querySelector('meta[name="keywords"]');
           if(keywordsEl==null){
               keywordsEl=document.createElement("meta");
               keywordsEl.setAttribute('name','keywords');

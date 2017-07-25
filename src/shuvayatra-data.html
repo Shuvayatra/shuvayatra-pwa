@@ -27,7 +27,7 @@
       }
 
       updateData(post){
-        if (post !== undefined ){
+        if (post !== undefined && post!==null){
           let body=document.documentElement.querySelector('body');
             let script=document.documentElement.querySelector('#postMicroData');
             if(script===null){
@@ -35,7 +35,6 @@
               script.setAttribute('id','postMicroData');
               script.setAttribute('type','type="application/ld+json"');
             }
-            
             
             let data={
                     "@context": "http://schema.org",

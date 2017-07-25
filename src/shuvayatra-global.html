@@ -1,0 +1,73 @@
+<script>
+// define the element's class element
+class ShuvayatraGlobal extends Polymer.Element {
+    static get is(){
+        return 'shuvayatra-global';
+    }
+
+    static get properties(){
+            return {
+                baseUrl:{
+                    type: String,
+                    value: "https://api.shuvayatra.org/v1/"
+                    //value: "http://nrna.yipl.com.np/"
+                },
+
+                forexUrl:{
+                    type: String,
+                    value: "https://hamropatro-android.appspot.com/fetchForex"
+                },
+
+                weatherUrl: {
+                    type: String,
+                    //value: "http://api.openweathermap.org/data/2.5/weather"
+                    value: "https://pro.openweathermap.org/data/2.5/weather"
+                },
+
+                weatherAppId:{
+                    type: String,
+                    value: "b60c6fb8d339dab1fcee26a787964af2"
+                },
+
+                apiKey: {
+                    type: String,
+                    value: "eeee0c3eaa204f98acac4102c90676abc674f191"
+                },
+
+                appUrl: {
+                    type: Object,
+                    value: {
+                        deeplink:{
+                            feed: "shuvayatra://feed"
+                        },
+                        url:{
+                            feed: "/feed/"
+                        }
+                    }
+                }
+        };
+    }
+    _hasValue(val){
+        console.log(val);
+        if(typeof(val) === 'undefined')
+            return false;
+        else {
+            return true;
+        }
+    }
+
+    _handleDeeplink(title, deeplink, params, country_id,gender){
+
+        var url = "#";
+        if(deeplink === this.appUrl.deeplink.feed){
+            url = this.appUrl.url.feed;
+            if(params && country_id){
+                url += "?title= "+ title + "&category_id=" + params.join(",") + "&country_id="+country_id + "&gender="+gender;
+            }else if(params){
+                url += "?title= "+ title + "&category_id=" + params.join(",");
+            }
+        }
+        return url;
+    }
+}
+</script>
