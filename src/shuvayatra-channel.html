@@ -29,7 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             padding: 10px;
             position: relative;
         }
-        
+
         app-header {
             @apply(--layout-fixed-top);
             z-index: 2;
@@ -42,12 +42,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             ;
         }
-        
+
         .feed-container {
             margin-top: 70px;
             padding-bottom: 100px;
         }
-        
+
         iron-image{
             width: 130px;
             height: 115px;
@@ -236,7 +236,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _setPlayIndex: function(e){
             var index = e.model.__data.index;
             this.playIndex = index;
-            this.$.player._startPlayback();
+            this.$.player.play()
         }
     });
     </script>
