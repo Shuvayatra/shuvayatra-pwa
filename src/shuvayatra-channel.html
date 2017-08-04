@@ -198,7 +198,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="loadingIndicator">
             <paper-spinner active="{{loading}}"></paper-spinner>
         </div>
-        <shuvayatra-mini-player id="player" tracks="{{ tracks }}" play-index="{{playIndex}}"></shuvayatra-mini-player>
     </template>
     <script>
     Polymer({
@@ -213,30 +212,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             tracks:{
                 notify: true
             },
-
-            playIndex: {
-                type: Number,
-                value: -1,
-                notify: true
+            player : {
+              type : Object
             }
         },
-
         _didRespond: function(e){
             if(e.detail.response.feeds){
                 this.tracks = e.detail.response.feeds.data;
-                this.playIndex = 0;
+                this.player.track = this.tracks[0]
             }
         },
-
         _goBack: function() {
-            this.$.player._stopPlayback();
             window.history.back();
         },
-
         _setPlayIndex: function(e){
             var index = e.model.__data.index;
-            this.playIndex = index;
-            this.$.player.play()
+            this.player.track = this.tracks[index]
+            this.player.play()
         }
     });
     </script>

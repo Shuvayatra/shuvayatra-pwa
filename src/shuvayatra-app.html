@@ -212,8 +212,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <a class="logo" href="/" hidden$="{{!wideLayout}}"><img src="/images/nav_logo.png" /></a>
                         </app-toolbar>
                     </app-header>
+                    <shuvayatra-mini-player id="player"></shuvayatra-mini-player>
                     <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="notfound" role="main">
-                        <shuvayatra-channel name="channel" channel-id="{{id}}"></shuvayatra-channel>
+                        <shuvayatra-channel name="channel"  player="[[audioPlayer]]" channel-id="{{id}}"></shuvayatra-channel>
                         <shuvayatra-home name="home"></shuvayatra-home>
                         <shuvayatra-screen name="screen"></shuvayatra-screen>
                         <shuvayatra-journey name="journey"></shuvayatra-journey>
@@ -279,6 +280,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 super.ready();
                 var activeRoute = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
                 this._appendMicroData();
+                this.audioPlayer = this.$.player
 
                 switch (activeRoute) {
                     case "home ":

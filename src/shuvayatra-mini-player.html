@@ -20,15 +20,12 @@
                 color: #fff;
                 max-width: 750px;
                 margin: 0 auto;
+                z-index: 99;
             }
 
             paper-icon-button {
                 width: 80px;
                 height: 80px;
-            }
-
-            paper-icon-button[hidden] {
-                display: none;
             }
 
             paper-slider {
@@ -98,8 +95,13 @@
              this.currentTime = e.target.currentTime
              this.progress = (e.target.currentTime / e.target.duration) * 100
            })
+           // This is required so that playing of audio does not update the seekbar back.
+           // Without this, a flicker will be seen everysecond when we hold the seekbar.
+           this.$.seekbar.addEventListener('immediate-value-change', e =>
+                this.$.audio.pause())
            this.$.seekbar.addEventListener("change", e => {
              this.$.audio.currentTime = e.target.value * this.$.audio.duration / 100
+             this.$.audio.play();
            })
         }
         _indexChanged(newIndex, old){
@@ -108,10 +110,15 @@
           this.playIndex = newIndex
         }
         playPause(){
-          this.$.audio.paused ? this.$.audio.play() : this.$.audio.pause()
+          this.$.audio.paused ? this.play() : this.pause()
+        }
+        pause(){
+          this.$.audio.pause()
+          this.paused = true
         }
         play(){
           this.$.audio.play()
+          this.paused = false
         }
         _convertSecToMin (seconds) {
             if (!seconds || seconds === 0) return '00:00';
@@ -120,7 +127,7 @@
             return minutes + ':' + (secondsToCalc.length < 2 ? '0' + secondsToCalc : secondsToCalc);
         }
         _computePlayPause(paused){
-          return paused ? 'play' : 'pause'
+          return this.$.audio.paused ? 'play' : 'pause'
         }
       }
       customElements.define(MiniPlayer.is, MiniPlayer)
