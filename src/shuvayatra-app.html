@@ -62,20 +62,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 box-shadow: 0 0 5px 2px rgba(144, 144, 144, 0.45);
                 --paper-input-container: {
                     padding: 0 1em;
-                } 
+                }
                 --paper-input-container-underline: {
                     display: none;
-                } 
+                }
                 --paper-input-container-underline-focus: {
                     display: none;
-                } 
+                }
                 --paper-input-container-label: {
                     line-height: 32px;
-                } 
+                }
                 display: block;
                 width: 100%;
             }
-            
+
             .drawer-list {
                 margin: 0 20px;
             }
@@ -123,7 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 vertical-align: middle;
             }
 
-           
+
             #menu-button {
                 margin-left: -1em;
             }
@@ -176,13 +176,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
         </style>
-        
-        
+
+
     <app-location route="{{route}}"></app-location>
     <app-route route="{{route}}" pattern="/:page" query-params="{{queryParams}}" data="{{routeData}}" tail="{{subroute}}"></app-route>
     <app-route route="{{subroute}}" pattern="/:id" data="{{subrouteData}}"></app-route>
-            
-        
+
+
     <div name="main">
         <!-- start tab on wide layout -->
         <app-drawer-layout force-narrow fullbleed>
@@ -195,7 +195,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </app-drawer>
             <div>
                 <iron-pages selected="[[myPage]]" attr-for-selected="name" role="main">
-                    <shuvayatra-channel name="channel" channel-id="{{id}}"></shuvayatra-channel>
                     <shuvayatra-feed name="feed" params="{{queryParams}}" title="{{queryParams.title}}" category="{{queryParams.category_id}}"></shuvayatra-feed>
                     <shuvayatra-post name="post" post-id="{{id}}"></shuvayatra-post>
                     <shuvayatra-destination name="destination" destination-id="{{id}}"></shuvayatra-destination>
@@ -213,7 +212,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <a class="logo" href="/" hidden$="{{!wideLayout}}"><img src="/images/nav_logo.png" /></a>
                         </app-toolbar>
                     </app-header>
+                    <shuvayatra-mini-player id="player"></shuvayatra-mini-player>
                     <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="notfound" role="main">
+                        <shuvayatra-channel name="channel"  player="[[audioPlayer]]" channel-id="{{id}}"></shuvayatra-channel>
                         <shuvayatra-home name="home"></shuvayatra-home>
                         <shuvayatra-screen name="screen"></shuvayatra-screen>
                         <shuvayatra-journey name="journey"></shuvayatra-journey>
@@ -279,7 +280,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 super.ready();
                 var activeRoute = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
                 this._appendMicroData();
-                
+                this.audioPlayer = this.$.player
+
                 switch (activeRoute) {
                     case "home ":
                         this.selected = 'गृह';
@@ -351,7 +353,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 } else {
                     this.myPage = page;
                 }
-                
+
                 if (page !== 'notfound') {
                     this.shadowRoot.querySelector('shuvayatra-notfound').className = '';
                 }
