@@ -186,7 +186,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template id="list" is="dom-repeat" items="{{ channel.feeds.data }}">
                 <paper-card class="mycard" elevation="1" animated="true" on-click="_setPlayIndex">
                     <paper-ripple></paper-ripple>
-                    <iron-image placeholder="../images/image-default.png" preload src="{{ item.image }}" fade="true" sizing="cover"></iron-image>
+                    <iron-image placeholder="../images/image-default.png" preload src="{{ httpToHttps(item.image) }}" fade="true" sizing="cover"></iron-image>
                     <div class="mytitle__wrap">
                         <paper-fab mini icon="av:volume-up" no-ink></paper-fab>
                         <label>{{ item.title }}</label>
@@ -229,6 +229,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var index = e.model.__data.index;
             this.player.track = this.tracks[index]
             this.player.play()
+        },
+        httpToHttps: function(url){
+            return url.replace('http://', 'https://')
         }
     });
     </script>
