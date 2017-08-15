@@ -165,9 +165,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .ellipsis {
                 margin-top: 30px;
             }
-
         }
-
         @media only screen and (min-width: 768px) {
             :host {
                 max-width: 750px;
@@ -183,17 +181,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </app-toolbar>
         </app-header>
         <div class="feed-container">
-            <template id="list" is="dom-repeat" items="{{ channel.feeds.data }}">
+          <div class="channel">
+              <iron-image placeholder="../images/image-default.png" preload src="{{ httpToHttps(channel.image_url) }}" fade="true" sizing="cover"></iron-image>
+                <paper-fab mini icon="av:volume-up" no-ink></paper-fab>
+                  <label> <b>{{ channel.title }} </b></label>
+                  <p>{{ channel.feeds.data.length}} Episodes</p>
+          </div>
+          <template id="list" is="dom-repeat" items="{{ channel.feeds.data }}">
                 <paper-card class="mycard" elevation="1" animated="true" on-click="_setPlayIndex">
                     <paper-ripple></paper-ripple>
                     <iron-image placeholder="../images/image-default.png" preload src="{{ httpToHttps(item.image) }}" fade="true" sizing="cover"></iron-image>
                     <div class="mytitle__wrap">
                         <paper-fab mini icon="av:volume-up" no-ink></paper-fab>
                         <label>{{ item.title }}</label>
-                        <div class="ellipsis"><div><p>{{ item.description}}</p></div></div>
+                        <div class="ellipsis">{{ item.description}}</div>
                     </div>
                 </paper-card>
-            </template>
+          </template>
         </div>
         <div class="loadingIndicator">
             <paper-spinner active="{{loading}}"></paper-spinner>

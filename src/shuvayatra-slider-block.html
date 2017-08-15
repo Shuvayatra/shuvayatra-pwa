@@ -4,57 +4,56 @@
 <link rel="import" href="behaviors/global-behavior.html">
 <link rel="import" href="shuvayatra-slider-item.html">
 <dom-module id="shuvayatra-slider-block">
-    <template>
-        <style include="shared-styles">
-            :host {
-                display: block;
-                margin-bottom: 20px;
-            }
-
-            paper-card {
-                width: 100%;
-            }
-        </style>
-        <div class="card-container">
-            <paper-card class="card" elevation="1" animated-shadow="false">
-                <div class="slider-block card-content">
-                    <h4>[[data.title]]</h4>
-                    <article>[[data.description]]</article>
-                    <div class="slider-wrap">
-                        <div class="slider-element">
-                            <template is="dom-repeat" items="[[data.content]]">
-                                <shuvayatra-slider-item data={{item}}></shuvayatra-slider-item>
-                            </template>
-                        </div>
-                    </div>
-                    <template is="dom-if" if="{{data.view_more}}">
-                        <template is="dom-if" if="{{data.country_id}}">
-                            <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter,countryid,gender) }}">
-                                <p>[[data.view_more_title]]</p>
-                            </a>
-                        </template>
-
-                        <template is="dom-if" if="{{!data.country_id}}">
-                            <a href="{{ _handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter) }}">
-                                <p>[[data.view_more_title]]</p>
-                            </a>
-                        </template>
-                    </template>
-                </div>
-            </paper-card>
+  <template>
+    <style >
+      .see-more{
+        float:right;
+        text-decoration: none;
+      }
+      paper-card {
+        width: 100%;
+      }
+      .slider-element {
+        display: flex;
+        justify-content: space-between;
+        overflow-x: scroll;
+      }
+    </style>
+    <paper-card animated-shadow="false">
+      <div class="card-content">
+        <div>
+          <a class="see-more" hidden$="[[!data.view_more]]"
+            href="{{_handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter, null, null)}}">
+            [[data.view_more_title]]
+          </a>
+          <b>[[data.title]]</b>
+          <article>[[data.description]]</article>
         </div>
-    </template>
-    <script>
-
-        Polymer({
-            is: 'shuvayatra-slider-block',
-            behaviors: [GlobalBehavior],
-            properties: {
-                data: {
-                    type: Object,
-                },
-            },
-
-        });
+        <div class="slider-element">
+          <template is="dom-repeat" items="[[data.content]]">
+            <shuvayatra-slider-item data={{item}}></shuvayatra-slider-item>
+          </template>
+        </div>
+      </div>
+    </paper-card>
+  </template>
+  <script>
+    Polymer({
+      is: 'shuvayatra-slider-block',
+      behaviors: [GlobalBehavior],
+      properties: {
+        data: {
+          type: Object,
+        },
+      },
+    });
+    /*
+    class SliderView extends Polymer.Element {
+      static get is(){
+        return 'slider-view'
+      }
+    }
+    customElements.define(SliderView.is, SliderBlock)
+    */
     </script>
 </dom-module>
