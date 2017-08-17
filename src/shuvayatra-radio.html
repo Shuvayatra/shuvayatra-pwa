@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="behaviors/global-behavior.html">
+<link rel="import" href="radio-slider.html">
 <dom-module id="shuvayatra-radio">
     <template>
         <style include="shared-styles">
@@ -20,7 +21,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 display: block;
                 padding: 10px;
             }
-
             iron-image {
                 max-width: 100%;
                 width: 100%;
@@ -37,6 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             .feed-container {
+                width: 100%;
                 display: flex;
                 justify-content: space-between;
                 flex-wrap: wrap;
@@ -54,20 +55,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
         </style>
-        <iron-ajax auto url="{{ podcast.featured_categories }}" headers="[[podcast.headers]]"last-response="{{channels}}" handle-as="json" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+        <iron-ajax auto url="{{ podcast.featured_categories }}"
+              headers="[[podcast.headers]]"
+              handle-as="json"
+              on-response="_handleResponse"
+              debounce-duration="300"
+              loading="{{loading}}"></iron-ajax>
 
         <p id="title">च्यानलहरू</p>
         <div class="feed-container">
-            <template id="list" is="dom-repeat" items="{{ channels }}">
-                <a class="link" href="{{ _generateUrl(item) }}">
-                    <paper-card class="card" elevation="1" animated-shadow="false">
-                        <div class="radio-block card-content">
-                            <iron-image src="{{ item.image_url }}?width=480" sizing="cover"></iron-image>
-                            <p>{{ item.title }}</p>
-                        </div>
-                    </paper-card>
-                </a>
-            </template>
+          <template is="dom-repeat" items="[[channels]]">
+            <radio-slider data="[[item]]">
+            </radio-slider>
+          </template>
         </div>
         <div class="loadingIndicator">
             <paper-spinner active="{{loading}}"></paper-spinner>
@@ -78,13 +78,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'shuvayatra-radio',
             behaviors: [GlobalBehavior],
 
-            properties: {},
+            properties: {
+              channels : {
+                type : Object
+              }
+            },
 
             _generateUrl: function (item) {
                 if (item != null) {
                     return "/channel/" + item.id;
                 }
             },
+            _handleResponse : function(r){
+              let chann = JSON.parse(r.detail.__data.response.list[0].value)
+              this.channels = []
+              for(let chan of chann){
+                let { name, podcasts} = chan
+                this.channels.push({ title : name, content : podcasts })
+              }
+              console.log(this.channels)
+            }
         });
     </script>
 </dom-module>

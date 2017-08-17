@@ -1,0 +1,102 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="behaviors/global-behavior.html">
+<link rel="import" href="shuvayatra-slider-item.html">
+<dom-module id="radio-slider">
+  <template>
+    <style >
+      :host{
+        width: 100%;
+      }
+      .see-more{
+        float:right;
+        text-decoration: none;
+      }
+      paper-card {
+        width: 100%;
+      }
+      .slider-element {
+        width: 100%;
+        justify-content: space-between;
+        display: flex;
+        overflow-x: scroll;
+      }
+      .slider-item{
+        display: block;
+        margin-right: 5px;
+      }
+      iron-image {
+          width: 140px;
+          height: 80px;
+      }
+
+      h5 {
+          font-weight: normal;
+          color: #333;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 130px;
+          margin: 0;
+          padding: 5px;
+      }
+
+      a{
+          text-decoration: none;
+      }
+
+      @media only screen and (min-width: 600px) {
+          iron-image {
+              width: 200px;
+              height: 150px;
+          }
+      }
+    </style>
+    <paper-card animated-shadow="false">
+      <div class="card-content">
+        <div>
+          <a class="see-more" hidden$="[[!data.view_more]]"
+            href="{{_handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter, null, null)}}">
+            [[data.view_more_title]]
+          </a>
+          <b>[[data.title]]</b>
+          <article>[[data.description]]</article>
+        </div>
+        <div class="slider-element">
+          <template is="dom-repeat" items="[[data.content]]">
+            <a href="[[_generateUrl(item)]]" class="slider-item">
+              <iron-image src="[[getImage(item)]]" preload fade sizing="cover" style="background-color:#F0F0F0;"></iron-image>
+              <h5>[[item.title]]</h5>
+            </a>
+          </template>
+        </div>
+      </div>
+    </paper-card>
+  </template>
+  <script>
+    Polymer({
+      is: 'radio-slider',
+      behaviors: [GlobalBehavior],
+      properties: {
+        data: {
+          type: Object,
+        },
+      },
+      getImage: function(d){
+        return d.coverImage + '?width=140'
+      },
+      _generateUrl:function(item) {
+        return '/channel/' + item.id
+      }
+    });
+    /*
+    class SliderView extends Polymer.Element {
+      static get is(){
+        return 'slider-view'
+      }
+    }
+    customElements.define(SliderView.is, SliderBlock)
+    */
+    </script>
+</dom-module>
