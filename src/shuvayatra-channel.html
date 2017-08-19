@@ -28,8 +28,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display: block;
             padding: 10px;
             position: relative;
+            max-width: 750px;
+            margin: 0 auto;
         }
-
         app-header {
             @apply(--layout-fixed-top);
             z-index: 2;
@@ -40,27 +41,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 height: 10px;
                 bottom: -10px;
             }
-            ;
         }
-
-        .feed-container {
-            margin-top: 70px;
-            padding-bottom: 100px;
-        }
-
         iron-image{
-            width: 130px;
-            height: 115px;
+            max-width: 100%;
+            height: 60px;
             float: left;
         }
-
         .mytitle__wrap{
             width: calc(100% - 130px);
             float: left;
             position: relative;
             padding: 5px 10px 5px 30px;
         }
-
         .mytitle__wrap label:nth-of-type(1){
             font-size: 14px;
             color: #000;
@@ -86,7 +78,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             width: 5px;
             height: 50px;
         }
-
         .ellipsis:after {
             content: "\02026";
             box-sizing: content-box;
@@ -107,25 +98,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
             background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
         }
-
         .mytitle__wrap .ellipsis p {
             margin: 0;
             color: #8e8e8e;
         }
-
         .mytitle__wrap label{
             font-size: 14px;
             display: block;
             color: #868686;
             cursor: pointer;
         }
-
-        paper-card{
-            width:100%;
-            margin-bottom: 10px;
-            display: flex;
-        }
-
         paper-fab {
             --iron-icon-fill-color: #00bbd3;
             background: #fff;
@@ -134,11 +116,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             left: -20px;
             transform: translateY(-50%);
         }
-
-        .post-card a{
-            display: block;
-        }
-
         .link {
             display: block;
             text-decoration: none;
@@ -149,55 +126,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 300px;
                 height: 150px;
             }
-
             .mytitle__wrap{
                 width: calc(100% - 150px);
             }
-
             .mytitle__wrap label:nth-of-type(1) {
                 margin: 15px 0;
             }
-
             .mytitle__wrap label:nth-of-type(2) {
                 margin: 0;
             }
-
-            .ellipsis {
-                margin-top: 30px;
-            }
-        }
-        @media only screen and (min-width: 768px) {
-            :host {
-                max-width: 750px;
-                margin: 0 auto;
-            }
         }
         </style>
-        <iron-ajax auto url="{{ baseUrl }}api/podcasts/?category={{channelId}}" on-response="_didRespond" last-response="{{channel}}" handle-as="json" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+        <iron-ajax auto url="{{ podcast.channelDetail }}/HamroAudio.podcast.[[channelId]]::-1"
+            headers="[[podcast.headers]]"
+            on-response="_didRespond" last-response="{{channel}}"
+            handle-as="json" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
                 <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
                 <label>{{channel.title}}</label>
             </app-toolbar>
         </app-header>
-        <div class="feed-container">
-          <div class="channel">
-              <iron-image placeholder="../images/image-default.png" preload src="{{ httpToHttps(channel.image_url) }}" fade="true" sizing="cover"></iron-image>
-                <paper-fab mini icon="av:volume-up" no-ink></paper-fab>
-                  <label> <b>{{ channel.title }} </b></label>
-                  <p>{{ channel.feeds.data.length}} Episodes</p>
+
+        <div class="card-container card">
+          <div class="flex">
+            <iron-image placeholder="../images/image-default.png" preload src="{{ httpToHttps(channel.coverImage) }}" fade="true" sizing="cover"></iron-image>
+            <div class="mytitle__wrap">
+              <label> <b>{{ channel.title }} </b></label>
+              <label> [[channel.author]] | [[channel.category]]</label>
+              <label>{{ channel.episodes.length}} Episodes</label>
+            </div>
           </div>
-          <template id="list" is="dom-repeat" items="{{ channel.feeds.data }}">
-                <paper-card class="mycard" elevation="1" animated="true" on-click="_setPlayIndex">
-                    <paper-ripple></paper-ripple>
-                    <iron-image placeholder="../images/image-default.png" preload src="{{ httpToHttps(item.image) }}" fade="true" sizing="cover"></iron-image>
-                    <div class="mytitle__wrap">
-                        <paper-fab mini icon="av:volume-up" no-ink></paper-fab>
-                        <label>{{ item.title }}</label>
-                        <div class="ellipsis">{{ item.description}}</div>
-                    </div>
-                </paper-card>
-          </template>
+          <div class="flex">{{ channel.description}}</div>
+
+          <div>
+            <template is="dom-repeat" items="[[channel.episodes]]">
+              <div class="flex item" on-tap="_setPlayIndex">
+                <paper-ripple></paper-ripple>
+                <iron-image placeholder="../images/image-default.png" preload src="{{ httpToHttps(channel.coverImageThumbnail) }}" fade="true" sizing="cover"></iron-image>
+                <div class="mytitle__wrap">
+                  <paper-fab mini icon="av:volume-up" no-ink></paper-fab>
+                  <label>{{ item.title }}</label>
+                  <label>[[ itemDesc(item)]]</label>
+                </div>
+              </div>
+            </template>
+          </div>
         </div>
         <div class="loadingIndicator">
             <paper-spinner active="{{loading}}"></paper-spinner>
@@ -212,7 +187,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             channelId: {
                 type: Number,
             },
-
             tracks:{
                 notify: true
             },
@@ -221,22 +195,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         },
         _didRespond: function(e){
-            if(e.detail.response.feeds){
-                this.tracks = e.detail.response.feeds.data;
-                this.player.track = this.tracks[0]
-            }
+          this.channel = JSON.parse(e.detail.__data.response.list[0].value)
+          console.log(this.channel)
         },
         _goBack: function() {
             window.history.back();
         },
         _setPlayIndex: function(e){
             var index = e.model.__data.index;
-            this.player.track = this.tracks[index]
+            this.player.track = this.channel.episodes[index]
             this.player.play()
         },
         httpToHttps: function(url){
-            return url.replace('http://', 'https://')
-        }
+            return url? url.replace('http://', 'https://') :''
+        },
+        itemDesc : function(item){
+          return `${item.publishedDate} | ${ Math.round(item.duration / 60)} MIN | ${ Math.round(item.filesize / 10485760)} MB `
+        },
+
     });
     </script>
 </dom-module>

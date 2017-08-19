@@ -38,7 +38,7 @@
                 background-color: #7bd086;
             }
     </style>
-    <audio id="audio" src="{{ track.source }}"></audio>
+    <audio id="audio" src="{{ track.mediaUrl }}"></audio>
     <div class="player-container">
       <div class="player-container-inner">
         <paper-icon-button on-tap="playPause" icon="av:{{_computePlayPause(paused)}}-circle-outline"></paper-icon-button>
@@ -128,6 +128,9 @@
         }
         _computePlayPause(paused){
           return this.$.audio.paused ? 'play' : 'pause'
+        }
+        httpToHttps(u){
+          return u.replace('http://', 'https://')
         }
       }
       customElements.define(MiniPlayer.is, MiniPlayer)
