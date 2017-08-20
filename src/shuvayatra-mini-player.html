@@ -7,25 +7,26 @@
 <dom-module id="shuvayatra-mini-player">
   <template>
     <style include="shared-styles">
-            :host {
-                display: block;
-                --paper-slider-active-color: #fff;
-                --paper-slider-knob-color: #fff;
-                --paper-slider-knob-start-color: #fff;
-                position: fixed;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                padding: 0;
-                color: #fff;
-                max-width: 750px;
-                margin: 0 auto;
-                z-index: 99;
-            }
+      :host {
+        display: block;
+        --paper-slider-active-color: #fff;
+        --paper-slider-knob-color: #fff;
+        --paper-slider-knob-start-color: #fff;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0;
+        color: #fff;
+        max-width: 750px;
+        margin: 0 auto;
+        z-index: 99;
+        width: 100%;
+      }
 
             paper-icon-button {
                 width: 80px;
-                height: 80px;
+                height: 60px;
             }
 
             paper-slider {
@@ -34,25 +35,68 @@
                 --paper-slider-knob-start-border-color: #fff;
             }
 
-            .player-container {
-                background-color: #7bd086;
-            }
+      .player-container {
+        background-color: #7bd086;
+      }
+      .playlist-container{
+        overflow: hidden;
+        background-color: #7bd086;
+        max-height:400px;
+      }
+      .playlist{
+          display: block;
+          max-height: 380px;
+          width: 100%;
+          height: auto;
+          overflow-y: auto;
+      }
+      iron-image{
+        width: 80px;
+        height: 55px;
+      }
+      .details{
+        display: block;
+        padding-left: 10px;
+        width: 100%;
+        cursor: pointer;
+      }
+      .right{
+        margin-left: auto;
+        display: flex;
+      }
     </style>
     <audio id="audio" src="{{ track.mediaUrl }}"></audio>
-    <div class="player-container">
-      <div class="player-container-inner">
-        <paper-icon-button on-tap="playPause" icon="av:{{_computePlayPause(paused)}}-circle-outline"></paper-icon-button>
-        <div>
-          <label>{{ track.title}}</label>
-          <div id="duration">
-            <span class="fit">{{ _computeProgress(currentTime, duration)}}</span>
+
+    <div hidden$="[[!playListShown]]" class="playlist-container">
+
+      <div class="playlist">
+        <template is="dom-repeat" items="[[tracks]]">
+          <div class="flex list-item" on-tap="_setPlayIndex">
+            <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(item.channel.coverImageThumbnail) }}"></iron-image>
+            <div class="mytitle__wrap">
+              <label>{{ item.title }}</label>
+              <label>[[ itemDesc(item)]]</label>
+            </div>
           </div>
-        </div>
+        </template>
       </div>
       <paper-slider id="seekbar" value="{{ progress }}"></paper-slider>
     </div>
+    <div class="player-container flex">
+        <paper-icon-button on-tap="playPause" icon="av:{{_computePlayPause(paused)}}-circle-outline"></paper-icon-button>
+        <a href="/channel/[[track.channel.id]]">
+          <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="[[httpToHttps(track.channel.coverImage)]]"></iron-image>
+        </a>
+        <div class="details" on-click="_fullPlayer">
+          <label>{{ track.title}}</label>
+          <div>{{ _computeProgress(currentTime, duration)}}</div>
+        </div>
+        <paper-icon-button class="right" on-tap="playPause" icon="av:skip-next"></paper-icon-button>
+      </div>
   </template>
-    <script>
+
+  <script>
+
       class MiniPlayer extends Polymer.Element{
         constructor(){
           super()
@@ -68,6 +112,7 @@
               },
               tracks : {
                 type : Array,
+                value : []
               },
               track : {
                 type : Object
@@ -81,6 +126,10 @@
               },
               progress : {
                 type : Number,
+              },
+              playListShown :{
+                type : Boolean,
+                value:false
               }
           }
         }
@@ -119,6 +168,7 @@
         play(){
           this.$.audio.play()
           this.paused = false
+          console.log(this.track)
         }
         _convertSecToMin (seconds) {
             if (!seconds || seconds === 0) return '00:00';
@@ -131,6 +181,23 @@
         }
         httpToHttps(u){
           return u.replace('http://', 'https://')
+        }
+        clearQueue(){
+          this.tracks= []
+          this.track = {}
+          this.index = -1
+        }
+        _fullPlayer(){
+          this.playListShown = !this.playListShown
+        }
+        playIndex(index){
+          index = index >= this.tracks.length ? this.tracks.length - 1 : index
+          this.track = this.tracks[index]
+          this.index = index;
+          this.$.audio.play();
+        }
+        addTrack(track){
+          this.push('tracks', track)
         }
       }
       customElements.define(MiniPlayer.is, MiniPlayer)
