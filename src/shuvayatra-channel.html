@@ -131,6 +131,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             player : {
               type : Object
+            },
+            loading : {
+              type : Boolean,
+              value : true
             }
         },
         _didRespond: function(e){
@@ -144,7 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _setPlayIndex: function(e){
             this.player.pause()
             this.player.addTrack(this.channel.episodes[e.model.__data.index])
-            this.player.playIndex(this.player.tracks.length)
+            this.player.playIndex(0)
         },
         httpToHttps: function(url){
             return url? url.replace('http://', 'https://') :''
@@ -160,9 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         playAll(){
           this.player.tracks = this.channel.episodes;
-          this.player.playIndex = 0;
-          this.player.track = this.player.tracks[this.player.playIndex]
-          this.player.play()
+          this.player.playIndex(0)
         }
     });
     </script>

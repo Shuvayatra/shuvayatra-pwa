@@ -67,22 +67,22 @@
     </style>
     <audio id="audio" src="{{ track.mediaUrl }}"></audio>
 
-    <div hidden$="[[!playListShown]]" class="playlist-container">
-
-      <div class="playlist">
-        <template is="dom-repeat" items="[[tracks]]">
-          <div class="flex list-item" on-tap="_setPlayIndex">
-            <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(item.channel.coverImageThumbnail) }}"></iron-image>
-            <div class="mytitle__wrap">
-              <label>{{ item.title }}</label>
-              <label>[[ itemDesc(item)]]</label>
+    <div hidden$="[[_playerHidden]]">
+      <div hidden$="[[!playListShown]]" class="playlist-container">
+        <div class="playlist">
+          <template is="dom-repeat" items="[[tracks]]">
+            <div class="flex list-item" on-tap="_setPlayIndex">
+              <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(item.channel.coverImageThumbnail) }}"></iron-image>
+              <div class="mytitle__wrap">
+                <label>{{ item.title }}</label>
+                <label>[[ itemDesc(item)]]</label>
+              </div>
             </div>
-          </div>
-        </template>
+          </template>
+        </div>
+        <paper-slider id="seekbar" value="{{ progress }}"></paper-slider>
       </div>
-      <paper-slider id="seekbar" value="{{ progress }}"></paper-slider>
-    </div>
-    <div class="player-container flex">
+      <div class="player-container flex">
         <paper-icon-button on-tap="playPause" icon="av:{{_computePlayPause(paused)}}-circle-outline"></paper-icon-button>
         <a href="/channel/[[track.channel.id]]">
           <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="[[httpToHttps(track.channel.coverImage)]]"></iron-image>
@@ -91,8 +91,9 @@
           <label>{{ track.title}}</label>
           <div>{{ _computeProgress(currentTime, duration)}}</div>
         </div>
-        <paper-icon-button class="right" on-tap="playPause" icon="av:skip-next"></paper-icon-button>
+        <paper-icon-button class="right" on-tap="skipNext" icon="av:skip-next"></paper-icon-button>
       </div>
+    </div>
   </template>
 
   <script>
@@ -112,7 +113,8 @@
               },
               tracks : {
                 type : Array,
-                value : []
+                value : [],
+                observer : "_tracksObserver"
               },
               track : {
                 type : Object
@@ -130,6 +132,10 @@
               playListShown :{
                 type : Boolean,
                 value:false
+              },
+              _playerHidden : {
+                type : Boolean,
+                value : true
               }
           }
         }
@@ -191,13 +197,22 @@
           this.playListShown = !this.playListShown
         }
         playIndex(index){
-          index = index >= this.tracks.length ? this.tracks.length - 1 : index
-          this.track = this.tracks[index]
-          this.index = index;
+          this.index = index >= this.tracks.length ? this.tracks.length - 1 : index
+          if(this.tracks.length === 0){
+            this.$.audio.pause()
+            return;
+          }
+          this.track = this.tracks[this.index]
           this.$.audio.play();
         }
         addTrack(track){
-          this.push('tracks', track)
+          this.unshift('tracks', track)
+          this._playerHidden = false
+        }
+        skipNext(){
+          this.splice('tracks', this.index, 1)
+          this.playIndex(this.index)
+          this._playerHidden = this.tracks.length === 0
         }
       }
       customElements.define(MiniPlayer.is, MiniPlayer)
