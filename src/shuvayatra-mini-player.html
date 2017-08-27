@@ -223,14 +223,18 @@
         _fullPlayer(){
           this.playListShown = !this.playListShown
         }
-        playIndex(index){
+        _playIndex(index){
           if(this.tracks.length === 0){
             this.$.audio.pause()
             return;
           }
-          this.index = index
           this.$.audio.play();
           this.paused = false;
+        }
+        playIndex(index){
+          this.index = index
+          this.track = this.tracks[index]
+          this._playIndex(index)
         }
         addTrack(track){
           this.unshift('tracks', track)
@@ -263,17 +267,19 @@
           }
         }
         _indexChanged(n, o){
+          console.log(o, '->', n)
           if(o >= 0){
             this.$.queue.children[o].classList.remove('selected');
           }
 
           n = n >= this.tracks.length ? this.tracks.length - 1 : n
-          this.track = this.tracks[this.index]
+          this.track = this.tracks[n]
 
           // This is required coz the list may not be completely rendered so the index will be out of order
           setTimeout((children, n)=>{
             children[n].classList.add('selected')
           }, 200, this.$.queue.children, n)
+          this._playIndex(n)
         }
       }
       customElements.define(MiniPlayer.is, MiniPlayer)

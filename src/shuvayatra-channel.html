@@ -74,6 +74,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         #cover div{
           padding-top:20px;
         }
+        .playlist{
+          background: #e6ffff;
+        }
         .list-item iron-image{
           width: 70px;
           height: 50px;
@@ -105,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
           <div class="flex">{{ channel.description}}</div>
 
-          <div>
+          <div class="playlist">
             <template is="dom-repeat" items="[[channel.episodes]]">
               <div class="flex list-item">
                 <iron-image sizing="cover" placeholder="../images/image-default.png"
