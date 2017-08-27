@@ -23,8 +23,10 @@
         z-index: 99;
         width: 100%;
       }
-
-            paper-icon-button {
+      .playlist div:nth-of-type({{this.index}}){
+        background: black;
+      }
+                  paper-icon-button {
                 width: 80px;
                 height: 60px;
             }
@@ -60,10 +62,6 @@
         width: 100%;
         cursor: pointer;
       }
-      .right{
-        margin-left: auto;
-        display: flex;
-      }
     </style>
     <audio id="audio" src="{{ track.mediaUrl }}"></audio>
 
@@ -71,11 +69,17 @@
       <div hidden$="[[!playListShown]]" class="playlist-container">
         <div class="playlist">
           <template is="dom-repeat" items="[[tracks]]">
-            <div class="flex list-item" on-tap="_setPlayIndex">
-              <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(item.channel.coverImageThumbnail) }}"></iron-image>
-              <div class="mytitle__wrap">
+            <div class="flex list-item">
+              <a href="/channel/[[item.channel.id]]">
+                <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(item.channel.coverImageThumbnail) }}"></iron-image>
+              </a>
+              <div class="block pointer" on-click="_playItem">
                 <label>{{ item.title }}</label>
-                <label>[[ itemDesc(item)]]</label>
+                <div>[[ itemDesc(item)]]</div>
+              </div>
+              <div class="right">
+                <paper-icon-button icon="cancel" on-click="_removeFromQueue"></paper-icon-button>
+                <paper-tooltip>Remove from Queue</paper-tooltip>
               </div>
             </div>
           </template>
@@ -83,7 +87,7 @@
         <paper-slider id="seekbar" value="{{ progress }}"></paper-slider>
       </div>
       <div class="player-container flex">
-        <paper-icon-button on-tap="playPause" icon="av:{{_computePlayPause(paused)}}-circle-outline"></paper-icon-button>
+        <paper-icon-button on-tap="playPause" icon="av:{{_computePlayPause(paused)}}"></paper-icon-button>
         <a href="/channel/[[track.channel.id]]">
           <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="[[httpToHttps(track.channel.coverImage)]]"></iron-image>
         </a>
@@ -91,7 +95,10 @@
           <label>{{ track.title}}</label>
           <div>{{ _computeProgress(currentTime, duration)}}</div>
         </div>
-        <paper-icon-button class="right" on-tap="skipNext" icon="av:skip-next"></paper-icon-button>
+        <div class="right">
+          <paper-icon-button on-tap="skipNext" icon="av:skip-next"></paper-icon-button>
+          <paper-tooltip>Skip to Next</paper-tooltip>
+        </div>
       </div>
     </div>
   </template>
@@ -107,14 +114,9 @@
         }
         static get properties(){
           return {
-              playIndex : {
-                type : Number,
-                observer : '_indexChanged'
-              },
               tracks : {
                 type : Array,
                 value : [],
-                observer : "_tracksObserver"
               },
               track : {
                 type : Object
@@ -150,6 +152,7 @@
              this.currentTime = e.target.currentTime
              this.progress = (e.target.currentTime / e.target.duration) * 100
            })
+           this.$.audio.addEventListener('ended', e => this.skipNext())
            // This is required so that playing of audio does not update the seekbar back.
            // Without this, a flicker will be seen everysecond when we hold the seekbar.
            this.$.seekbar.addEventListener('immediate-value-change', e =>
@@ -158,11 +161,6 @@
              this.$.audio.currentTime = e.target.value * this.$.audio.duration / 100
              this.$.audio.play();
            })
-        }
-        _indexChanged(newIndex, old){
-          if(newIndex > -1 && newIndex < this.tracks.length)
-            this.track = this.tracks[newIndex]
-          this.playIndex = newIndex
         }
         playPause(){
           this.$.audio.paused ? this.play() : this.pause()
@@ -174,7 +172,6 @@
         play(){
           this.$.audio.play()
           this.paused = false
-          console.log(this.track)
         }
         _convertSecToMin (seconds) {
             if (!seconds || seconds === 0) return '00:00';
@@ -183,15 +180,23 @@
             return minutes + ':' + (secondsToCalc.length < 2 ? '0' + secondsToCalc : secondsToCalc);
         }
         _computePlayPause(paused){
-          return this.$.audio.paused ? 'play' : 'pause'
+          return this.paused ? 'play-arrow' : 'pause'
         }
         httpToHttps(u){
           return u.replace('http://', 'https://')
         }
-        clearQueue(){
-          this.tracks= []
-          this.track = {}
-          this.index = -1
+        _playItem(e){
+          this.$.audio.pause()
+          this.track = this.tracks[e.model.__data.index]
+          this.$.audio.play()
+        }
+        _removeFromQueue(e){
+          let index = e.model.__data.index
+          this.splice('tracks', index, 1)
+          if(index === this.index){
+            this.track = this.tracks[index]
+            this.$.audio.play()
+          }
         }
         _fullPlayer(){
           this.playListShown = !this.playListShown
@@ -204,15 +209,23 @@
           }
           this.track = this.tracks[this.index]
           this.$.audio.play();
+          this.paused = false;
         }
         addTrack(track){
           this.unshift('tracks', track)
           this._playerHidden = false
         }
+        queueTrack(track){
+          this.push('tracks', track)
+          this._playerHidden = false
+        }
         skipNext(){
           this.splice('tracks', this.index, 1)
-          this.playIndex(this.index)
           this._playerHidden = this.tracks.length === 0
+          this.playIndex(this.index)
+        }
+        itemDesc(item){
+          return `${item.publishedDate} | ${ Math.round(item.duration / 6) / 10} MIN | ${ Math.round(item.filesize / 1048576) / 10} MB `
         }
       }
       customElements.define(MiniPlayer.is, MiniPlayer)

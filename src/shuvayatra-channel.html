@@ -106,12 +106,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div>
             <template is="dom-repeat" items="[[channel.episodes]]">
-              <div class="flex list-item" on-tap="_setPlayIndex">
-                <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(channel.coverImageThumbnail) }}"></iron-image>
-                <div class="mytitle__wrap">
+              <div class="flex list-item">
+                <iron-image sizing="cover" placeholder="../images/image-default.png"
+                  preload fade src="{{ httpToHttps(channel.coverImageThumbnail) }}"></iron-image>
+                <div class="mytitle__wrap block" on-tap="_setPlayIndex">
                   <label>{{ item.title }}</label>
                   <label>[[ itemDesc(item)]]</label>
                 </div>
+                <div class="right">
+                  <paper-icon-button icon="add-circle-outline" on-tap="_addToQueue"></paper-icon-button>
+                  <paper-tooltip>Add to Queue</paper-tooltip>
+              </div>
               </div>
             </template>
           </div>
@@ -165,6 +170,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         playAll(){
           this.player.tracks = this.channel.episodes;
           this.player.playIndex(0)
+        },
+        _addToQueue(e){
+          this.player.queueTrack(this.channel.episodes[e.model.__data.index])
         }
     });
     </script>
