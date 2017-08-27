@@ -23,20 +23,15 @@
         z-index: 99;
         width: 100%;
       }
-      .playlist div:nth-of-type({{this.index}}){
-        background: black;
+      paper-icon-button {
+        width: 60px;
+        height: 60px;
       }
-                  paper-icon-button {
-                width: 80px;
-                height: 60px;
-            }
-
-            paper-slider {
-                width: 100%;
-                --paper-slider-container-color: #fff;
-                --paper-slider-knob-start-border-color: #fff;
-            }
-
+      paper-slider {
+        width: 100%;
+        --paper-slider-container-color: #fff;
+        --paper-slider-knob-start-border-color: #fff;
+      }
       .player-container {
         background-color: #7bd086;
       }
@@ -78,7 +73,7 @@
                 <div>[[ itemDesc(item)]]</div>
               </div>
               <div class="right">
-                <paper-icon-button icon="cancel" on-click="_removeFromQueue"></paper-icon-button>
+                <paper-icon-button icon="clear" on-click="_removeFromQueue"></paper-icon-button>
                 <paper-tooltip>Remove from Queue</paper-tooltip>
               </div>
             </div>
@@ -87,7 +82,9 @@
         <paper-slider id="seekbar" value="{{ progress }}"></paper-slider>
       </div>
       <div class="player-container flex">
-        <paper-icon-button on-tap="playPause" icon="av:{{_computePlayPause(paused)}}"></paper-icon-button>
+        <div>
+          <paper-icon-button on-tap="playPause" icon="av:{{_computePlayPause(paused)}}"></paper-icon-button>
+        </div>
         <a href="/channel/[[track.channel.id]]">
           <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="[[httpToHttps(track.channel.coverImage)]]"></iron-image>
         </a>
@@ -96,8 +93,14 @@
           <div>{{ _computeProgress(currentTime, duration)}}</div>
         </div>
         <div class="right">
-          <paper-icon-button on-tap="skipNext" icon="av:skip-next"></paper-icon-button>
-          <paper-tooltip>Skip to Next</paper-tooltip>
+          <div>
+            <paper-icon-button on-tap="_fullPlayer" icon="av:queue-music"></paper-icon-button>
+            <paper-tooltip>Show player queue</paper-tooltip>
+          </div>
+          <div>
+            <paper-icon-button on-tap="skipNext" icon="av:skip-next"></paper-icon-button>
+            <paper-tooltip>Skip to Next</paper-tooltip>
+          </div>
         </div>
       </div>
     </div>
@@ -180,22 +183,21 @@
             return minutes + ':' + (secondsToCalc.length < 2 ? '0' + secondsToCalc : secondsToCalc);
         }
         _computePlayPause(paused){
-          return this.paused ? 'play-arrow' : 'pause'
+          return 'av:' + (this.paused ? 'play' : 'pause' ) + '-circle-filled'
         }
         httpToHttps(u){
           return u.replace('http://', 'https://')
         }
         _playItem(e){
-          this.$.audio.pause()
-          this.track = this.tracks[e.model.__data.index]
-          this.$.audio.play()
+          this.playIndex(e.model.__data.index)
         }
         _removeFromQueue(e){
           let index = e.model.__data.index
-          this.splice('tracks', index, 1)
+          // We need to change playing if currently playing audio is removed.
           if(index === this.index){
-            this.track = this.tracks[index]
-            this.$.audio.play()
+            this.skipNext()
+          } else {
+            this.splice('tracks', index, 1)
           }
         }
         _fullPlayer(){
@@ -203,6 +205,7 @@
         }
         playIndex(index){
           this.index = index >= this.tracks.length ? this.tracks.length - 1 : index
+          this._playerHidden = this.tracks.length === 0
           if(this.tracks.length === 0){
             this.$.audio.pause()
             return;
@@ -217,11 +220,13 @@
         }
         queueTrack(track){
           this.push('tracks', track)
-          this._playerHidden = false
+          // Previously queue was empty
+          if(this.tracks.length === 1){
+            this.playIndex(0)
+          }
         }
         skipNext(){
           this.splice('tracks', this.index, 1)
-          this._playerHidden = this.tracks.length === 0
           this.playIndex(this.index)
         }
         itemDesc(item){

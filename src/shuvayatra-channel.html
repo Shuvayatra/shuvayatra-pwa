@@ -98,7 +98,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <label> <b>[[ _computeTitle(channel)]]</b></label>
               <label>[[_computeAuthor(channel)]]</label>
               <paper-fab on-tap="playAll" icon="av:play-arrow" alt="play" id="playallbtn"></paper-fab>
-              <paper-tooltip for="playallbtn"> Play All [[channel.episodes.length]] Episodes </paper-tooltip>
+              <paper-tooltip for="playallbtn">Playing all epiosdes will take too much time. Queue individual items instead.
+              </paper-tooltip>
               [[channel.episodes.length]] Episodes
             </div>
           </div>
@@ -114,7 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <label>[[ itemDesc(item)]]</label>
                 </div>
                 <div class="right">
-                  <paper-icon-button icon="add-circle-outline" on-tap="_addToQueue"></paper-icon-button>
+                  <paper-icon-button icon="av:queue" on-tap="_addToQueue"></paper-icon-button>
                   <paper-tooltip>Add to Queue</paper-tooltip>
               </div>
               </div>
