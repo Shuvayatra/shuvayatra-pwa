@@ -33,11 +33,11 @@
         --paper-slider-knob-start-border-color: #fff;
       }
       .player-container {
-        background-color: #7bd086;
+        background-color: var(--app-primary-color);
       }
       .playlist-container{
         overflow: hidden;
-        background-color: #7bd086;
+        background-color: var(--app-primary-color);
         max-height:400px;
       }
       .playlist{
@@ -46,6 +46,11 @@
           width: 100%;
           height: auto;
           overflow-y: auto;
+      }
+      .playlist .selected {
+        background: var(--app-secondary-color);
+        border-radius: 5px;
+        opacity: 0.7;
       }
       iron-image{
         width: 80px;
@@ -57,18 +62,21 @@
         width: 100%;
         cursor: pointer;
       }
+      .left-pad{
+        padding-left: 15px;
+      }
     </style>
     <audio id="audio" src="{{ track.mediaUrl }}"></audio>
 
     <div hidden$="[[_playerHidden]]">
       <div hidden$="[[!playListShown]]" class="playlist-container">
-        <div class="playlist">
+        <div class="playlist" id="queue">
           <template is="dom-repeat" items="[[tracks]]">
             <div class="flex list-item">
               <a href="/channel/[[item.channel.id]]">
                 <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(item.channel.coverImageThumbnail) }}"></iron-image>
               </a>
-              <div class="block pointer" on-click="_playItem">
+              <div class="block pointer left-pad" on-click="_playItem">
                 <label>{{ item.title }}</label>
                 <div>[[ itemDesc(item)]]</div>
               </div>
@@ -115,6 +123,11 @@
         static get is(){
           return 'shuvayatra-mini-player'
         }
+        static get observers(){
+          return [
+            '_tracksChanged(tracks.splices)'
+          ]
+        }
         static get properties(){
           return {
               tracks : {
@@ -141,6 +154,10 @@
               _playerHidden : {
                 type : Boolean,
                 value : true
+              },
+              index : {
+                type : Number,
+                observer : '_indexChanged'
               }
           }
         }
@@ -194,7 +211,10 @@
         _removeFromQueue(e){
           let index = e.model.__data.index
           // We need to change playing if currently playing audio is removed.
-          if(index === this.index){
+          if(index < this.index){
+            this.splice('tracks', index, 1)
+            this.index--
+          } else if( index === this.index){
             this.skipNext()
           } else {
             this.splice('tracks', index, 1)
@@ -204,19 +224,16 @@
           this.playListShown = !this.playListShown
         }
         playIndex(index){
-          this.index = index >= this.tracks.length ? this.tracks.length - 1 : index
-          this._playerHidden = this.tracks.length === 0
           if(this.tracks.length === 0){
             this.$.audio.pause()
             return;
           }
-          this.track = this.tracks[this.index]
+          this.index = index
           this.$.audio.play();
           this.paused = false;
         }
         addTrack(track){
           this.unshift('tracks', track)
-          this._playerHidden = false
         }
         queueTrack(track){
           this.push('tracks', track)
@@ -231,6 +248,32 @@
         }
         itemDesc(item){
           return `${item.publishedDate} | ${ Math.round(item.duration / 6) / 10} MIN | ${ Math.round(item.filesize / 1048576) / 10} MB `
+        }
+        _tracksChanged(s){
+          if(!s) return
+          let splices = s.indexSplices[0]
+          let len     = splices.object.length
+
+          if(len === 0){
+            this._playerHidden = true
+            // so that index changed is triggered proprly
+            this.index = -1
+          } else {
+            this._playerHidden = false
+          }
+        }
+        _indexChanged(n, o){
+          if(o >= 0){
+            this.$.queue.children[o].classList.remove('selected');
+          }
+
+          n = n >= this.tracks.length ? this.tracks.length - 1 : n
+          this.track = this.tracks[this.index]
+
+          // This is required coz the list may not be completely rendered so the index will be out of order
+          setTimeout((children, n)=>{
+            children[n].classList.add('selected')
+          }, 200, this.$.queue.children, n)
         }
       }
       customElements.define(MiniPlayer.is, MiniPlayer)
