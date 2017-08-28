@@ -3,9 +3,12 @@
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="behaviors/global-behavior.html">
 <link rel="import" href="shuvayatra-slider-item.html">
-<dom-module id="shuvayatra-slider-block">
+<dom-module id="radio-slider">
   <template>
     <style >
+      :host{
+        width: 100%;
+      }
       .see-more{
         float:right;
         text-decoration: none;
@@ -14,9 +17,40 @@
         width: 100%;
       }
       .slider-element {
-        display: flex;
+        width: 100%;
         justify-content: space-between;
-        overflow-x: scroll;
+        display: flex;
+        overflow-x: auto;
+      }
+      .slider-item{
+        display: block;
+        margin-right: 5px;
+      }
+      iron-image {
+          width: 140px;
+          height: 80px;
+      }
+
+      h5 {
+          font-weight: normal;
+          color: #333;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 130px;
+          margin: 0;
+          padding: 5px;
+      }
+
+      a{
+          text-decoration: none;
+      }
+
+      @media only screen and (min-width: 600px) {
+          iron-image {
+              width: 200px;
+              height: 150px;
+          }
       }
     </style>
     <paper-card animated-shadow="false">
@@ -31,7 +65,10 @@
         </div>
         <div class="slider-element">
           <template is="dom-repeat" items="[[data.content]]">
-            <shuvayatra-slider-item data={{item}}></shuvayatra-slider-item>
+            <a href="[[_generateUrl(item)]]" class="slider-item">
+              <iron-image src="[[getImage(item)]]" preload fade sizing="cover" style="background-color:#F0F0F0;"></iron-image>
+              <h5>[[item.title]]</h5>
+            </a>
           </template>
         </div>
       </div>
@@ -39,13 +76,19 @@
   </template>
   <script>
     Polymer({
-      is: 'shuvayatra-slider-block',
+      is: 'radio-slider',
       behaviors: [GlobalBehavior],
       properties: {
         data: {
           type: Object,
         },
       },
+      getImage: function(d){
+        return d.coverImage + '?width=140'
+      },
+      _generateUrl:function(item) {
+        return '/channel/' + item.id
+      }
     });
     /*
     class SliderView extends Polymer.Element {

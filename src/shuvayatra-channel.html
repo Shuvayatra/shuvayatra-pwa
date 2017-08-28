@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="shared-styles.html">
@@ -28,8 +29,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display: block;
             padding: 10px;
             position: relative;
+            max-width: 750px;
+            margin: 0 auto;
         }
-
         app-header {
             @apply(--layout-fixed-top);
             z-index: 2;
@@ -40,160 +42,85 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 height: 10px;
                 bottom: -10px;
             }
-            ;
         }
-
-        .feed-container {
-            margin-top: 70px;
-            padding-bottom: 100px;
-        }
-
-        iron-image{
-            width: 130px;
-            height: 115px;
-            float: left;
-        }
-
         .mytitle__wrap{
-            width: calc(100% - 130px);
-            float: left;
             position: relative;
-            padding: 5px 10px 5px 30px;
+            padding: 0px 5px 5px 30px;
+            display: block;
         }
-
         .mytitle__wrap label:nth-of-type(1){
             font-size: 14px;
             color: #000;
             margin-top: 5px;
         }
-
-        .ellipsis {
-            overflow: hidden;
-            height: 50px;
-            line-height: 25px;
-            margin-top: 15px;
-        }
-
-        .ellipsis > div {
-            float: right;
-            width: 100%;
-            margin-left: -5px;
-        }
-
-        .ellipsis:before {
-            content: "";
-            float: left;
-            width: 5px;
-            height: 50px;
-        }
-
-        .ellipsis:after {
-            content: "\02026";
-            box-sizing: content-box;
-            -webkit-box-sizing: content-box;
-            -moz-box-sizing: content-box;
-            float: right;
-            color: #8e8e8e;
-            position: relative;
-            top: -25px;
-            left: 100%;
-            width: 3em;
-            margin-left: -3em;
-            padding-right: 5px;
-            text-align: right;
-            background: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(white), color-stop(50%, white));
-            background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-            background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-            background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-            background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-        }
-
-        .mytitle__wrap .ellipsis p {
-            margin: 0;
-            color: #8e8e8e;
-        }
-
         .mytitle__wrap label{
             font-size: 14px;
             display: block;
             color: #868686;
             cursor: pointer;
         }
-
-        paper-card{
-            width:100%;
-            margin-bottom: 10px;
-            display: flex;
-        }
-
         paper-fab {
             --iron-icon-fill-color: #00bbd3;
             background: #fff;
             position: absolute;
             top: 50%;
-            left: -20px;
+            left: -30px;
             transform: translateY(-50%);
         }
-
-        .post-card a{
-            display: block;
+        #cover iron-image{
+          width: 250px;
+          height: 120px;
         }
-
-        .link {
-            display: block;
-            text-decoration: none;
+        #cover div{
+          padding-top:20px;
         }
-
-        @media only screen and (min-width: 480px){
-            iron-image{
-                width: 300px;
-                height: 150px;
-            }
-
-            .mytitle__wrap{
-                width: calc(100% - 150px);
-            }
-
-            .mytitle__wrap label:nth-of-type(1) {
-                margin: 15px 0;
-            }
-
-            .mytitle__wrap label:nth-of-type(2) {
-                margin: 0;
-            }
-
-            .ellipsis {
-                margin-top: 30px;
-            }
-
-        }
-
-        @media only screen and (min-width: 768px) {
-            :host {
-                max-width: 750px;
-                margin: 0 auto;
-            }
+        .list-item iron-image{
+          width: 70px;
+          height: 50px;
         }
         </style>
-        <iron-ajax auto url="{{ baseUrl }}api/podcasts/?category={{channelId}}" on-response="_didRespond" last-response="{{channel}}" handle-as="json" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+        <iron-ajax auto url="{{ podcast.channelDetail }}/HamroAudio.podcast.[[channelId]]::-1"
+            headers="[[podcast.headers]]"
+            on-response="_didRespond" last-response="{{channel}}"
+            handle-as="json" debounce-duration="300" loading="{{loading}}"></iron-ajax>
+
         <app-header condenses effects="waterfall" fixed>
             <app-toolbar>
                 <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
                 <label>{{channel.title}}</label>
             </app-toolbar>
         </app-header>
-        <div class="feed-container">
-            <template id="list" is="dom-repeat" items="{{ channel.feeds.data }}">
-                <paper-card class="mycard" elevation="1" animated="true" on-click="_setPlayIndex">
-                    <paper-ripple></paper-ripple>
-                    <iron-image placeholder="../images/image-default.png" preload src="{{ item.image }}" fade="true" sizing="cover"></iron-image>
-                    <div class="mytitle__wrap">
-                        <paper-fab mini icon="av:volume-up" no-ink></paper-fab>
-                        <label>{{ item.title }}</label>
-                        <div class="ellipsis"><div><p>{{ item.description}}</p></div></div>
-                    </div>
-                </paper-card>
+
+        <div class="card-container card" hidden$="[[loading]]">
+          <div class="flex" id="cover">
+            <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(channel.coverImage) }}"></iron-image>
+            <div class="mytitle__wrap">
+              <label> <b>[[ _computeTitle(channel)]]</b></label>
+              <label>[[_computeAuthor(channel)]]</label>
+              <paper-fab on-tap="playAll" icon="av:play-arrow" alt="play" id="playallbtn"></paper-fab>
+              <paper-tooltip for="playallbtn">Playing all epiosdes will take too much time. Queue individual items instead.
+              </paper-tooltip>
+              [[channel.episodes.length]] Episodes
+            </div>
+          </div>
+          <div class="flex">{{ channel.description}}</div>
+
+          <div>
+            <template is="dom-repeat" items="[[channel.episodes]]">
+              <div class="flex list-item">
+                <iron-image sizing="cover" placeholder="../images/image-default.png"
+                  preload fade src="{{ httpToHttps(channel.coverImageThumbnail) }}"></iron-image>
+                <div class="mytitle__wrap block" on-tap="_setPlayIndex">
+                  <label>{{ item.title }}</label>
+                  <label>[[ itemDesc(item)]]</label>
+                </div>
+                <div class="right">
+                  <paper-icon-button icon="av:queue" on-tap="_addToQueue"></paper-icon-button>
+                  <paper-tooltip>Add to Queue</paper-tooltip>
+              </div>
+              </div>
             </template>
+          </div>
         </div>
         <div class="loadingIndicator">
             <paper-spinner active="{{loading}}"></paper-spinner>
@@ -208,27 +135,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             channelId: {
                 type: Number,
             },
-
-            tracks:{
-                notify: true
-            },
             player : {
               type : Object
+            },
+            loading : {
+              type : Boolean,
+              value : true
             }
         },
         _didRespond: function(e){
-            if(e.detail.response.feeds){
-                this.tracks = e.detail.response.feeds.data;
-                this.player.track = this.tracks[0]
-            }
+          this.channel = JSON.parse(e.detail.__data.response.list[0].value)
+          this.channel.episodes.forEach(e => e.channel = this.channel)
+          console.log(this.channel)
         },
         _goBack: function() {
             window.history.back();
         },
         _setPlayIndex: function(e){
-            var index = e.model.__data.index;
-            this.player.track = this.tracks[index]
-            this.player.play()
+            this.player.pause()
+            this.player.addTrack(this.channel.episodes[e.model.__data.index])
+            this.player.playIndex(0)
+        },
+        httpToHttps: function(url){
+            return url? url.replace('http://', 'https://') :''
+        },
+        itemDesc : function(item){
+          return `${item.publishedDate} | ${ Math.round(item.duration / 6) / 10} MIN | ${ Math.round(item.filesize / 1048576) / 10} MB `
+        },
+        _computeTitle: function(chan){
+          return chan ? `${chan.title} - ${chan.category}` : ''
+        },
+        _computeAuthor: function(c){
+          return c? c.author||' ' : ' '
+        },
+        playAll(){
+          this.player.tracks = this.channel.episodes;
+          this.player.playIndex(0)
+        },
+        _addToQueue(e){
+          this.player.queueTrack(this.channel.episodes[e.model.__data.index])
         }
     });
     </script>

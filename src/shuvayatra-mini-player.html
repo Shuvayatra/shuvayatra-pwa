@@ -7,52 +7,115 @@
 <dom-module id="shuvayatra-mini-player">
   <template>
     <style include="shared-styles">
-            :host {
-                display: block;
-                --paper-slider-active-color: #fff;
-                --paper-slider-knob-color: #fff;
-                --paper-slider-knob-start-color: #fff;
-                position: fixed;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                padding: 0;
-                color: #fff;
-                max-width: 750px;
-                margin: 0 auto;
-                z-index: 99;
-            }
-
-            paper-icon-button {
-                width: 80px;
-                height: 80px;
-            }
-
-            paper-slider {
-                width: 100%;
-                --paper-slider-container-color: #fff;
-                --paper-slider-knob-start-border-color: #fff;
-            }
-
-            .player-container {
-                background-color: #7bd086;
-            }
+      :host {
+        display: block;
+        --paper-slider-active-color: #fff;
+        --paper-slider-knob-color: #fff;
+        --paper-slider-knob-start-color: #fff;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0;
+        color: #fff;
+        max-width: 750px;
+        margin: 0 auto;
+        z-index: 99;
+        width: 100%;
+      }
+      paper-icon-button {
+        width: 60px;
+        height: 60px;
+      }
+      paper-slider {
+        width: 100%;
+        --paper-slider-container-color: #fff;
+        --paper-slider-knob-start-border-color: #fff;
+      }
+      .player-container {
+        background-color: var(--app-primary-color);
+      }
+      .playlist-container{
+        overflow: hidden;
+        background-color: var(--app-primary-color);
+        max-height:400px;
+      }
+      .playlist{
+          display: block;
+          max-height: 380px;
+          width: 100%;
+          height: auto;
+          overflow-y: auto;
+      }
+      .playlist .selected {
+        background: var(--app-secondary-color);
+        border-radius: 5px;
+        opacity: 0.7;
+      }
+      iron-image{
+        width: 80px;
+        height: 55px;
+      }
+      .details{
+        display: block;
+        padding-left: 10px;
+        width: 100%;
+        cursor: pointer;
+      }
+      .left-pad{
+        padding-left: 15px;
+      }
     </style>
-    <audio id="audio" src="{{ track.source }}"></audio>
-    <div class="player-container">
-      <div class="player-container-inner">
-        <paper-icon-button on-tap="playPause" icon="av:{{_computePlayPause(paused)}}-circle-outline"></paper-icon-button>
+    <audio id="audio" src="{{ track.mediaUrl }}"></audio>
+
+    <div hidden$="[[_playerHidden]]">
+      <div hidden$="[[!playListShown]]" class="playlist-container">
+        <div class="playlist" id="queue">
+          <template is="dom-repeat" items="[[tracks]]">
+            <div class="flex list-item">
+              <a href="/channel/[[item.channel.id]]">
+                <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(item.channel.coverImageThumbnail) }}"></iron-image>
+              </a>
+              <div class="block pointer left-pad" on-click="_playItem">
+                <label>{{ item.title }}</label>
+                <div>[[ itemDesc(item)]]</div>
+              </div>
+              <div class="right">
+                <paper-icon-button icon="clear" on-click="_removeFromQueue"></paper-icon-button>
+                <paper-tooltip>Remove from Queue</paper-tooltip>
+              </div>
+            </div>
+          </template>
+        </div>
+        <paper-slider id="seekbar" value="{{ progress }}"></paper-slider>
+      </div>
+      <div class="player-container flex">
         <div>
+          <paper-icon-button on-tap="playPause" icon="av:{{_computePlayPause(paused)}}"></paper-icon-button>
+        </div>
+        <a href="/channel/[[track.channel.id]]">
+          <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="[[httpToHttps(track.channel.coverImage)]]"></iron-image>
+        </a>
+        <div class="details" on-click="_fullPlayer">
           <label>{{ track.title}}</label>
-          <div id="duration">
-            <span class="fit">{{ _computeProgress(currentTime, duration)}}</span>
+          <div>{{ _computeProgress(currentTime, duration)}}</div>
+        </div>
+        <div class="right">
+          <div>
+            <paper-icon-button on-tap="_fullPlayer" icon="av:queue-music"></paper-icon-button>
+            <paper-tooltip>Show player queue</paper-tooltip>
+          </div>
+          <div>
+            <paper-icon-button on-tap="skipNext" icon="av:skip-next"></paper-icon-button>
+            <paper-tooltip>Skip to Next</paper-tooltip>
           </div>
         </div>
       </div>
-      <paper-slider id="seekbar" value="{{ progress }}"></paper-slider>
     </div>
   </template>
-    <script>
+
+  <script>
+
       class MiniPlayer extends Polymer.Element{
         constructor(){
           super()
@@ -60,14 +123,16 @@
         static get is(){
           return 'shuvayatra-mini-player'
         }
+        static get observers(){
+          return [
+            '_tracksChanged(tracks.splices)'
+          ]
+        }
         static get properties(){
           return {
-              playIndex : {
-                type : Number,
-                observer : '_indexChanged'
-              },
               tracks : {
                 type : Array,
+                value : [],
               },
               track : {
                 type : Object
@@ -81,6 +146,18 @@
               },
               progress : {
                 type : Number,
+              },
+              playListShown :{
+                type : Boolean,
+                value:false
+              },
+              _playerHidden : {
+                type : Boolean,
+                value : true
+              },
+              index : {
+                type : Number,
+                observer : '_indexChanged'
               }
           }
         }
@@ -95,6 +172,7 @@
              this.currentTime = e.target.currentTime
              this.progress = (e.target.currentTime / e.target.duration) * 100
            })
+           this.$.audio.addEventListener('ended', e => this.skipNext())
            // This is required so that playing of audio does not update the seekbar back.
            // Without this, a flicker will be seen everysecond when we hold the seekbar.
            this.$.seekbar.addEventListener('immediate-value-change', e =>
@@ -103,11 +181,6 @@
              this.$.audio.currentTime = e.target.value * this.$.audio.duration / 100
              this.$.audio.play();
            })
-        }
-        _indexChanged(newIndex, old){
-          if(newIndex > -1 && newIndex < this.tracks.length)
-            this.track = this.tracks[newIndex]
-          this.playIndex = newIndex
         }
         playPause(){
           this.$.audio.paused ? this.play() : this.pause()
@@ -127,7 +200,80 @@
             return minutes + ':' + (secondsToCalc.length < 2 ? '0' + secondsToCalc : secondsToCalc);
         }
         _computePlayPause(paused){
-          return this.$.audio.paused ? 'play' : 'pause'
+          return 'av:' + (this.paused ? 'play' : 'pause' ) + '-circle-filled'
+        }
+        httpToHttps(u){
+          return u.replace('http://', 'https://')
+        }
+        _playItem(e){
+          this.playIndex(e.model.__data.index)
+        }
+        _removeFromQueue(e){
+          let index = e.model.__data.index
+          // We need to change playing if currently playing audio is removed.
+          if(index < this.index){
+            this.splice('tracks', index, 1)
+            this.index--
+          } else if( index === this.index){
+            this.skipNext()
+          } else {
+            this.splice('tracks', index, 1)
+          }
+        }
+        _fullPlayer(){
+          this.playListShown = !this.playListShown
+        }
+        playIndex(index){
+          if(this.tracks.length === 0){
+            this.$.audio.pause()
+            return;
+          }
+          this.index = index
+          this.$.audio.play();
+          this.paused = false;
+        }
+        addTrack(track){
+          this.unshift('tracks', track)
+        }
+        queueTrack(track){
+          this.push('tracks', track)
+          // Previously queue was empty
+          if(this.tracks.length === 1){
+            this.playIndex(0)
+          }
+        }
+        skipNext(){
+          this.splice('tracks', this.index, 1)
+          this.playIndex(this.index)
+        }
+        itemDesc(item){
+          return `${item.publishedDate} | ${ Math.round(item.duration / 6) / 10} MIN | ${ Math.round(item.filesize / 1048576) / 10} MB `
+        }
+        _tracksChanged(s){
+          if(!s) return
+          let splices = s.indexSplices[0]
+          let len     = splices.object.length
+
+          if(len === 0){
+            this._playerHidden = true
+            // so that index changed is triggered proprly
+            this.index = -1
+          } else {
+            this._playerHidden = false
+          }
+        }
+        _indexChanged(n, o){
+          if(o >= 0){
+            this.$.queue.children[o].classList.remove('selected');
+          }
+
+          n = n >= this.tracks.length ? this.tracks.length - 1 : n
+          this.track = this.tracks[this.index]
+
+          // This is required coz the list may not be completely rendered so the index will be out of order
+          setTimeout((children, n)=>{
+            children[n].classList.add('selected')
+          }, 200, this.$.queue.children, n)
         }
       }
       customElements.define(MiniPlayer.is, MiniPlayer)
