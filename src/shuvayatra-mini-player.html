@@ -66,7 +66,7 @@
         padding-left: 15px;
       }
     </style>
-    <audio id="audio" src="{{ track.mediaUrl }}"></audio>
+    <audio id="audio" src="{{ audioUrl(track.mediaUrl) }}"></audio>
 
     <div hidden$="[[_playerHidden]]">
       <div hidden$="[[!playListShown]]" class="playlist-container">
@@ -280,6 +280,9 @@
             children[n].classList.add('selected')
           }, 200, this.$.queue.children, n)
           this._playIndex(n)
+        }
+        audioUrl(url){
+            return url.replace('http://cache.hamro-files.com/', 'https://storage.googleapis.com/')
         }
       }
       customElements.define(MiniPlayer.is, MiniPlayer)
