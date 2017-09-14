@@ -18,16 +18,17 @@
       }
       .slider-element {
         width: 100%;
-        justify-content: space-between;
         display: flex;
+        justify-content: flex-start;
         overflow-x: auto;
       }
       .slider-item{
         display: block;
         margin-right: 5px;
+        padding: 0 8px;
       }
       iron-image {
-          width: 140px;
+          width: 80px;
           height: 80px;
       }
 
@@ -48,8 +49,8 @@
 
       @media only screen and (min-width: 600px) {
           iron-image {
-              width: 200px;
-              height: 150px;
+              width: 140px;
+              height: 140px;
           }
       }
     </style>
@@ -65,7 +66,7 @@
         </div>
         <div class="slider-element">
           <template is="dom-repeat" items="[[data.content]]">
-            <a href="[[_generateUrl(item)]]" class="slider-item">
+            <a href="[[_generateUrl(item)]]" class="slider-item link">
               <iron-image src="[[getImage(item)]]" preload fade sizing="cover" style="background-color:#F0F0F0;"></iron-image>
               <h5>[[item.title]]</h5>
             </a>

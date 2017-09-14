@@ -45,8 +45,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         .mytitle__wrap{
             position: relative;
-            padding: 0px 5px 5px 30px;
+            padding: 0px 5px 5px 40px;
             display: block;
+        }
+        .playlist .mytitle__wrap {
+          padding: 0px 5px 5px 20px;
         }
         .mytitle__wrap label:nth-of-type(1){
             font-size: 14px;
@@ -59,6 +62,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             color: #868686;
             cursor: pointer;
         }
+        .mytitle__wrap label.title{
+          font-size: 1.4em;
+        }
+        .mytitle__wrap label.desc{
+          font-size: 0.8em;
+        }
         paper-fab {
             --iron-icon-fill-color: #00bbd3;
             background: #fff;
@@ -69,7 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         #cover iron-image{
           width: 250px;
-          height: 120px;
+          height: 150px;
         }
         #cover div{
           padding-top:20px;
@@ -77,9 +86,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .playlist{
           background: #e6ffff;
         }
+        .list-item{
+          border-bottom: 1px dotted #555;
+        }
+        .list-item:nth-last-child(2){
+          border-bottom: 0px;
+        }
         .list-item iron-image{
-          width: 70px;
+          width:65px;
           height: 50px;
+        }
+        .channel-desc{
+          padding: 15px;
+          text-align: justify;
         }
         </style>
         <iron-ajax auto url="{{ podcast.channelDetail }}/HamroAudio.podcast.[[channelId]]::-1"
@@ -96,9 +115,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div class="card-container card" hidden$="[[loading]]">
           <div class="flex" id="cover">
-            <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(channel.coverImage) }}"></iron-image>
+            <iron-image placeholder="../images/image-default.png" preload sizing="cover" fade src="{{ httpToHttps(channel.coverImage) }}"></iron-image>
             <div class="mytitle__wrap">
-              <label> <b>[[ _computeTitle(channel)]]</b></label>
+              <label class="title"> <b>[[ _computeTitle(channel)]]</b></label>
               <label>[[_computeAuthor(channel)]]</label>
               <paper-fab on-tap="playAll" icon="av:play-arrow" alt="play" id="playallbtn"></paper-fab>
               <paper-tooltip for="playallbtn">Playing all epiosdes will take too much time. Queue individual items instead.
@@ -106,7 +125,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               [[channel.episodes.length]] Episodes
             </div>
           </div>
-          <div class="flex">{{ channel.description}}</div>
+          <div class="flex channel-desc">{{ channel.description}}</div>
 
           <div class="playlist">
             <template is="dom-repeat" items="[[channel.episodes]]">
@@ -115,7 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   preload fade src="{{ httpToHttps(channel.coverImageThumbnail) }}"></iron-image>
                 <div class="mytitle__wrap block" on-tap="_setPlayIndex">
                   <label>{{ item.title }}</label>
-                  <label>[[ itemDesc(item)]]</label>
+                  <label class="desc">[[ itemDesc(item)]]</label>
                 </div>
                 <div class="right">
                   <paper-icon-button icon="av:queue" on-tap="_addToQueue"></paper-icon-button>

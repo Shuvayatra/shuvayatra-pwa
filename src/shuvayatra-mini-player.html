@@ -53,7 +53,7 @@
         opacity: 0.7;
       }
       iron-image{
-        width: 80px;
+        width: 65px;
         height: 55px;
       }
       .details{
@@ -61,6 +61,9 @@
         padding-left: 10px;
         width: 100%;
         cursor: pointer;
+      }
+      .details .desc{
+        font-size:0.8em;
       }
       .left-pad{
         padding-left: 15px;
@@ -76,9 +79,9 @@
               <a href="/channel/[[item.channel.id]]">
                 <iron-image sizing="cover" placeholder="../images/image-default.png" preload fade src="{{ httpToHttps(item.channel.coverImageThumbnail) }}"></iron-image>
               </a>
-              <div class="block pointer left-pad" on-click="_playItem">
+              <div class="block pointer left-pad details" on-click="_playItem">
                 <label>{{ item.title }}</label>
-                <div>[[ itemDesc(item)]]</div>
+                <div class="desc">[[ itemDesc(item)]]</div>
               </div>
               <div class="right">
                 <paper-icon-button icon="clear" on-click="_removeFromQueue"></paper-icon-button>
@@ -98,7 +101,7 @@
         </a>
         <div class="details" on-click="_fullPlayer">
           <label>{{ track.title}}</label>
-          <div>{{ _computeProgress(currentTime, duration)}}</div>
+          <div class="desc">{{ _computeProgress(currentTime, duration)}}</div>
         </div>
         <div class="right">
           <div>

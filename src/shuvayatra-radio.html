@@ -27,15 +27,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 height: 170px;
                 display: block;
             }
-
-            #title {
-                text-align: center;
-                color: #4a4a4a;
-                margin: 0;
-                padding: 20px 0;
-                font-size: 16px;
-            }
-
             .feed-container {
                 width: 100%;
                 display: flex;
@@ -62,7 +53,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               debounce-duration="300"
               loading="{{loading}}"></iron-ajax>
 
-        <p id="title">च्यानलहरू</p>
         <div class="feed-container">
           <template is="dom-repeat" items="[[channels]]">
             <radio-slider data="[[item]]">
