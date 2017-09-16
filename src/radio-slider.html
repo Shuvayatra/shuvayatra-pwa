@@ -31,7 +31,10 @@
           width: 80px;
           height: 80px;
       }
-
+      label.title{
+        padding-left : 8px;
+        font-weight: bold;
+      }
       h5 {
           font-weight: normal;
           color: #333;
@@ -61,7 +64,7 @@
             href="{{_handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter, null, null)}}">
             [[data.view_more_title]]
           </a>
-          <b>[[data.title]]</b>
+          <label class="title">[[data.title]]</label>
           <article>[[data.description]]</article>
         </div>
         <div class="slider-element">
