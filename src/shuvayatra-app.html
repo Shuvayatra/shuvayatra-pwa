@@ -201,6 +201,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <shuvayatra-search name="search" query="[[query]]"></shuvayatra-search>
                     <shuvayatra-about name="about"></shuvayatra-about>
                     <shuvayatra-contact name="contact"></shuvayatra-contact>
+                    <shuvayatra-terms name="terms"></shuvayatra-terms>
+
                 </iron-pages>
                 <app-header-layout>
                     <app-header slot="header" reveals effects="waterfall">
@@ -255,7 +257,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     headerPages: {
                         type: Array,
                         value: function() {
-                            return ["channel ", "feed", "search", "post", "destination", "screen",'about','contact'];
+                            return ["channel ", "feed", "search", "post", "destination", "screen",'about','contact','terms'];
                         }
                     }
                 };

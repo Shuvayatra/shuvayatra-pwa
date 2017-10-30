@@ -17,6 +17,7 @@
         "src/shuvayatra-channel.html",
         "src/shuvayatra-post.html",
         "src/shuvayatra-destinations.html",
+        "src/shuvayatra-terms.html",
         "src/shared-styles.html"
     ],
     "sources": [
