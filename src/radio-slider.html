@@ -3,9 +3,12 @@
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="behaviors/global-behavior.html">
 <link rel="import" href="shuvayatra-slider-item.html">
-<dom-module id="shuvayatra-slider-block">
+<dom-module id="radio-slider">
   <template>
     <style >
+      :host{
+        width: 100%;
+      }
       .see-more{
         float:right;
         text-decoration: none;
@@ -14,9 +17,44 @@
         width: 100%;
       }
       .slider-element {
+        width: 100%;
         display: flex;
-        justify-content: space-between;
-        overflow-x: scroll;
+        justify-content: flex-start;
+        overflow-x: auto;
+      }
+      .slider-item{
+        display: block;
+        margin-right: 5px;
+        padding: 0 8px;
+      }
+      iron-image {
+          width: 80px;
+          height: 80px;
+      }
+      label.title{
+        padding-left : 8px;
+        font-weight: bold;
+      }
+      h5 {
+          font-weight: normal;
+          color: #333;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 130px;
+          margin: 0;
+          padding: 5px;
+      }
+
+      a{
+          text-decoration: none;
+      }
+
+      @media only screen and (min-width: 600px) {
+          iron-image {
+              width: 140px;
+              height: 140px;
+          }
       }
     </style>
     <paper-card animated-shadow="false">
@@ -26,12 +64,15 @@
             href="{{_handleDeeplink(data.title, data.view_more_deeplink, data.view_more_filter, null, null)}}">
             [[data.view_more_title]]
           </a>
-          <b>[[data.title]]</b>
+          <label class="title">[[data.title]]</label>
           <article>[[data.description]]</article>
         </div>
         <div class="slider-element">
           <template is="dom-repeat" items="[[data.content]]">
-            <shuvayatra-slider-item data={{item}}></shuvayatra-slider-item>
+            <a href="[[_generateUrl(item)]]" class="slider-item link">
+              <iron-image src="[[getImage(item)]]" preload fade sizing="cover" style="background-color:#F0F0F0;"></iron-image>
+              <h5>[[item.title]]</h5>
+            </a>
           </template>
         </div>
       </div>
@@ -39,13 +80,19 @@
   </template>
   <script>
     Polymer({
-      is: 'shuvayatra-slider-block',
+      is: 'radio-slider',
       behaviors: [GlobalBehavior],
       properties: {
         data: {
           type: Object,
         },
       },
+      getImage: function(d){
+        return d.coverImage + '?width=140'
+      },
+      _generateUrl:function(item) {
+        return '/channel/' + item.id
+      }
     });
     /*
     class SliderView extends Polymer.Element {

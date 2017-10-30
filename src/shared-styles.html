@@ -14,8 +14,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="shared-styles">
     <template>
         <style>
-
-
+        :host{
+          --app-primary-color: #27a8d8;
+          --app-secondary-color: black;
+        }
             .card {
                 color: #757575;
                 border-radius: 5px;
@@ -129,7 +131,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 border-radius: 0;
                 display: block;
             }
-
+            .link{
+              text-decoration: inherit;
+            }
             .feed-container .link {
                 display: block;
                 width: 48.5%;
@@ -400,6 +404,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     color: #4a4a4a;
                 }
             }
+          .flex{
+            display: flex;
+            padding:5px;
+          }
+          .right{
+            margin-left: auto;
+            margin:auto;
+            display: flex;
+          }
+          .block{
+            display: block;
+            width: 100%;
+          }
+          .pointer{
+            cursor:pointer;
+          }
+          paper-card{
+            width: 100%;
+          }
         </style>
     </template>
 </dom-module>
