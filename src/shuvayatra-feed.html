@@ -51,6 +51,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .col{
             width: 100%;
         }
+        #feedWraper{
+            width: 30%;
+        }
+
 
 
 
@@ -79,8 +83,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <nebula-storage id="caches" key="feed-cat-{{category}}" data="{{feeds}}" default-value="[]" auto-save auto-load> </nebula-storage>
         <iron-list id="list" items="[[feeds]]" as="item" scroll-target="list">
             <template>
-            <div class="col">
-                <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}">
+            <div>
+                <template is="dom-if" if="{{ _checkPostType(item.type, 'video') }}" style="width: ">
                     <shuvayatra-video-card class="post-card" post="{{ item }}"></shuvayatra-video-card>
                 </template>
                 <template is="dom-if" if="{{ _checkPostType(item.type, 'audio') }}">

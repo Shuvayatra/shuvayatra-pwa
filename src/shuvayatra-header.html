@@ -141,6 +141,8 @@
             .content{
                 max-width: 800px;
                 margin: 0 auto;
+                padding-top: 10px;
+
             }
 
             @media only screen  and (min-width: 900px) {
@@ -158,6 +160,9 @@
                 .category-header > div {
                     margin-top: 175px;
                 }
+            }
+            @media only screen  and (min-width: 400px) {
+
             }
 
             @media only screen  and (min-width: 1600px) {
@@ -200,19 +205,19 @@
         <!-- normal header for detail pages with back icon and title -->
         <template id="postIf" is="dom-if" if="{{ regular }}" restamp="true">
             <app-header condenses effects="waterfall" fixed slot="header">
-                    <app-toolbar>
-                        <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
-                        <label>{{data.title}}</label>
-                    </app-toolbar>
-                </app-header>
+                <app-toolbar>
+                    <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
+                    <label>{{data.title}}</label>
+                </app-toolbar>
+            </app-header>
         </template>
 
         <template id="postIf" is="dom-if" if="{{ post }}" restamp="true">
 
             <app-header class$="{{ _generateClass(hasFeatureImage) }}" condenses fixed
-                            effects="waterfall resize-snapped-title fade-background"
-                            effects-config='{"resize-snapped-title": {"startsAt": 0.3, "duration": "100ms"}, "fade-background": {"startsAt": 0.3, "endsAt": 0.9}}'
-                            style="background-image: url({{ featureimages}} );" slot="header">
+                        effects="waterfall resize-snapped-title fade-background"
+                        effects-config='{"resize-snapped-title": {"startsAt": 0.3, "duration": "100ms"}, "fade-background": {"startsAt": 0.3, "endsAt": 0.9}}'
+                        style="background-image: url({{ featureimages}} );" slot="header">
 
                 <app-toolbar>
                     <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
@@ -229,24 +234,24 @@
                     </a>
                     <span id="favourite" on-tap="_toggleFavourite">
                         <paper-icon-button icon="favorite"
-                            hidden$="{{ !_checkIfFavourite(favoriteData, data) }}"></paper-icon-button>
+                                           hidden$="{{ !_checkIfFavourite(favoriteData, data) }}"></paper-icon-button>
                         <paper-icon-button icon="favorite-border"
-                            hidden$="{{ _checkIfFavourite(favoriteData, data) }}"></paper-icon-button>
+                                           hidden$="{{ _checkIfFavourite(favoriteData, data) }}"></paper-icon-button>
                     </span>
 
                     <iron-ajax id="shareAjax" method="POST"
-                    loading="{{ isSubmittingShare }}">
+                               loading="{{ isSubmittingShare }}">
                     </iron-ajax>
                     <iron-ajax id="favAjax" method="POST"
-                    loading="{{ isSubmittingFav }}">
+                               loading="{{ isSubmittingFav }}">
                     </iron-ajax>
                 </app-toolbar>
 
                 <template id="playerIf" is="dom-if" if="{{ audio }}" restamp="true">
                     <div class="audio-player-wrap" title>
                         <shuvayatra-audio-player
-                            id="player" src="{{ data.data.media_url }}"
-                            title="{{ data.title }}">
+                                id="player" src="{{ data.data.media_url }}"
+                                title="{{ data.title }}">
                         </shuvayatra-audio-player>
                     </div>
                 </template>
@@ -262,8 +267,9 @@
                     <div class="content">
                         <google-youtube id="video"
                                         video-id="{{ _getVideoId(data.data.media_url) }}"
-                                        fluid
-                                        autoplay="0">
+                                        width="100%"
+                                        autoplay="0"
+                                       >
                         </google-youtube>
 
                     </div>
@@ -294,12 +300,12 @@
             <app-header condenses effects="waterfall" fixed slot="header">
                 <app-toolbar>
                     <paper-icon-button id="back" icon="arrow-back" on-click="_goBack"></paper-icon-button>
-                        <paper-input placeholder="Search"
-                                no-label-float no-ink
-                                on-keydown="_submitForm"
-                                value="{{ searchTerm }}">
-                            <!-- <iron-icon icon="search" prefix></div> -->
-                        </paper-input>
+                    <paper-input placeholder="Search"
+                                 no-label-float no-ink
+                                 on-keydown="_submitForm"
+                                 value="{{ searchTerm }}">
+                        <!-- <iron-icon icon="search" prefix></div> -->
+                    </paper-input>
                 </app-toolbar>
             </app-header>
         </template>
@@ -308,7 +314,7 @@
 
     </template>
     <script>
-         class ShuvayatraHeader extends Polymer.mixinBehaviors([GlobalBehavior], Polymer.Element){
+        class ShuvayatraHeader extends Polymer.mixinBehaviors([GlobalBehavior], Polymer.Element){
             static get properties() {
                 return {
                     changeFlag: {
@@ -325,7 +331,7 @@
                     data: {
                         type: Object,
                         value: function(){
-                        return {};
+                            return {};
                         },
                         notify: true,
                         reflectToAttribute:true
@@ -389,25 +395,25 @@
                 }
             }
 
-           static get is(){
-               return 'shuvayatra-header';
-           }
-           
-           static get observers(){
-               return  [
+            static get is(){
+                return 'shuvayatra-header';
+            }
+
+            static get observers(){
+                return  [
                     '_isVideo(video,videoPlayer)'
                 ];
-           }
+            }
 
             _computeFeaturedImage(featured_image,audio,video){
-              if (this.hasFeatureImage && this.audio) {
-                  this.$.postIf.render();
-                  this.$$("#playerIf").render();
-                  this.player = this.$$("#player");
-                  return this.data.thumbnail;
-              } else if(this.hasFeatureImage && !this.audio & !this.video){
-                  return this.data.featured_image;
-              }
+                if (this.hasFeatureImage && this.audio) {
+                    this.$.postIf.render();
+                    this.$$("#playerIf").render();
+                    this.player = this.$$("#player");
+                    return this.data.thumbnail;
+                } else if(this.hasFeatureImage && !this.audio & !this.video){
+                    return this.data.featured_image;
+                }
             }
 
             _hasIcon(data){
@@ -456,11 +462,11 @@
             }
 
             _isVideo (video,videoPlayer) {
-              if(this.video){
-                  this.$.postIf.render();
-                  this.$$("#videoIf").render();
-                  this.videoPlayer = this.$$("#video");
-              }
+                if(this.video){
+                    this.$.postIf.render();
+                    this.$$("#videoIf").render();
+                    this.videoPlayer = this.$$("#video");
+                }
             }
 
             _getVideoId(url){

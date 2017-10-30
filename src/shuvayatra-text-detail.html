@@ -25,6 +25,7 @@
                 font-weight: normal;
             }
 
+
             .content{
                 padding: 18px 20px;
             }
@@ -81,6 +82,7 @@
                 </div>
             </template>
             <template is="dom-if" if="{{post.source}}">
+
                 <p><label>Source :</label> <a href="{{post.source_url}}">{{post.source}}</a></p>
             </template>
             <template is="dom-if" if="{{post.photo_credit}}">
@@ -98,7 +100,7 @@
                     <p>मिल्दोजुल्दो कथाहरु</p>
 
                     <div class="similar-wrapper">
-                        <template is="dom-repeat" items="{{ post.similar }}">
+                        <template is="dom-repeat" items="{{post.similar_posts}}">
                             <div class="col">
                                 <shuvayatra-text-card post="{{ item }}"></shuvayatra-text-card>
                             </div>
